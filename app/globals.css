@@ -85,3 +85,10 @@ input::placeholder,
 textarea::placeholder {
   color: var(--mute);
 }
+
+/* Form controls inherit the body font (matches the design's per-page rule). */
+input,
+textarea,
+select {
+  font-family: var(--font-public-sans), "Public Sans", sans-serif;
+}

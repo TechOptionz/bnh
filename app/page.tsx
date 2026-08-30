@@ -1,69 +1,797 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Link from "next/link";
+import HomeFooter from "@/components/HomeFooter";
+import SiteHeader from "@/components/SiteHeader";
+import { BACHROB_URL, BOOKING_URL, C, POSTS } from "@/lib/site";
 
-export default function Home() {
+const EYEBROW: React.CSSProperties = {
+  fontFamily: "var(--font-archivo), Archivo, sans-serif",
+  fontWeight: 700,
+  letterSpacing: "0.14em",
+  textTransform: "uppercase",
+  fontSize: 13,
+  color: C.cyan,
+  marginBottom: 12,
+};
+
+const H2: React.CSSProperties = {
+  fontFamily: "var(--font-archivo), Archivo, sans-serif",
+  fontWeight: 800,
+  color: C.navy,
+  fontSize: "clamp(28px,3vw,38px)",
+  lineHeight: 1.15,
+  margin: 0,
+};
+
+const PILL: React.CSSProperties = {
+  background: "#FFFFFF",
+  border: "1px solid #DCE4EE",
+  borderRadius: 999,
+  padding: "5px 13px",
+  fontSize: 13,
+  color: C.navy,
+};
+
+const STATS = [
+  { n: "300%", l: "growth in the past year" },
+  { n: "4", l: "offices across Queensland" },
+  { n: "12+", l: "qualified specialists" },
+  { n: "30 min", l: "free first consultation" },
+];
+
+const PILLARS = [
+  { t: "Affordability", c: C.cyan },
+  { t: "Client Care", c: C.orange },
+  { t: "Personalised Service", c: C.navy },
+  { t: "Transparency", c: C.cyan },
+  { t: "Integrity", c: C.orange },
+  { t: "Expertise", c: C.navy },
+];
+
+const STEPS = [
+  {
+    t: "Free 30-min consultation",
+    p: "It all begins when you book a free 30-minute consultation to discuss your financial or taxation matters. When you say yes, onboarding begins.",
+  },
+  {
+    t: "Onboarding",
+    p: "Onboarding usually takes 3–5 business days. We stay in touch and guide you through each step, keeping the paperwork as smooth and simple as possible.",
+  },
+  {
+    t: "Matched to the right team",
+    p: "Once we identify whether you need taxation or financial services, you're assigned to the right department and a dedicated accountant takes over.",
+  },
+  {
+    t: "Ongoing dedicated support",
+    p: "Your dedicated team delivers personalised service and continuous support — precision, care and clear communication every step of the way.",
+  },
+];
+
+const PARTNERS = [
+  { src: "/assets/partner-cpa.png", alt: "CPA Australia" },
+  { src: "/assets/partner-xero.png", alt: "Xero" },
+  { src: "/assets/partner-myob.png", alt: "MYOB" },
+  { src: "/assets/partner-quickbooks.png", alt: "Intuit QuickBooks" },
+  { src: "/assets/partner-quickfee.png", alt: "QuickFee" },
+  { src: "/assets/partner-taxdome.png", alt: "TaxDome" },
+];
+
+export default function HomePage() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <>
+      {/* Announcement bar */}
+      <div
+        style={{
+          background: C.navyDeep,
+          color: C.lightBlue,
+          fontSize: 13.5,
+          padding: "9px 24px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 10,
+          flexWrap: "wrap",
+          textAlign: "center",
+        }}
+      >
+        <span>
+          <strong style={{ color: C.cyan }}>News:</strong> We have grown 300%
+          this year and welcomed Bachmann Robinson (BachRob) as a sister firm
+          &mdash; now open in Ipswich, Springwood, Noosaville &amp; Maroochydore.
+        </span>
+        <a
+          href={BACHROB_URL}
+          className="hv-orange"
+          style={{ color: "#FFFFFF", fontWeight: 700, whiteSpace: "nowrap" }}
+        >
+          Visit BachRob &rarr;
+        </a>
+      </div>
+
+      <SiteHeader />
+
+      {/* Hero */}
+      <section
+        style={{
+          background: "linear-gradient(180deg,#F4F7FA 0%,#FFFFFF 100%)",
+          padding: "72px 5vw 56px",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 1200,
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(340px,1fr))",
+            gap: 48,
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <div style={{ ...EYEBROW, marginBottom: 16 }}>
+              Accountants &amp; Financial Advisers &middot; QLD
+            </div>
+            <h1
+              style={{
+                fontFamily: "var(--font-archivo), Archivo, sans-serif",
+                fontWeight: 800,
+                color: C.navy,
+                fontSize: "clamp(38px,4.6vw,60px)",
+                lineHeight: 1.08,
+                margin: "0 0 20px",
+                textWrap: "pretty",
+              }}
+            >
+              Better at <span style={{ color: C.orange }}>money matters</span>.
+            </h1>
+            <p
+              style={{
+                fontSize: 18,
+                lineHeight: 1.65,
+                margin: "0 0 30px",
+                maxWidth: "52ch",
+              }}
+            >
+              We deliver tailored accounting, taxation, advisory and financial
+              advice to help businesses and individuals across Australia thrive
+              &mdash; starting with a free 30-minute consultation.
+            </p>
+            <div
+              style={{
+                display: "flex",
+                gap: 14,
+                flexWrap: "wrap",
+                alignItems: "center",
+              }}
+            >
+              <a
+                href={BOOKING_URL}
+                className="btn-orange"
+                style={{
+                  background: C.orange,
+                  color: "#FFFFFF",
+                  padding: "15px 28px",
+                  borderRadius: 8,
+                  fontWeight: 700,
+                  fontSize: 16,
+                }}
+              >
+                Book a Free 30-Min Consultation
+              </a>
+              <a
+                href="#services"
+                className="btn-outline"
+                style={{
+                  color: C.navy,
+                  border: `2px solid ${C.navy}`,
+                  padding: "13px 26px",
+                  borderRadius: 8,
+                  fontWeight: 700,
+                  fontSize: 16,
+                }}
+              >
+                Explore Our Services
+              </a>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: 34,
+                flexWrap: "wrap",
+                marginTop: 42,
+              }}
+            >
+              {STATS.map((s) => (
+                <div key={s.n}>
+                  <div
+                    style={{
+                      fontFamily: "var(--font-archivo), Archivo, sans-serif",
+                      fontWeight: 800,
+                      fontSize: 28,
+                      color: C.navy,
+                    }}
+                  >
+                    {s.n}
+                  </div>
+                  <div style={{ fontSize: 13.5 }}>{s.l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/hero-graphic.png"
+            alt="Illustration: adviser assembling financial building blocks"
+            style={{
+              width: "100%",
+              maxWidth: 560,
+              justifySelf: "center",
+              display: "block",
+            }}
+          />
+        </div>
+      </section>
+
+      {/* Services */}
+      <section
+        id="services"
+        style={{ padding: "80px 5vw", background: "#FFFFFF" }}
+      >
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div style={{ maxWidth: 640, marginBottom: 44 }}>
+            <div style={EYEBROW}>Our Services</div>
+            <h2 style={{ ...H2, margin: "0 0 14px" }}>
+              Two divisions, one goal: your financial well-being
+            </h2>
+            <p style={{ fontSize: 16.5, lineHeight: 1.65, margin: 0 }}>
+              Our team consists of subject specialists with extensive global
+              experience across industries, caring for clients and creating a
+              positive impact on their financial well-being.
+            </p>
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))",
+              gap: 24,
+            }}
+          >
+            <div
+              style={{
+                background: C.bgAlt,
+                borderRadius: 14,
+                padding: "34px 32px",
+                display: "flex",
+                flexDirection: "column",
+                gap: 16,
+              }}
+            >
+              <div
+                style={{
+                  width: 46,
+                  height: 46,
+                  borderRadius: 10,
+                  background: C.cyan,
+                }}
+              />
+              <h3
+                style={{
+                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
+                  fontWeight: 700,
+                  color: C.navy,
+                  fontSize: 23,
+                  margin: 0,
+                }}
+              >
+                Financial Advice
+              </h3>
+              <p style={{ margin: 0, lineHeight: 1.65 }}>
+                Strategic financial advice and solutions to meet your objectives
+                &mdash; from budgeting and retirement planning to estate
+                planning, superannuation and investment advice.
+              </p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {[
+                  "Retirement",
+                  "Super & SMSF",
+                  "Insurance",
+                  "Investments",
+                  "Estate Planning",
+                ].map((t) => (
+                  <span key={t} style={PILL}>
+                    {t}
+                  </span>
+                ))}
+              </div>
+              <Link
+                href="/financial-advice"
+                className="hv-orange"
+                style={{ fontWeight: 700, color: C.orange, marginTop: "auto" }}
+              >
+                Learn more &rarr;
+              </Link>
+            </div>
+
+            <div
+              style={{
+                background: C.bgAlt,
+                borderRadius: 14,
+                padding: "34px 32px",
+                display: "flex",
+                flexDirection: "column",
+                gap: 16,
+              }}
+            >
+              <div
+                style={{
+                  width: 46,
+                  height: 46,
+                  borderRadius: 10,
+                  background: C.orange,
+                }}
+              />
+              <h3
+                style={{
+                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
+                  fontWeight: 700,
+                  color: C.navy,
+                  fontSize: 23,
+                  margin: 0,
+                }}
+              >
+                Tax &amp; Accounting
+              </h3>
+              <p style={{ margin: 0, lineHeight: 1.65 }}>
+                A comprehensive range of tax, accounting and advisory services
+                for clients Australia-wide &mdash; taxation strategy,
+                bookkeeping, audit, business advisory and more.
+              </p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {[
+                  "Taxation",
+                  "Bookkeeping & Payroll",
+                  "Audit",
+                  "Virtual CFO",
+                  "SMSF",
+                ].map((t) => (
+                  <span key={t} style={PILL}>
+                    {t}
+                  </span>
+                ))}
+              </div>
+              <Link
+                href="/accounting"
+                className="hv-orange"
+                style={{ fontWeight: 700, color: C.orange, marginTop: "auto" }}
+              >
+                Learn more &rarr;
+              </Link>
+            </div>
+
+            <div
+              style={{
+                background: C.navy,
+                borderRadius: 14,
+                padding: "34px 32px",
+                display: "flex",
+                flexDirection: "column",
+                gap: 16,
+                color: C.lightBlue,
+              }}
+            >
+              <div
+                style={{
+                  width: 46,
+                  height: 46,
+                  borderRadius: 10,
+                  background: C.cyan,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#FFFFFF",
+                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
+                  fontWeight: 800,
+                  fontSize: 15,
+                }}
+              >
+                30&#39;
+              </div>
+              <h3
+                style={{
+                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
+                  fontWeight: 700,
+                  color: "#FFFFFF",
+                  fontSize: 23,
+                  margin: 0,
+                }}
+              >
+                Free Consultation
+              </h3>
+              <p style={{ margin: 0, lineHeight: 1.65 }}>
+                Not sure where to start? Schedule a free 30-minute consultation
+                with one of our expert advisers and we&#39;ll tailor an offer
+                to your needs &mdash; no obligation.
+              </p>
+              <a
+                href={BOOKING_URL}
+                className="btn-orange"
+                style={{
+                  background: C.orange,
+                  color: "#FFFFFF",
+                  padding: "13px 24px",
+                  borderRadius: 8,
+                  fontWeight: 700,
+                  textAlign: "center",
+                  marginTop: "auto",
+                }}
+              >
+                Book Now
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pillars */}
+      <section style={{ padding: "72px 5vw", background: C.bgAlt }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "end",
+              gap: 24,
+              flexWrap: "wrap",
+              marginBottom: 40,
+            }}
+          >
+            <div style={{ maxWidth: 560 }}>
+              <div style={EYEBROW}>Our Specialty</div>
+              <h2 style={H2}>The pillars we stand by</h2>
+            </div>
+            <p
+              style={{
+                maxWidth: 420,
+                margin: 0,
+                lineHeight: 1.6,
+                fontSize: 15.5,
+              }}
+            >
+              Our team has shared values &mdash; six pillars that shape every
+              engagement, from a first tax return to a full corporate
+              restructure.
+            </p>
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))",
+              gap: 16,
+            }}
+          >
+            {PILLARS.map((p) => (
+              <div
+                key={p.t}
+                style={{
+                  background: "#FFFFFF",
+                  borderRadius: 12,
+                  padding: "24px 22px",
+                  borderTop: `3px solid ${p.c}`,
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "var(--font-archivo), Archivo, sans-serif",
+                    fontWeight: 700,
+                    color: C.navy,
+                    fontSize: 17,
+                  }}
+                >
+                  {p.t}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How we work */}
+      <section style={{ padding: "80px 5vw", background: "#FFFFFF" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div style={{ maxWidth: 640, marginBottom: 44 }}>
+            <div style={EYEBROW}>How We Work</div>
+            <h2 style={H2}>From first call to dedicated team, in four steps</h2>
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))",
+              gap: 22,
+            }}
+          >
+            {STEPS.map((s, i) => (
+              <div
+                key={s.t}
+                style={{
+                  border: `1px solid ${C.border}`,
+                  borderRadius: 14,
+                  padding: "28px 26px",
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "var(--font-archivo), Archivo, sans-serif",
+                    fontWeight: 800,
+                    fontSize: 15,
+                    color: "#FFFFFF",
+                    background: C.orange,
+                    width: 34,
+                    height: 34,
+                    borderRadius: 999,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: 16,
+                  }}
+                >
+                  {i + 1}
+                </div>
+                <h3
+                  style={{
+                    fontFamily: "var(--font-archivo), Archivo, sans-serif",
+                    fontWeight: 700,
+                    color: C.navy,
+                    fontSize: 18,
+                    margin: "0 0 10px",
+                  }}
+                >
+                  {s.t}
+                </h3>
+                <p style={{ margin: 0, fontSize: 15, lineHeight: 1.65 }}>
+                  {s.p}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Partners */}
+      <section
+        style={{
+          padding: "56px 5vw",
+          background: "#FFFFFF",
+          borderBottom: "1px solid #EEF2F7",
+        }}
+      >
+        <div style={{ maxWidth: 1100, margin: "0 auto", textAlign: "center" }}>
+          <div style={{ ...EYEBROW, color: C.mute, marginBottom: 28 }}>
+            Our Partners &amp; Platforms
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 44,
+              flexWrap: "wrap",
+            }}
+          >
+            {PARTNERS.map((p) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={p.alt}
+                src={p.src}
+                alt={p.alt}
+                style={{ height: 64, filter: "grayscale(1)", opacity: 0.75 }}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Recent blogs */}
+      <section style={{ padding: "80px 5vw", background: "#FFFFFF" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "end",
+              gap: 24,
+              flexWrap: "wrap",
+              marginBottom: 40,
+            }}
+          >
+            <div>
+              <div style={EYEBROW}>Recent Blogs</div>
+              <h2 style={H2}>Insights from our advisers</h2>
+            </div>
+            <Link
+              href="/blog"
+              className="hv-orange"
+              style={{ fontWeight: 700, color: C.orange }}
+            >
+              View all posts &rarr;
+            </Link>
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+              gap: 24,
+            }}
+          >
+            {POSTS.map((p) => (
+              <a
+                key={p.href}
+                href={p.href}
+                className="card-hover"
+                style={{
+                  background: "#FFFFFF",
+                  border: `1px solid ${C.border}`,
+                  borderRadius: 14,
+                  overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "column",
+                  color: "inherit",
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={p.img}
+                  alt={p.alt}
+                  style={{
+                    width: "100%",
+                    aspectRatio: "16/9",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                />
+                <div
+                  style={{
+                    padding: "22px 24px 26px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 10,
+                  }}
+                >
+                  <div style={{ fontSize: 13, color: C.mute, fontWeight: 600 }}>
+                    {p.date}
+                  </div>
+                  <h3
+                    style={{
+                      fontFamily: "var(--font-archivo), Archivo, sans-serif",
+                      fontWeight: 700,
+                      color: C.navy,
+                      fontSize: 19,
+                      margin: 0,
+                      lineHeight: 1.3,
+                    }}
+                  >
+                    {p.title}
+                  </h3>
+                  <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.6 }}>
+                    {p.excerpt}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* BachRob banner */}
+      <section
+        style={{
+          position: "relative",
+          backgroundImage: "url('/assets/team-photo.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          padding: "230px 5vw 56px",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "rgba(10,18,36,0.68)",
+          }}
         />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+        <div
+          style={{
+            position: "relative",
+            maxWidth: 900,
+            margin: "0 auto",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 24,
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "var(--font-archivo), Archivo, sans-serif",
+              fontWeight: 600,
+              color: "#FFFFFF",
+              fontSize: "clamp(20px,2.4vw,28px)",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              lineHeight: 1.6,
+            }}
+          >
+            We proudly welcome BachRob to the JCA-BNH family.
+          </div>
+          <a
+            href={BACHROB_URL}
+            className="btn-white"
+            style={{
+              background: "#FFFFFF",
+              color: C.navy,
+              padding: "14px 30px",
+              borderRadius: 8,
+              fontWeight: 700,
+              fontSize: 15,
+            }}
+          >
+            Visit BachRob
+          </a>
+        </div>
+      </section>
+
+      {/* Closing CTA */}
+      <section
+        style={{
+          padding: "76px 5vw",
+          background: `linear-gradient(120deg,${C.navy} 0%,${C.navyDeep} 100%)`,
+        }}
+      >
+        <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
+          <h2
+            style={{
+              fontFamily: "var(--font-archivo), Archivo, sans-serif",
+              fontWeight: 800,
+              color: "#FFFFFF",
+              fontSize: "clamp(28px,3.4vw,42px)",
+              lineHeight: 1.15,
+              margin: "0 0 16px",
+            }}
+          >
+            Ready to get better at money matters?
+          </h2>
+          <p
+            style={{
+              color: C.lightBlue,
+              fontSize: 17,
+              lineHeight: 1.65,
+              margin: "0 0 30px",
+            }}
+          >
+            Book your free 30-minute consultation &mdash; we&#39;ll listen,
+            then tailor a plan for your tax, accounting or financial goals.
           </p>
-        </div>
-        <div className={styles.ctas}>
           <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href={BOOKING_URL}
+            className="btn-orange"
+            style={{
+              background: C.orange,
+              color: "#FFFFFF",
+              padding: "16px 34px",
+              borderRadius: 8,
+              fontWeight: 700,
+              fontSize: 17,
+              display: "inline-block",
+            }}
           >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
+            Book a Free Consultation
           </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          <div style={{ color: C.mute, fontSize: 13.5, marginTop: 18 }}>
+            No cost, no obligation &middot; 1300 264 346
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <HomeFooter />
+    </>
   );
 }

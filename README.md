@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# JCA-BNH — Next.js site
 
-## Getting Started
+A Next.js (App Router, TypeScript) build of the JCA-BNH website design, ported
+1:1 from the Claude design files in
+`Website redesign analysis request/` (`*.dc.html`).
 
-First, run the development server:
+## Run
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev     # http://localhost:3000
+npm run build
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Path | Design file it came from |
+| --- | --- |
+| `app/page.tsx` | `Home.dc.html` |
+| `app/financial-advice/page.tsx` | `Financial Advice.dc.html` |
+| `app/accounting/page.tsx` | `Accounting.dc.html` |
+| `app/about/page.tsx` | `About Us.dc.html` |
+| `app/contact/page.tsx` | `Contact.dc.html` |
+| `app/blog/page.tsx` | `Blog.dc.html` |
+| `app/careers/page.tsx` | `Career.dc.html` |
+| `app/services/[slug]/page.tsx` | `Service.dc.html` (was `?s=<slug>`) |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Shared pieces live in `components/`; content and design tokens live in `lib/`
+(`site.ts`, `services.ts`, `team.ts`). Images are in `public/assets/`.
 
-## Learn More
+Styling follows the design exactly: inline styles carried over verbatim, with
+the design's `style-hover` attributes turned into the small set of hover classes
+in `app/globals.css` (`.hv-orange`, `.btn-orange`, `.btn-outline`,
+`.card-hover`, `.crumb`, `.btn-white`, `.btn-cyan`). Fonts (Archivo, Public
+Sans) are loaded with `next/font`.
 
-To learn more about Next.js, take a look at the following resources:
+## Chat assistant
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`components/Chatbot.tsx` is the design's `jca-chatbot` widget. The design called
+`window.claude.complete`, which only exists inside the Claude artifact runtime,
+so it now posts to `app/api/chat/route.ts`. Set `ANTHROPIC_API_KEY` (see
+`.env.example`) to enable it; without a key the widget falls back to the
+"call us / book a consultation" message the design already defined.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Forms
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The Contact and Careers forms were static markup in the design. They look
+identical here and compose a `mailto:` to `info@jca-bnh.com.au` on submit —
+swap in a real form handler when a backend is available. A resume chosen on the
+Careers form is named in the email body for the applicant to attach; the browser
+cannot attach it to a `mailto` on its own.
