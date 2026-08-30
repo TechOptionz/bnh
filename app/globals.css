@@ -223,6 +223,58 @@ select {
     height: 84px;
   }
 }
+/* --- mega-menu ---------------------------------------------------------- */
+
+/* Three link columns plus the promo card; collapses on narrow viewports. */
+.mega-grid {
+  display: grid;
+  grid-template-columns: 0.92fr 1.2fr 1.2fr 330px;
+  gap: 44px 52px;
+  align-content: start;
+}
+@media (max-width: 1180px) {
+  .mega-grid {
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+    gap: 40px;
+  }
+}
+@media (max-width: 700px) {
+  .mega-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+/* Menu rows highlight as a soft pill with an arrow sliding in on hover. */
+.mega-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  margin: 0 -12px;
+  border-radius: 9px;
+  color: var(--body);
+  line-height: 1.35;
+  transition: background 0.22s ease, color 0.22s ease;
+}
+.mega-link:hover,
+.mega-link:focus-visible {
+  background: var(--bg-alt);
+  color: var(--navy);
+}
+.mega-link .mega-arrow {
+  flex-shrink: 0;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.22s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.mega-link:hover .mega-arrow,
+.mega-link:focus-visible .mega-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .partner-marquee-track {
     animation: none;

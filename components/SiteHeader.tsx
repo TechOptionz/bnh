@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BOOKING_URL, BACHROB_URL, C, EMAIL, PHONE_BRISBANE } from "@/lib/site";
 import { ACC, FA, SERVICES } from "@/lib/services";
+import SocialLinks from "@/components/SocialLinks";
 
 export type NavKey =
   | "financial-advice"
@@ -81,6 +82,144 @@ const COL_HEADING: React.CSSProperties = {
   display: "block",
 };
 
+const ARROW = (
+  <svg
+    className="mega-arrow"
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={C.orange}
+    strokeWidth="2.2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden
+  >
+    <path d="M5 12h13" />
+    <path d="M12 5l7 7-7 7" />
+  </svg>
+);
+
+/** A column heading with the brand chip and a hairline beneath it. */
+function ColumnHeading({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <>
+      <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 14 }}>
+        <span
+          style={{
+            width: 10,
+            height: 10,
+            borderRadius: 3,
+            background: C.cyan,
+            flexShrink: 0,
+          }}
+        />
+        <Link href={href} className="hv-orange" style={{ ...COL_HEADING, marginBottom: 0 }}>
+          {children}
+        </Link>
+      </div>
+      <div style={{ height: 1, background: C.border, marginBottom: 12 }} />
+    </>
+  );
+}
+
+/** Navy "book a call" card shared by the hover dropdowns and the mega-menu. */
+function PromoCard({ show, delay = 0.12 }: { show: boolean; delay?: number }) {
+  return (
+    <div
+      style={{
+        background: C.navy,
+        borderRadius: 14,
+        padding: "30px 30px 28px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        gap: 12,
+        alignSelf: "start",
+        opacity: show ? 1 : 0,
+        transform: show ? "translateY(0)" : "translateY(14px)",
+        transition: `opacity 0.45s ease ${delay}s, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s`,
+      }}
+    >
+      <span
+        style={{
+          fontSize: 11.5,
+          fontWeight: 700,
+          letterSpacing: "0.14em",
+          textTransform: "uppercase",
+          color: C.cyan,
+        }}
+      >
+        Free consultation
+      </span>
+      <div
+        style={{
+          fontFamily: "var(--font-lexend), Lexend, sans-serif",
+          fontWeight: 600,
+          color: "#FFFFFF",
+          fontSize: 19,
+          lineHeight: 1.3,
+        }}
+      >
+        Not sure where to start?
+      </div>
+      <div style={{ color: C.lightBlue, fontSize: 15, lineHeight: 1.6 }}>
+        Book a free 30-minute consultation with the people who make the calls.
+      </div>
+      <a
+        href={BOOKING_URL}
+        className="btn-soft"
+        style={{
+          marginTop: 10,
+          background: C.cyan,
+          color: C.navy,
+          padding: "12px 22px",
+          borderRadius: 8,
+          fontWeight: 600,
+          fontSize: 14.5,
+        }}
+      >
+        Book a Free Consultation &rarr;
+      </a>
+    </div>
+  );
+}
+
+/** Small labelled contact link used in the mega-menu footer strip. */
+function ContactBit({
+  label,
+  value,
+  href,
+}: {
+  label: string;
+  value: string;
+  href: string;
+}) {
+  return (
+    <div>
+      <div
+        style={{
+          fontSize: 11.5,
+          fontWeight: 700,
+          letterSpacing: "0.14em",
+          textTransform: "uppercase",
+          color: C.mute,
+          marginBottom: 5,
+        }}
+      >
+        {label}
+      </div>
+      <a
+        href={href}
+        className="hv-orange"
+        style={{ color: C.navy, fontWeight: 600, fontSize: 15.5 }}
+      >
+        {value}
+      </a>
+    </div>
+  );
+}
+
 export default function SiteHeader({
   active = null,
   floating = false,
@@ -114,6 +253,21 @@ export default function SiteHeader({
       window.removeEventListener("keydown", onKey);
     };
   }, [open]);
+
+  /** Staggered "lift and fade" applied to the bar's nav items while the
+   *  mega-menu is open, so they clear out before the panel content lands. */
+  const liftAway = (i: number, count: number): React.CSSProperties => {
+    const delay = open ? i * 0.045 : (count - i) * 0.035;
+    return {
+      opacity: open ? 0 : 1,
+      transform: open ? "translateY(-18px)" : "translateY(0)",
+      visibility: open ? "hidden" : "visible",
+      transition:
+        `opacity 0.3s ease ${delay}s,` +
+        ` transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s,` +
+        ` visibility 0.3s linear ${delay}s`,
+    };
+  };
 
   return (
     <>
@@ -166,67 +320,85 @@ export default function SiteHeader({
             fontWeight: 600,
           }}
         >
-          {LINKS.map((l) => {
-            const on = l.key === active;
-            const hasDropdown = DROPDOWNS.some((d) => d.key === l.key);
-            const showing = dropdown === l.key;
-            return (
-              <span
-                key={l.key}
-                onMouseEnter={() => setDropdown(hasDropdown ? l.key : null)}
-                style={{ display: "inline-flex", alignItems: "center", gap: 7 }}
-              >
-                <Link
-                  href={l.href}
-                  className={on ? undefined : "hv-orange"}
-                  style={{ color: on || showing ? C.orange : C.navy }}
-                  aria-haspopup={hasDropdown || undefined}
-                  aria-expanded={hasDropdown ? showing : undefined}
-                  onFocus={() => setDropdown(hasDropdown ? l.key : null)}
-                  onClick={() => {
-                    setOpen(false);
-                    setDropdown(null);
-                  }}
-                >
-                  {l.label}
-                </Link>
-                {hasDropdown && (
-                  <svg
-                    width="11"
-                    height="11"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                    stroke={showing ? C.orange : C.navy}
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    style={{
-                      transform: showing ? "rotate(180deg)" : "rotate(0deg)",
-                      transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.25s ease",
-                      marginTop: 2,
-                    }}
-                  >
-                    <path d="M2 4l4 4 4-4" />
-                  </svg>
-                )}
-              </span>
-            );
-          })}
-          <a
-            href={BOOKING_URL}
-            onMouseEnter={() => setDropdown(null)}
-            className="btn-soft"
+          {/* Nav items lift up and fade out while the mega-menu is open. */}
+          <div
+            aria-hidden={open}
             style={{
-              background: C.cyan,
-              color: C.navy,
-              padding: "13px 24px",
-              borderRadius: 8,
-              fontWeight: 600,
-              fontSize: 15,
+              display: "flex",
+              alignItems: "center",
+              gap: 28,
+              flexWrap: "wrap",
+              pointerEvents: open ? "none" : "auto",
             }}
           >
-            Book a Free Consultation
-          </a>
+            {LINKS.map((l, i) => {
+              const on = l.key === active;
+              const hasDropdown = DROPDOWNS.some((d) => d.key === l.key);
+              const showing = dropdown === l.key;
+              return (
+                <span
+                  key={l.key}
+                  onMouseEnter={() => setDropdown(hasDropdown ? l.key : null)}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 7,
+                    ...liftAway(i, LINKS.length),
+                  }}
+                >
+                  <Link
+                    href={l.href}
+                    className={on ? undefined : "hv-orange"}
+                    style={{ color: on || showing ? C.orange : C.navy }}
+                    aria-haspopup={hasDropdown || undefined}
+                    aria-expanded={hasDropdown ? showing : undefined}
+                    onFocus={() => setDropdown(hasDropdown ? l.key : null)}
+                    onClick={() => {
+                      setOpen(false);
+                      setDropdown(null);
+                    }}
+                  >
+                    {l.label}
+                  </Link>
+                  {hasDropdown && (
+                    <svg
+                      width="11"
+                      height="11"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke={showing ? C.orange : C.navy}
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{
+                        transform: showing ? "rotate(180deg)" : "rotate(0deg)",
+                        transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.25s ease",
+                        marginTop: 2,
+                      }}
+                    >
+                      <path d="M2 4l4 4 4-4" />
+                    </svg>
+                  )}
+                </span>
+              );
+            })}
+            <a
+              href={BOOKING_URL}
+              onMouseEnter={() => setDropdown(null)}
+              className="btn-soft"
+              style={{
+                background: C.cyan,
+                color: C.navy,
+                padding: "13px 24px",
+                borderRadius: 8,
+                fontWeight: 600,
+                fontSize: 15,
+                ...liftAway(LINKS.length, LINKS.length),
+              }}
+            >
+              Book a Free Consultation
+            </a>
+          </div>
           <button
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -329,16 +501,15 @@ export default function SiteHeader({
                       <Link
                         key={l.href}
                         href={l.href}
-                        className="hv-orange"
+                        className="mega-link"
                         style={{
-                          color: C.body,
-                          lineHeight: 1.4,
                           opacity: showing ? 1 : 0,
                           transform: showing ? "translateY(0)" : "translateY(10px)",
-                          transition: `opacity 0.4s ease ${0.06 + i * 0.025}s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) ${0.06 + i * 0.025}s`,
+                          transition: `opacity 0.4s ease ${0.06 + i * 0.025}s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) ${0.06 + i * 0.025}s, background 0.22s ease, color 0.22s ease`,
                         }}
                       >
                         {l.label}
+                        {ARROW}
                       </Link>
                     ))}
                   </div>
@@ -360,50 +531,8 @@ export default function SiteHeader({
                 </div>
 
                 {/* Highlight card, Perks-style */}
-                <div
-                  style={{
-                    flex: "0 1 320px",
-                    background: C.navy,
-                    borderRadius: 12,
-                    padding: "30px 30px 28px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    gap: 14,
-                    opacity: showing ? 1 : 0,
-                    transform: showing ? "translateY(0)" : "translateY(14px)",
-                    transition:
-                      "opacity 0.45s ease 0.12s, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.12s",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontFamily: "var(--font-lexend), Lexend, sans-serif",
-                      fontWeight: 600,
-                      color: "#FFFFFF",
-                      fontSize: 18,
-                    }}
-                  >
-                    Not sure where to start?
-                  </div>
-                  <div style={{ color: C.lightBlue, fontSize: 15.5, lineHeight: 1.55 }}>
-                    Book a free 30-minute consultation with the people who make the calls.
-                  </div>
-                  <a
-                    href={BOOKING_URL}
-                    className="btn-soft"
-                    style={{
-                      marginTop: "auto",
-                      background: C.cyan,
-                      color: C.navy,
-                      padding: "12px 22px",
-                      borderRadius: 8,
-                      fontWeight: 600,
-                      fontSize: 14.5,
-                    }}
-                  >
-                    Book a Free Consultation →
-                  </a>
+                <div style={{ flex: "0 1 320px", display: "flex" }}>
+                  <PromoCard show={showing} />
                 </div>
               </div>
             </div>
@@ -461,8 +590,9 @@ export default function SiteHeader({
           opacity: open ? 1 : 0,
           transform: open ? "translateY(0)" : "translateY(-28px)",
           pointerEvents: open ? "auto" : "none",
-          transition:
-            "opacity 0.4s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.4s",
+          transition: open
+            ? "opacity 0.4s ease 0.1s, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s, visibility 0.4s linear 0.1s"
+            : "opacity 0.35s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.35s",
           visibility: open ? "visible" : "hidden",
         }}
       >
@@ -472,109 +602,71 @@ export default function SiteHeader({
             if ((e.target as HTMLElement).closest("a")) setOpen(false);
           }}
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
-            gap: "40px 32px",
+            width: "100%",
+            maxWidth: 1340,
+            margin: "0 auto",
             flex: 1,
-            alignContent: "start",
-          }}
-        >
-          {MENU_COLUMNS.map((col, i) => (
-            <div
-              key={col.heading}
-              style={{
-                opacity: open ? 1 : 0,
-                transform: open ? "translateY(0)" : "translateY(18px)",
-                transition: `opacity 0.45s ease ${0.1 + i * 0.08}s, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) ${0.1 + i * 0.08}s`,
-              }}
-            >
-              <Link href={col.href} className="hv-orange" style={COL_HEADING}>
-                {col.heading}
-              </Link>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 15,
-                  fontSize: 15.5,
-                }}
-              >
-                {col.links.map((l) => (
-                  <Link
-                    key={l.href}
-                    href={l.href}
-                    className="hv-orange"
-                    style={{ color: C.body, lineHeight: 1.4 }}
-                  >
-                    {l.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Bottom strip */}
-        <div
-          style={{
-            borderTop: `1px solid ${C.border}`,
-            marginTop: 48,
-            paddingTop: 26,
             display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            gap: 24,
-            flexWrap: "wrap",
-            opacity: open ? 1 : 0,
-            transition: "opacity 0.45s ease 0.35s",
+            flexDirection: "column",
           }}
         >
-          <div>
-            <div
-              style={{
-                fontFamily: "var(--font-lexend), Lexend, sans-serif",
-                fontWeight: 600,
-                color: C.navy,
-                fontSize: 17,
-                marginBottom: 6,
-              }}
-            >
-              Not sure where to start?
-            </div>
-            <div style={{ fontSize: 15.5 }}>
-              <a
-                href={BOOKING_URL}
-                className="hv-orange"
+          <div className="mega-grid" style={{ marginBottom: 56 }}>
+            {MENU_COLUMNS.map((col, i) => (
+              <div
+                key={col.heading}
                 style={{
-                  color: C.navy,
-                  fontWeight: 700,
-                  textDecoration: "underline",
-                  textUnderlineOffset: 4,
+                  opacity: open ? 1 : 0,
+                  transform: open ? "translateY(0)" : "translateY(18px)",
+                  transition: `opacity 0.45s ease ${open ? 0.3 + i * 0.08 : 0}s, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) ${open ? 0.3 + i * 0.08 : 0}s`,
                 }}
               >
-                Book a free 30-minute consultation
-              </a>{" "}
-              with the people who make the calls.
-            </div>
+                <ColumnHeading href={col.href}>{col.heading}</ColumnHeading>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 2,
+                    fontSize: 15.5,
+                  }}
+                >
+                  {col.links.map((l) => (
+                    <Link key={l.href} href={l.href} className="mega-link">
+                      {l.label}
+                      {ARROW}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            <PromoCard show={open} delay={open ? 0.54 : 0} />
           </div>
+
+          {/* Bottom strip */}
           <div
             style={{
+              borderTop: `1px solid ${C.border}`,
+              marginTop: "auto",
+              paddingTop: 26,
               display: "flex",
-              gap: 28,
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+              gap: "24px 48px",
               flexWrap: "wrap",
-              fontSize: 14.5,
-              fontWeight: 600,
+              opacity: open ? 1 : 0,
+              transition: `opacity 0.45s ease ${open ? 0.62 : 0}s`,
             }}
           >
-            <a href={`tel:${PHONE_BRISBANE.replace(/\s/g, "")}`} className="hv-orange" style={{ color: C.navy }}>
-              {PHONE_BRISBANE}
-            </a>
-            <a href={`mailto:${EMAIL}`} className="hv-orange" style={{ color: C.navy }}>
-              {EMAIL}
-            </a>
-            <a href={BACHROB_URL} className="hv-orange" style={{ color: C.navy }}>
-              Visit BachRob
-            </a>
+            <div style={{ display: "flex", gap: 44, flexWrap: "wrap" }}>
+              <ContactBit
+                label="Call us"
+                value={PHONE_BRISBANE}
+                href={`tel:${PHONE_BRISBANE.replace(/\s/g, "")}`}
+              />
+              <ContactBit label="Email" value={EMAIL} href={`mailto:${EMAIL}`} />
+              <ContactBit label="Our group" value="Visit BachRob" href={BACHROB_URL} />
+            </div>
+            <SocialLinks size={38} />
           </div>
         </div>
       </div>
