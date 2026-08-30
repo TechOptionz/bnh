@@ -12,8 +12,8 @@ export type ServiceGroup = {
 };
 
 const CARD_TITLE: React.CSSProperties = {
-  fontFamily: "var(--font-archivo), Archivo, sans-serif",
-  fontWeight: 700,
+  fontFamily: "var(--font-lexend), Lexend, sans-serif",
+  fontWeight: 600,
   color: C.navy,
   fontSize: 18,
   margin: "0 0 8px",
@@ -51,10 +51,11 @@ export default function ServiceGroups({ groups }: { groups: ServiceGroup[] }) {
               />
               <h2
                 style={{
-                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                  fontWeight: 800,
+                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                  fontWeight: 600,
                   color: C.navy,
                   fontSize: 26,
+                  letterSpacing: "-0.01em",
                   margin: 0,
                 }}
               >

@@ -26,6 +26,27 @@ const serviceLinks = (division: typeof FA | typeof ACC) =>
     .filter(([, s]) => s.division === division)
     .map(([slug, s]) => ({ href: `/services/${slug}`, label: s.title }));
 
+/** Hover dropdowns for the two service nav items. */
+const DROPDOWNS: {
+  key: Exclude<NavKey, null>;
+  heading: string;
+  href: string;
+  links: { href: string; label: string }[];
+}[] = [
+  {
+    key: "financial-advice",
+    heading: "Financial Advice",
+    href: "/financial-advice",
+    links: serviceLinks(FA),
+  },
+  {
+    key: "accounting",
+    heading: "Accounting, Taxation & Advisory",
+    href: "/accounting",
+    links: serviceLinks(ACC),
+  },
+];
+
 /** Columns of the mega-menu, in display order. */
 const MENU_COLUMNS: { heading: string; href: string; links: { href: string; label: string }[] }[] = [
   {
@@ -33,7 +54,8 @@ const MENU_COLUMNS: { heading: string; href: string; links: { href: string; labe
     href: "/about",
     links: [
       { href: "/about", label: "About Us" },
-      { href: "/blog", label: "Insights & Articles" },
+      { href: "/team", label: "Meet Our Team" },
+      { href: "/blog", label: "Blogs & Articles" },
       { href: "/careers", label: "Careers" },
       { href: "/contact", label: "Contact" },
     ],
@@ -51,8 +73,8 @@ const MENU_COLUMNS: { heading: string; href: string; links: { href: string; labe
 ];
 
 const COL_HEADING: React.CSSProperties = {
-  fontFamily: "var(--font-archivo), Archivo, sans-serif",
-  fontWeight: 800,
+  fontFamily: "var(--font-lexend), Lexend, sans-serif",
+  fontWeight: 600,
   color: C.navy,
   fontSize: 19,
   marginBottom: 22,
@@ -68,6 +90,17 @@ export default function SiteHeader({
   floating?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  /** Which nav item's hover dropdown is showing. */
+  const [dropdown, setDropdown] = useState<Exclude<NavKey, null> | null>(null);
+
+  useEffect(() => {
+    if (!dropdown) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setDropdown(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [dropdown]);
 
   useEffect(() => {
     if (!open) return;
@@ -98,6 +131,7 @@ export default function SiteHeader({
                 padding: "12px 28px",
               }
             : {
+                position: "relative",
                 borderBottom: `1px solid ${C.border}`,
                 padding: "14px 5vw",
               }),
@@ -108,8 +142,13 @@ export default function SiteHeader({
           justifyContent: "space-between",
           gap: 24,
         }}
+        onMouseLeave={() => setDropdown(null)}
       >
-        <Link href="/" style={{ display: "flex", alignItems: "center" }}>
+        <Link
+          href="/"
+          style={{ display: "flex", alignItems: "center" }}
+          onMouseEnter={() => setDropdown(null)}
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/assets/logo.png"
@@ -129,23 +168,56 @@ export default function SiteHeader({
         >
           {LINKS.map((l) => {
             const on = l.key === active;
+            const hasDropdown = DROPDOWNS.some((d) => d.key === l.key);
+            const showing = dropdown === l.key;
             return (
-              <Link
+              <span
                 key={l.key}
-                href={l.href}
-                className={on ? undefined : "hv-orange"}
-                style={{ color: on ? C.orange : C.navy }}
-                onClick={() => setOpen(false)}
+                onMouseEnter={() => setDropdown(hasDropdown ? l.key : null)}
+                style={{ display: "inline-flex", alignItems: "center", gap: 7 }}
               >
-                {l.label}
-              </Link>
+                <Link
+                  href={l.href}
+                  className={on ? undefined : "hv-orange"}
+                  style={{ color: on || showing ? C.orange : C.navy }}
+                  aria-haspopup={hasDropdown || undefined}
+                  aria-expanded={hasDropdown ? showing : undefined}
+                  onFocus={() => setDropdown(hasDropdown ? l.key : null)}
+                  onClick={() => {
+                    setOpen(false);
+                    setDropdown(null);
+                  }}
+                >
+                  {l.label}
+                </Link>
+                {hasDropdown && (
+                  <svg
+                    width="11"
+                    height="11"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    stroke={showing ? C.orange : C.navy}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{
+                      transform: showing ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.25s ease",
+                      marginTop: 2,
+                    }}
+                  >
+                    <path d="M2 4l4 4 4-4" />
+                  </svg>
+                )}
+              </span>
             );
           })}
           <a
             href={BOOKING_URL}
+            onMouseEnter={() => setDropdown(null)}
             className="btn-soft"
             style={{
-              background: C.lightBlue,
+              background: C.cyan,
               color: C.navy,
               padding: "13px 24px",
               borderRadius: 8,
@@ -198,7 +270,160 @@ export default function SiteHeader({
             </svg>
           </button>
         </nav>
+
+        {/* Hover mega-dropdowns for the two service nav items */}
+        {DROPDOWNS.map((d) => {
+          const showing = dropdown === d.key && !open;
+          return (
+            <div
+              key={d.key}
+              aria-hidden={!showing}
+              style={{
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                right: 0,
+                paddingTop: 12,
+                zIndex: 60,
+                pointerEvents: showing ? "auto" : "none",
+              }}
+            >
+              <div
+                onClick={(e) => {
+                  /* Close when any link inside the panel is clicked. */
+                  if ((e.target as HTMLElement).closest("a")) setDropdown(null);
+                }}
+                style={{
+                  background: "#FFFFFF",
+                  borderRadius: 14,
+                  boxShadow: "0 28px 72px rgba(10,18,36,0.26)",
+                  padding: "36px 40px",
+                  display: "flex",
+                  gap: 40,
+                  alignItems: "stretch",
+                  flexWrap: "wrap",
+                  opacity: showing ? 1 : 0,
+                  transform: showing ? "translateY(0)" : "translateY(-16px)",
+                  visibility: showing ? "visible" : "hidden",
+                  transition:
+                    "opacity 0.35s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.35s",
+                }}
+              >
+                <div style={{ flex: "1 1 460px", minWidth: 0 }}>
+                  <Link
+                    href={d.href}
+                    className="hv-orange"
+                    style={{ ...COL_HEADING, marginBottom: 20 }}
+                  >
+                    {d.heading}
+                  </Link>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))",
+                      gap: "14px 32px",
+                      fontSize: 15.5,
+                    }}
+                  >
+                    {d.links.map((l, i) => (
+                      <Link
+                        key={l.href}
+                        href={l.href}
+                        className="hv-orange"
+                        style={{
+                          color: C.body,
+                          lineHeight: 1.4,
+                          opacity: showing ? 1 : 0,
+                          transform: showing ? "translateY(0)" : "translateY(10px)",
+                          transition: `opacity 0.4s ease ${0.06 + i * 0.025}s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) ${0.06 + i * 0.025}s`,
+                        }}
+                      >
+                        {l.label}
+                      </Link>
+                    ))}
+                  </div>
+                  <Link
+                    href={d.href}
+                    className="hv-orange"
+                    style={{
+                      display: "inline-block",
+                      marginTop: 24,
+                      color: C.navy,
+                      fontWeight: 700,
+                      fontSize: 14.5,
+                      textDecoration: "underline",
+                      textUnderlineOffset: 4,
+                    }}
+                  >
+                    View all {d.heading.toLowerCase()} services →
+                  </Link>
+                </div>
+
+                {/* Highlight card, Perks-style */}
+                <div
+                  style={{
+                    flex: "0 1 320px",
+                    background: C.navy,
+                    borderRadius: 12,
+                    padding: "30px 30px 28px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    gap: 14,
+                    opacity: showing ? 1 : 0,
+                    transform: showing ? "translateY(0)" : "translateY(14px)",
+                    transition:
+                      "opacity 0.45s ease 0.12s, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.12s",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                      fontWeight: 600,
+                      color: "#FFFFFF",
+                      fontSize: 18,
+                    }}
+                  >
+                    Not sure where to start?
+                  </div>
+                  <div style={{ color: C.lightBlue, fontSize: 15.5, lineHeight: 1.55 }}>
+                    Book a free 30-minute consultation with the people who make the calls.
+                  </div>
+                  <a
+                    href={BOOKING_URL}
+                    className="btn-soft"
+                    style={{
+                      marginTop: "auto",
+                      background: C.cyan,
+                      color: C.navy,
+                      padding: "12px 22px",
+                      borderRadius: 8,
+                      fontWeight: 600,
+                      fontSize: 14.5,
+                    }}
+                  >
+                    Book a Free Consultation →
+                  </a>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </header>
+
+      {/* Dimmed backdrop behind the hover dropdowns (visual only) */}
+      <div
+        aria-hidden
+        style={{
+          position: "fixed",
+          inset: 0,
+          background: "rgba(10,18,36,0.42)",
+          zIndex: 45,
+          opacity: dropdown && !open ? 1 : 0,
+          pointerEvents: "none",
+          transition: "opacity 0.4s ease",
+        }}
+      />
 
       {/* Dimmed backdrop behind the mega-menu */}
       <div
@@ -307,8 +532,8 @@ export default function SiteHeader({
           <div>
             <div
               style={{
-                fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                fontWeight: 800,
+                fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                fontWeight: 600,
                 color: C.navy,
                 fontSize: 17,
                 marginBottom: 6,

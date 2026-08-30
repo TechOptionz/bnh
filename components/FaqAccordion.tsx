@@ -4,17 +4,18 @@ import { useState } from "react";
 import { C } from "@/lib/site";
 import type { Faq } from "@/lib/services";
 
-/** The ruled FAQ accordion from the reference design: bold navy questions
- *  separated by hairlines, a cyan arrow on the right that flips when open. */
+/** The ruled FAQ accordion from the reference design, on the navy section:
+ *  bold white questions separated by hairlines, a cyan arrow that flips open. */
 export default function FaqAccordion({ items }: { items: Faq[] }) {
   const [open, setOpen] = useState<number | null>(null);
+  const rule = "1px solid rgba(255,255,255,0.16)";
 
   return (
-    <div style={{ borderTop: `1px solid ${C.border}` }}>
+    <div style={{ borderTop: rule }}>
       {items.map((item, i) => {
         const isOpen = open === i;
         return (
-          <div key={item.q} style={{ borderBottom: `1px solid ${C.border}` }}>
+          <div key={item.q} style={{ borderBottom: rule }}>
             <button
               type="button"
               aria-expanded={isOpen}
@@ -34,11 +35,12 @@ export default function FaqAccordion({ items }: { items: Faq[] }) {
             >
               <span
                 style={{
-                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                  fontWeight: 700,
-                  color: C.navy,
-                  fontSize: 18,
-                  lineHeight: 1.4,
+                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                  fontWeight: 600,
+                  color: "#FFFFFF",
+                  fontSize: "clamp(17px,1.7vw,20px)",
+                  lineHeight: 1.45,
+                  letterSpacing: "-0.005em",
                 }}
               >
                 {item.q}
@@ -49,7 +51,7 @@ export default function FaqAccordion({ items }: { items: Faq[] }) {
                 viewBox="0 0 20 20"
                 fill="none"
                 stroke={C.cyan}
-                strokeWidth="2"
+                strokeWidth="1.6"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 style={{
@@ -72,11 +74,12 @@ export default function FaqAccordion({ items }: { items: Faq[] }) {
               <div style={{ overflow: "hidden" }}>
                 <p
                   style={{
-                    margin: "0 0 26px",
+                    margin: "0 0 28px",
                     padding: "0 44px 0 4px",
-                    fontSize: 15.5,
+                    fontSize: 16,
                     lineHeight: 1.75,
-                    color: C.body,
+                    maxWidth: "88ch",
+                    color: "rgba(255,255,255,0.78)",
                   }}
                 >
                   {item.a}

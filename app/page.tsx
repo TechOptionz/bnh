@@ -1,24 +1,51 @@
 import Link from "next/link";
 import HomeFooter from "@/components/HomeFooter";
+import ImagePlaceholder from "@/components/ImagePlaceholder";
 import SiteHeader from "@/components/SiteHeader";
 import { BACHROB_URL, BOOKING_URL, C, POSTS } from "@/lib/site";
 
-const EYEBROW: React.CSSProperties = {
-  fontFamily: "var(--font-archivo), Archivo, sans-serif",
-  fontWeight: 700,
-  letterSpacing: "0.14em",
-  textTransform: "uppercase",
-  fontSize: 13,
-  color: C.cyan,
-  marginBottom: 12,
+const EYEBROW_CHIP: React.CSSProperties = {
+  width: 12,
+  height: 12,
+  borderRadius: 4,
+  background: C.cyan,
+  display: "inline-block",
+  flexShrink: 0,
 };
 
+/** Small square chip + label, matching the services-page eyebrows. */
+function Eyebrow({
+  label,
+  center = false,
+}: {
+  label: string;
+  center?: boolean;
+}) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: center ? "center" : "flex-start",
+        gap: 10,
+        marginBottom: 18,
+      }}
+    >
+      <span style={EYEBROW_CHIP} />
+      <span style={{ fontSize: 14.5, fontWeight: 600, color: C.body }}>
+        {label}
+      </span>
+    </div>
+  );
+}
+
 const H2: React.CSSProperties = {
-  fontFamily: "var(--font-archivo), Archivo, sans-serif",
-  fontWeight: 800,
+  fontFamily: "var(--font-lexend), Lexend, sans-serif",
+  fontWeight: 600,
   color: C.navy,
-  fontSize: "clamp(28px,3vw,38px)",
-  lineHeight: 1.15,
+  fontSize: "clamp(27px,3.1vw,40px)",
+  lineHeight: 1.18,
+  letterSpacing: "-0.01em",
   margin: 0,
 };
 
@@ -170,11 +197,12 @@ export default function HomePage() {
           </div>
           <h1
             style={{
-              fontFamily: "var(--font-archivo), Archivo, sans-serif",
-              fontWeight: 800,
+              fontFamily: "var(--font-lexend), Lexend, sans-serif",
+              fontWeight: 400,
               color: "#FFFFFF",
               fontSize: "clamp(44px,6.5vw,96px)",
               lineHeight: 1.02,
+              letterSpacing: "-0.015em",
               margin: 0,
               textWrap: "balance",
             }}
@@ -192,17 +220,6 @@ export default function HomePage() {
             zIndex: 2,
           }}
         >
-          <div
-            style={{
-              position: "absolute",
-              top: -54,
-              left: -42,
-              width: 74,
-              height: 74,
-              borderRadius: 20,
-              background: C.lightBlue,
-            }}
-          />
           <a
             href={BOOKING_URL}
             style={{
@@ -211,11 +228,12 @@ export default function HomePage() {
               borderTopLeftRadius: 32,
               padding: "44px 46px 52px 42px",
               width: "min(360px, 86vw)",
-              fontFamily: "var(--font-archivo), Archivo, sans-serif",
-              fontWeight: 800,
+              fontFamily: "var(--font-lexend), Lexend, sans-serif",
+              fontWeight: 600,
               color: C.navyDeep,
               fontSize: "clamp(24px,2.3vw,32px)",
               lineHeight: 1.2,
+              letterSpacing: "-0.01em",
             }}
           >
             Book a Free 30-Min Consultation &rarr;
@@ -245,8 +263,8 @@ export default function HomePage() {
             <div key={s.n}>
               <div
                 style={{
-                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                  fontWeight: 800,
+                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                  fontWeight: 600,
                   fontSize: 28,
                   color: C.navy,
                 }}
@@ -266,7 +284,7 @@ export default function HomePage() {
       >
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ maxWidth: 640, marginBottom: 44 }}>
-            <div style={EYEBROW}>Our Services</div>
+            <Eyebrow label="Our Services" />
             <h2 style={{ ...H2, margin: "0 0 14px" }}>
               Two divisions, one goal: your financial well-being
             </h2>
@@ -303,8 +321,8 @@ export default function HomePage() {
               />
               <h3
                 style={{
-                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                  fontWeight: 700,
+                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                  fontWeight: 600,
                   color: C.navy,
                   fontSize: 23,
                   margin: 0,
@@ -359,8 +377,8 @@ export default function HomePage() {
               />
               <h3
                 style={{
-                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                  fontWeight: 700,
+                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                  fontWeight: 600,
                   color: C.navy,
                   fontSize: 23,
                   margin: 0,
@@ -416,7 +434,7 @@ export default function HomePage() {
                   alignItems: "center",
                   justifyContent: "center",
                   color: "#FFFFFF",
-                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
+                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
                   fontWeight: 800,
                   fontSize: 15,
                 }}
@@ -425,8 +443,8 @@ export default function HomePage() {
               </div>
               <h3
                 style={{
-                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                  fontWeight: 700,
+                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                  fontWeight: 600,
                   color: "#FFFFFF",
                   fontSize: 23,
                   margin: 0,
@@ -473,7 +491,7 @@ export default function HomePage() {
             }}
           >
             <div style={{ maxWidth: 560 }}>
-              <div style={EYEBROW}>Our Specialty</div>
+              <Eyebrow label="Our Specialty" />
               <h2 style={H2}>The pillars we stand by</h2>
             </div>
             <p
@@ -508,8 +526,8 @@ export default function HomePage() {
               >
                 <div
                   style={{
-                    fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                    fontWeight: 700,
+                    fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                    fontWeight: 600,
                     color: C.navy,
                     fontSize: 17,
                   }}
@@ -526,7 +544,7 @@ export default function HomePage() {
       <section style={{ padding: "80px 5vw", background: "#FFFFFF" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ maxWidth: 640, marginBottom: 44 }}>
-            <div style={EYEBROW}>How We Work</div>
+            <Eyebrow label="How We Work" />
             <h2 style={H2}>From first call to dedicated team, in four steps</h2>
           </div>
           <div
@@ -547,7 +565,7 @@ export default function HomePage() {
               >
                 <div
                   style={{
-                    fontFamily: "var(--font-archivo), Archivo, sans-serif",
+                    fontFamily: "var(--font-lexend), Lexend, sans-serif",
                     fontWeight: 800,
                     fontSize: 15,
                     color: "#FFFFFF",
@@ -565,8 +583,8 @@ export default function HomePage() {
                 </div>
                 <h3
                   style={{
-                    fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                    fontWeight: 700,
+                    fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                    fontWeight: 600,
                     color: C.navy,
                     fontSize: 18,
                     margin: "0 0 10px",
@@ -592,9 +610,7 @@ export default function HomePage() {
         }}
       >
         <div style={{ maxWidth: 1100, margin: "0 auto", textAlign: "center" }}>
-          <div style={{ ...EYEBROW, color: C.mute, marginBottom: 28 }}>
-            Our Partners &amp; Platforms
-          </div>
+          <Eyebrow label="Our Partners & Platforms" center />
           <div
             style={{
               display: "flex",
@@ -631,7 +647,7 @@ export default function HomePage() {
             }}
           >
             <div>
-              <div style={EYEBROW}>Recent Blogs</div>
+              <Eyebrow label="Recent Blogs" />
               <h2 style={H2}>Insights from our advisers</h2>
             </div>
             <Link
@@ -649,7 +665,7 @@ export default function HomePage() {
               gap: 24,
             }}
           >
-            {POSTS.map((p) => (
+            {POSTS.slice(0, 3).map((p) => (
               <a
                 key={p.href}
                 href={p.href}
@@ -664,17 +680,21 @@ export default function HomePage() {
                   color: "inherit",
                 }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={p.img}
-                  alt={p.alt}
-                  style={{
-                    width: "100%",
-                    aspectRatio: "16/9",
-                    objectFit: "cover",
-                    display: "block",
-                  }}
-                />
+                {p.img ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={p.img}
+                    alt={p.alt}
+                    style={{
+                      width: "100%",
+                      aspectRatio: "16/9",
+                      objectFit: "cover",
+                      display: "block",
+                    }}
+                  />
+                ) : (
+                  <ImagePlaceholder ratio="16 / 9" radius={0} />
+                )}
                 <div
                   style={{
                     padding: "22px 24px 26px",
@@ -688,8 +708,8 @@ export default function HomePage() {
                   </div>
                   <h3
                     style={{
-                      fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                      fontWeight: 700,
+                      fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                      fontWeight: 600,
                       color: C.navy,
                       fontSize: 19,
                       margin: 0,
@@ -712,7 +732,7 @@ export default function HomePage() {
       <section
         style={{
           position: "relative",
-          backgroundImage: "url('/assets/team-photo.jpg')",
+          backgroundImage: "url('/assets/hero-team-wide.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           padding: "230px 5vw 56px",
@@ -739,7 +759,7 @@ export default function HomePage() {
         >
           <div
             style={{
-              fontFamily: "var(--font-archivo), Archivo, sans-serif",
+              fontFamily: "var(--font-lexend), Lexend, sans-serif",
               fontWeight: 600,
               color: "#FFFFFF",
               fontSize: "clamp(20px,2.4vw,28px)",
@@ -777,11 +797,12 @@ export default function HomePage() {
         <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
           <h2
             style={{
-              fontFamily: "var(--font-archivo), Archivo, sans-serif",
-              fontWeight: 800,
+              fontFamily: "var(--font-lexend), Lexend, sans-serif",
+              fontWeight: 600,
               color: "#FFFFFF",
               fontSize: "clamp(28px,3.4vw,42px)",
-              lineHeight: 1.15,
+              lineHeight: 1.18,
+              letterSpacing: "-0.01em",
               margin: "0 0 16px",
             }}
           >

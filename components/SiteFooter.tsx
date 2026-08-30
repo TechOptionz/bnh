@@ -79,8 +79,8 @@ export default function SiteFooter({
               href={BOOKING_URL}
               className="hv-orange"
               style={{
-                fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                fontWeight: 700,
+                fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                fontWeight: 600,
                 fontSize: 17,
                 color: C.navy,
                 display: "inline-flex",

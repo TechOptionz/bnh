@@ -44,10 +44,11 @@ export default function CareersPage() {
           <div>
             <h2
               style={{
-                fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                fontWeight: 800,
+                fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                fontWeight: 600,
                 color: C.navy,
                 fontSize: 26,
+                letterSpacing: "-0.01em",
                 margin: "0 0 22px",
               }}
             >
@@ -73,8 +74,8 @@ export default function CareersPage() {
             >
               <h3
                 style={{
-                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                  fontWeight: 700,
+                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                  fontWeight: 600,
                   color: C.navy,
                   fontSize: 18,
                   margin: "0 0 10px",
@@ -120,8 +121,8 @@ export default function CareersPage() {
             >
               <h3
                 style={{
-                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                  fontWeight: 700,
+                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                  fontWeight: 600,
                   color: C.navy,
                   fontSize: 16,
                   margin: "0 0 6px",
@@ -133,8 +134,8 @@ export default function CareersPage() {
                 href="tel:1300264346"
                 className="hv-orange"
                 style={{
-                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                  fontWeight: 800,
+                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                  fontWeight: 600,
                   fontSize: 22,
                   color: C.orange,
                 }}

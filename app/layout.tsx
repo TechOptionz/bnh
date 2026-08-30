@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Archivo, Public_Sans } from "next/font/google";
+import { Lexend, Public_Sans } from "next/font/google";
 import Chatbot from "@/components/Chatbot";
 import "./globals.css";
 
-const archivo = Archivo({
+const lexend = Lexend({
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-  variable: "--font-archivo",
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-lexend",
   display: "swap",
 });
 
@@ -30,7 +30,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en-AU" className={`${archivo.variable} ${publicSans.variable}`}>
+    <html lang="en-AU" className={`${lexend.variable} ${publicSans.variable}`}>
       <body>
         {children}
         <Chatbot />

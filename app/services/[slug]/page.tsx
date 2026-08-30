@@ -17,7 +17,7 @@ import { BOOKING_URL, C, PHONE_BRISBANE } from "@/lib/site";
 
 type Params = { params: Promise<{ slug: string }> };
 
-const ARCHIVO = "var(--font-archivo), Archivo, sans-serif";
+const LEXEND = "var(--font-lexend), Lexend, sans-serif";
 const WRAP: React.CSSProperties = { maxWidth: 1280, margin: "0 auto" };
 
 export function generateStaticParams() {
@@ -32,7 +32,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 }
 
 /** Small square + label section marker from the reference design. */
-function Eyebrow({ children }: { children: React.ReactNode }) {
+function Eyebrow({
+  children,
+  light = false,
+}: {
+  children: React.ReactNode;
+  light?: boolean;
+}) {
   return (
     <div
       style={{
@@ -43,9 +49,16 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
       }}
     >
       <span
-        style={{ width: 9, height: 9, background: C.cyan, flexShrink: 0 }}
+        style={{ width: 8, height: 8, background: C.cyan, flexShrink: 0 }}
       />
-      <span style={{ fontSize: 15, fontWeight: 600, color: C.body }}>
+      <span
+        style={{
+          fontSize: 13.5,
+          fontWeight: 500,
+          color: light ? "rgba(255,255,255,0.75)" : C.body,
+          letterSpacing: "0.01em",
+        }}
+      >
         {children}
       </span>
     </div>
@@ -110,7 +123,7 @@ export default async function ServicePage({ params }: Params) {
                     {c.label}
                   </Link>
                 ) : (
-                  <span style={{ color: C.navy, fontWeight: 600 }}>
+                  <span style={{ color: C.navy, fontWeight: 500 }}>
                     {c.label}
                   </span>
                 )}
@@ -119,12 +132,12 @@ export default async function ServicePage({ params }: Params) {
           </div>
           <h1
             style={{
-              fontFamily: ARCHIVO,
-              fontWeight: 800,
+              fontFamily: LEXEND,
+              fontWeight: 600,
               color: C.navy,
-              fontSize: "clamp(40px,5.6vw,74px)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.02em",
+              fontSize: "clamp(36px,4.8vw,62px)",
+              lineHeight: 1.08,
+              letterSpacing: "-0.015em",
               margin: "0 0 48px",
               maxWidth: "18ch",
             }}
@@ -141,12 +154,12 @@ export default async function ServicePage({ params }: Params) {
           <Eyebrow>{service.title}</Eyebrow>
           <h2
             style={{
-              fontFamily: ARCHIVO,
-              fontWeight: 800,
+              fontFamily: LEXEND,
+              fontWeight: 600,
               color: C.navy,
-              fontSize: "clamp(30px,3.6vw,50px)",
-              lineHeight: 1.12,
-              letterSpacing: "-0.015em",
+              fontSize: "clamp(27px,3.1vw,42px)",
+              lineHeight: 1.18,
+              letterSpacing: "-0.01em",
               margin: "0 0 30px",
               maxWidth: "26ch",
             }}
@@ -182,12 +195,12 @@ export default async function ServicePage({ params }: Params) {
             <Eyebrow>{service.title}</Eyebrow>
             <h2
               style={{
-                fontFamily: ARCHIVO,
-                fontWeight: 800,
+                fontFamily: LEXEND,
+                fontWeight: 600,
                 color: C.navy,
-                fontSize: "clamp(28px,3vw,42px)",
-                lineHeight: 1.15,
-                letterSpacing: "-0.015em",
+                fontSize: "clamp(25px,2.7vw,36px)",
+                lineHeight: 1.2,
+                letterSpacing: "-0.01em",
                 margin: "0 0 22px",
                 maxWidth: "20ch",
               }}
@@ -211,10 +224,10 @@ export default async function ServicePage({ params }: Params) {
             ))}
             <p
               style={{
-                fontSize: 16,
+                fontSize: 15.5,
                 lineHeight: 1.75,
                 margin: "10px 0 16px",
-                fontWeight: 600,
+                fontWeight: 500,
                 color: C.navy,
               }}
             >
@@ -259,12 +272,12 @@ export default async function ServicePage({ params }: Params) {
             <Eyebrow>{insightEyebrow}</Eyebrow>
             <h2
               style={{
-                fontFamily: ARCHIVO,
-                fontWeight: 800,
+                fontFamily: LEXEND,
+                fontWeight: 600,
                 color: C.navy,
-                fontSize: "clamp(28px,3.2vw,44px)",
-                lineHeight: 1.15,
-                letterSpacing: "-0.015em",
+                fontSize: "clamp(25px,2.8vw,38px)",
+                lineHeight: 1.22,
+                letterSpacing: "-0.01em",
                 margin: "0 0 26px",
               }}
             >
@@ -282,10 +295,10 @@ export default async function ServicePage({ params }: Params) {
               <div key={s.h} style={{ marginTop: 26 }}>
                 <h3
                   style={{
-                    fontFamily: ARCHIVO,
-                    fontWeight: 700,
+                    fontFamily: LEXEND,
+                    fontWeight: 600,
                     color: C.navy,
-                    fontSize: 20,
+                    fontSize: 19,
                     margin: "0 0 10px",
                   }}
                 >
@@ -309,10 +322,10 @@ export default async function ServicePage({ params }: Params) {
                 color: "#FFFFFF",
                 borderRadius: 8,
                 padding: "28px 26px",
-                fontFamily: ARCHIVO,
-                fontWeight: 700,
-                fontSize: 27,
-                lineHeight: 1.2,
+                fontFamily: LEXEND,
+                fontWeight: 600,
+                fontSize: 23,
+                lineHeight: 1.25,
                 boxShadow: "0 18px 40px rgba(10,18,36,0.18)",
               }}
             >
@@ -328,12 +341,12 @@ export default async function ServicePage({ params }: Params) {
           <Eyebrow>{service.division}</Eyebrow>
           <h2
             style={{
-              fontFamily: ARCHIVO,
-              fontWeight: 800,
+              fontFamily: LEXEND,
+              fontWeight: 600,
               color: C.navy,
-              fontSize: "clamp(30px,3.6vw,48px)",
-              lineHeight: 1.12,
-              letterSpacing: "-0.015em",
+              fontSize: "clamp(27px,3.1vw,40px)",
+              lineHeight: 1.18,
+              letterSpacing: "-0.01em",
               margin: "0 0 24px",
               maxWidth: "24ch",
             }}
@@ -371,12 +384,12 @@ export default async function ServicePage({ params }: Params) {
             <Eyebrow>Contact</Eyebrow>
             <h2
               style={{
-                fontFamily: ARCHIVO,
-                fontWeight: 800,
+                fontFamily: LEXEND,
+                fontWeight: 600,
                 color: C.navy,
-                fontSize: "clamp(30px,3.4vw,46px)",
-                lineHeight: 1.12,
-                letterSpacing: "-0.015em",
+                fontSize: "clamp(26px,2.9vw,38px)",
+                lineHeight: 1.18,
+                letterSpacing: "-0.01em",
                 margin: "0 0 18px",
                 maxWidth: "16ch",
               }}
@@ -399,7 +412,7 @@ export default async function ServicePage({ params }: Params) {
               <a
                 href="tel:1300264346"
                 className="hv-orange"
-                style={{ color: C.navy, fontWeight: 700 }}
+                style={{ color: C.navy, fontWeight: 600 }}
               >
                 {PHONE_BRISBANE}
               </a>{" "}
@@ -409,7 +422,7 @@ export default async function ServicePage({ params }: Params) {
                 className="hv-orange"
                 style={{
                   color: C.navy,
-                  fontWeight: 700,
+                  fontWeight: 600,
                   textDecoration: "underline",
                   textUnderlineOffset: 4,
                 }}
@@ -423,63 +436,66 @@ export default async function ServicePage({ params }: Params) {
         </div>
       </section>
 
-      {/* ---- FAQ ---- */}
-      {faqs.length > 0 && (
-        <section style={{ background: "#FFFFFF", padding: "24px 4vw 96px" }}>
+      {/* ---- FAQ + related services (navy) ---- */}
+      {(faqs.length > 0 || related.length > 0) && (
+        <section style={{ background: C.navy, padding: "80px 4vw 96px" }}>
           <div style={WRAP}>
-            <Eyebrow>Questions?</Eyebrow>
-            <h2
-              style={{
-                fontFamily: ARCHIVO,
-                fontWeight: 800,
-                color: C.navy,
-                fontSize: "clamp(52px,7vw,88px)",
-                lineHeight: 1,
-                letterSpacing: "-0.02em",
-                margin: "0 0 40px",
-              }}
-            >
-              FAQ
-            </h2>
-            <FaqAccordion items={faqs} />
-          </div>
-        </section>
-      )}
-
-      {/* ---- Related services ---- */}
-      {related.length > 0 && (
-        <section style={{ background: "#FFFFFF", padding: "0 4vw 96px" }}>
-          <div style={WRAP}>
-            <h3
-              style={{
-                fontFamily: ARCHIVO,
-                fontWeight: 700,
-                color: C.navy,
-                fontSize: 19,
-                margin: "0 0 20px",
-              }}
-            >
-              Related services
-            </h3>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-              {related.map((r) => (
-                <Link
-                  key={r.href}
-                  href={r.href}
-                  className="card-hover"
+            {faqs.length > 0 && (
+              <>
+                <Eyebrow light>Questions?</Eyebrow>
+                <h2
                   style={{
-                    border: `1px solid ${C.border}`,
-                    borderRadius: 999,
-                    padding: "11px 20px",
-                    color: C.navy,
+                    fontFamily: LEXEND,
                     fontWeight: 600,
-                    fontSize: 14.5,
+                    color: "#FFFFFF",
+                    fontSize: "clamp(42px,5.5vw,68px)",
+                    lineHeight: 1.02,
+                    letterSpacing: "-0.015em",
+                    margin: "0 0 40px",
                   }}
                 >
-                  {r.title}
-                </Link>
-              ))}
-            </div>
+                  FAQ
+                </h2>
+                <FaqAccordion items={faqs} />
+              </>
+            )}
+
+            {related.length > 0 && (
+              <div style={{ marginTop: faqs.length > 0 ? 72 : 0 }}>
+                <Eyebrow light>Explore more</Eyebrow>
+                <h3
+                  style={{
+                    fontFamily: LEXEND,
+                    fontWeight: 600,
+                    color: "#FFFFFF",
+                    fontSize: "clamp(22px,2.2vw,28px)",
+                    letterSpacing: "-0.01em",
+                    margin: "0 0 24px",
+                  }}
+                >
+                  Related services
+                </h3>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+                  {related.map((r) => (
+                    <Link
+                      key={r.href}
+                      href={r.href}
+                      className="pill-dark"
+                      style={{
+                        border: "1px solid rgba(255,255,255,0.28)",
+                        borderRadius: 999,
+                        padding: "11px 20px",
+                        color: "#FFFFFF",
+                        fontWeight: 500,
+                        fontSize: 14.5,
+                      }}
+                    >
+                      {r.title}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </section>
       )}

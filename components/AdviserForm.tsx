@@ -20,10 +20,10 @@ function Label({ children }: { children: React.ReactNode }) {
     <label
       style={{
         display: "block",
-        fontFamily: "var(--font-archivo), Archivo, sans-serif",
-        fontWeight: 700,
+        fontFamily: "var(--font-lexend), Lexend, sans-serif",
+        fontWeight: 600,
         color: C.navy,
-        fontSize: 14.5,
+        fontSize: 13.5,
         marginBottom: 7,
       }}
     >
@@ -62,10 +62,11 @@ export default function AdviserForm({ service }: { service: string }) {
     >
       <div
         style={{
-          fontFamily: "var(--font-archivo), Archivo, sans-serif",
-          fontWeight: 800,
+          fontFamily: "var(--font-lexend), Lexend, sans-serif",
+          fontWeight: 700,
           color: C.navy,
-          fontSize: 22,
+          fontSize: 20,
+          letterSpacing: "-0.01em",
           marginBottom: 24,
         }}
       >
@@ -132,8 +133,8 @@ export default function AdviserForm({ service }: { service: string }) {
             color: "#FFFFFF",
             padding: "14px 26px",
             borderRadius: 8,
-            fontWeight: 700,
-            fontSize: 16,
+            fontWeight: 600,
+            fontSize: 15.5,
             textAlign: "center",
           }}
         >

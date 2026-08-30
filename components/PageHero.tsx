@@ -57,11 +57,12 @@ export default function PageHero({
         </div>
         <h1
           style={{
-            fontFamily: "var(--font-archivo), Archivo, sans-serif",
-            fontWeight: 800,
+            fontFamily: "var(--font-lexend), Lexend, sans-serif",
+            fontWeight: 400,
             color: "#FFFFFF",
             fontSize: titleClamp,
-            lineHeight: 1.1,
+            lineHeight: 1.08,
+            letterSpacing: "-0.015em",
             margin: intro || children ? "0 0 18px" : 0,
             maxWidth: titleMaxWidth,
           }}

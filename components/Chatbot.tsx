@@ -275,7 +275,7 @@ const CSS = `
 .jb-panel{position:fixed;right:22px;bottom:92px;z-index:9999;width:min(360px,calc(100vw - 44px));height:min(520px,calc(100vh - 130px));background:#fff;border-radius:16px;box-shadow:0 12px 48px rgba(14,27,51,.28);display:flex;flex-direction:column;overflow:hidden;font-family:var(--font-public-sans),'Public Sans',sans-serif}
 .jb-hd{background:linear-gradient(120deg,#1B2A4C,#12203C);color:#fff;padding:16px 18px;display:flex;align-items:center;gap:12px}
 .jb-dot{width:10px;height:10px;border-radius:99px;background:#2ECC8F;flex-shrink:0}
-.jb-hd b{font-family:var(--font-archivo),Archivo,sans-serif;font-size:15px;display:block}
+.jb-hd b{font-family:var(--font-lexend),Lexend,sans-serif;font-size:15px;display:block}
 .jb-hd small{color:#C9D4E8;font-size:12px}
 .jb-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#F4F7FA}
 .jb-m{max-width:82%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}

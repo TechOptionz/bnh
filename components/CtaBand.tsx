@@ -23,10 +23,12 @@ export default function CtaBand({
       <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
         <h2
           style={{
-            fontFamily: "var(--font-archivo), Archivo, sans-serif",
-            fontWeight: 800,
+            fontFamily: "var(--font-lexend), Lexend, sans-serif",
+            fontWeight: 600,
             color: C.navy,
             fontSize: headingClamp,
+            lineHeight: 1.18,
+            letterSpacing: "-0.01em",
             margin: "0 0 14px",
           }}
         >
