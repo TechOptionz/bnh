@@ -1,0 +1,87 @@
+/* Base + hover behaviours ported from the design file's `style-hover` attributes. */
+
+:root {
+  --navy: #1b2a4c;
+  --navy-deep: #12203c;
+  --navy-footer: #0e1b33;
+  --orange: #f25c0a;
+  --orange-dark: #d94f04;
+  --cyan: #12b7d6;
+  --teal: #0e93ac;
+  --body: #46536e;
+  --mute: #8a97af;
+  --light-blue: #c9d4e8;
+  --bg-alt: #f4f7fa;
+  --border: #e6ebf2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-public-sans), "Public Sans", sans-serif;
+  color: var(--body);
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--teal);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--orange);
+}
+
+img {
+  max-width: 100%;
+}
+
+/* --- hover helpers ------------------------------------------------------ */
+
+/* Nav / footer links that sit navy or light and turn orange on hover. */
+.hv-orange:hover {
+  color: var(--orange) !important;
+}
+
+/* Solid orange buttons. */
+.btn-orange:hover {
+  background: var(--orange-dark) !important;
+  color: #ffffff !important;
+}
+
+/* Outlined navy buttons. */
+.btn-outline:hover {
+  color: var(--orange) !important;
+  border-color: var(--orange) !important;
+}
+
+/* Cards that pick up a cyan border on hover. */
+.card-hover:hover {
+  border-color: var(--cyan) !important;
+  color: inherit;
+}
+
+/* Breadcrumb links on the dark hero. */
+.crumb:hover {
+  color: #ffffff !important;
+}
+
+/* White button on the BachRob banner. */
+.btn-white:hover {
+  background: var(--orange) !important;
+  color: #ffffff !important;
+}
+
+/* Cyan button in the contact sidebar. */
+.btn-cyan:hover {
+  background: #ffffff !important;
+  color: var(--navy-footer) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--mute);
+}
