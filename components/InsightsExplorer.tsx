@@ -1,8 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
+import { highlightParts, searchPosts, type SearchHit } from "@/lib/blogSearch";
 import { C, POSTS, type Post } from "@/lib/site";
+
+type Sort = "relevance" | "newest" | "oldest" | "az";
 
 const SELECT_STYLE: React.CSSProperties = {
   appearance: "none",
@@ -57,7 +60,34 @@ function FilterSelect({
   );
 }
 
-function PostCard({ post }: { post: Post }) {
+/** Renders `text` with every matched search term wrapped in a <mark>. */
+function Highlight({ text, terms }: { text: string; terms: string[] }) {
+  const parts = useMemo(() => highlightParts(text, terms), [text, terms]);
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.hit ? (
+          <mark
+            key={i}
+            style={{
+              background: "rgba(0,174,199,0.18)",
+              color: "inherit",
+              borderRadius: 3,
+              padding: "0 1px",
+            }}
+          >
+            {part.text}
+          </mark>
+        ) : (
+          <span key={i}>{part.text}</span>
+        )
+      )}
+    </>
+  );
+}
+
+function PostCard({ post, hit }: { post: Post; hit?: SearchHit }) {
+  const terms = hit?.matched ?? [];
   return (
     <a
       href={post.href}
@@ -134,11 +164,42 @@ function PostCard({ post }: { post: Post }) {
           margin: "12px 0 10px",
         }}
       >
-        {post.title}
+        <Highlight text={post.title} terms={terms} />
       </h2>
-      <p style={{ margin: "0 0 22px", fontSize: 15, lineHeight: 1.65, flex: 1 }}>
-        {post.excerpt}
+      <p style={{ margin: "0 0 14px", fontSize: 15, lineHeight: 1.65 }}>
+        <Highlight text={post.excerpt} terms={terms} />
       </p>
+      {/* Body-only hits show where in the article the keyword actually lives. */}
+      {hit?.snippet ? (
+        <p
+          style={{
+            margin: "0 0 18px",
+            padding: "10px 14px",
+            borderLeft: `3px solid ${C.cyan}`,
+            background: C.bgAlt,
+            borderRadius: "0 8px 8px 0",
+            fontSize: 14,
+            lineHeight: 1.6,
+            color: C.body,
+          }}
+        >
+          <span
+            style={{
+              display: "block",
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: 0.4,
+              textTransform: "uppercase",
+              color: C.teal,
+              marginBottom: 4,
+            }}
+          >
+            Found in this article
+          </span>
+          <Highlight text={hit.snippet} terms={terms} />
+        </p>
+      ) : null}
+      <span style={{ flex: 1 }} />
       <span
         className="post-card-more"
         style={{
@@ -152,6 +213,7 @@ function PostCard({ post }: { post: Post }) {
           display: "inline-flex",
           alignItems: "center",
           gap: 9,
+          marginTop: 8,
           transition: "border-color 0.25s ease, color 0.25s ease",
         }}
       >
@@ -177,36 +239,49 @@ export default function InsightsExplorer() {
   const [query, setQuery] = useState("");
   const [type, setType] = useState("all");
   const [category, setCategory] = useState("all");
-  const [sort, setSort] = useState<"newest" | "oldest" | "az">("newest");
+  const [sort, setSort] = useState<Sort>("newest");
 
-  const types = useMemo(
-    () => Array.from(new Set(POSTS.map((p) => p.type))),
-    []
-  );
+  /* Keeps typing responsive: the input updates immediately while the (heavier)
+     full-text pass over every article renders at a lower priority. */
+  const deferredQuery = useDeferredValue(query);
+  const searching = deferredQuery.trim().length > 0;
+  const stale = query !== deferredQuery;
+
+  const types = useMemo(() => Array.from(new Set(POSTS.map((p) => p.type))), []);
   const categories = useMemo(
     () => Array.from(new Set(POSTS.map((p) => p.category))).sort(),
     []
   );
 
-  const posts = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const list = POSTS.filter(
+  const hits = useMemo(() => {
+    const pool = POSTS.filter(
       (p) =>
         (type === "all" || p.type === type) &&
-        (category === "all" || p.category === category) &&
-        (!q ||
-          p.title.toLowerCase().includes(q) ||
-          p.excerpt.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q))
+        (category === "all" || p.category === category)
     );
-    return list.sort((a, b) =>
-      sort === "az"
-        ? a.title.localeCompare(b.title)
-        : sort === "oldest"
-          ? a.iso.localeCompare(b.iso)
-          : b.iso.localeCompare(a.iso)
+    const found = searchPosts(deferredQuery, pool);
+
+    /* searchPosts already returns relevance order; the other sorts re-order it
+       while keeping each hit's matched terms and snippet attached. */
+    const effective: Sort = sort === "relevance" && !searching ? "newest" : sort;
+    if (effective === "relevance") return found;
+    return [...found].sort((a, b) =>
+      effective === "az"
+        ? a.post.title.localeCompare(b.post.title)
+        : effective === "oldest"
+          ? a.post.iso.localeCompare(b.post.iso)
+          : b.post.iso.localeCompare(a.post.iso)
     );
-  }, [query, type, category, sort]);
+  }, [deferredQuery, searching, type, category, sort]);
+
+  const onQueryChange = (v: string) => {
+    setQuery(v);
+    // Typing should surface the best match first; clearing restores Newest.
+    if (v.trim() && sort === "newest") setSort("relevance");
+    if (!v.trim() && sort === "relevance") setSort("newest");
+  };
+
+  const filtered = type !== "all" || category !== "all";
 
   const clearFilters = () => {
     setQuery("");
@@ -225,45 +300,84 @@ export default function InsightsExplorer() {
           justifyContent: "space-between",
           gap: "18px 28px",
           flexWrap: "wrap",
-          marginBottom: 48,
+          marginBottom: 20,
         }}
       >
         <div style={{ position: "relative", flex: "1 1 240px", maxWidth: 320 }}>
           <input
-            type="search"
+            type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search"
-            aria-label="Search articles"
+            onChange={(e) => onQueryChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") onQueryChange("");
+            }}
+            placeholder="Search articles"
+            aria-label="Search articles by title, topic or content"
             style={{
               width: "100%",
-              border: `1px solid ${C.borderInput}`,
+              border: `1px solid ${searching ? C.cyan : C.borderInput}`,
               borderRadius: 8,
               padding: "12px 44px 12px 14px",
               fontSize: 14.5,
               color: C.navy,
               outlineColor: C.cyan,
+              transition: "border-color 0.2s ease",
             }}
           />
-          <svg
-            width="17"
-            height="17"
-            viewBox="0 0 18 18"
-            fill="none"
-            stroke={C.navy}
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            style={{
-              position: "absolute",
-              right: 15,
-              top: "50%",
-              transform: "translateY(-50%)",
-              pointerEvents: "none",
-            }}
-          >
-            <circle cx="7.5" cy="7.5" r="5.5" />
-            <path d="M12 12l4.5 4.5" />
-          </svg>
+          {searching || query ? (
+            <button
+              type="button"
+              onClick={() => onQueryChange("")}
+              aria-label="Clear search"
+              style={{
+                position: "absolute",
+                right: 8,
+                top: "50%",
+                transform: "translateY(-50%)",
+                width: 28,
+                height: 28,
+                display: "grid",
+                placeItems: "center",
+                border: "none",
+                background: "none",
+                cursor: "pointer",
+                color: C.navy,
+                padding: 0,
+              }}
+            >
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              >
+                <path d="M3.5 3.5l9 9M12.5 3.5l-9 9" />
+              </svg>
+            </button>
+          ) : (
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 18 18"
+              fill="none"
+              stroke={C.navy}
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              style={{
+                position: "absolute",
+                right: 15,
+                top: "50%",
+                transform: "translateY(-50%)",
+                pointerEvents: "none",
+              }}
+            >
+              <circle cx="7.5" cy="7.5" r="5.5" />
+              <path d="M12 12l4.5 4.5" />
+            </svg>
+          )}
         </div>
         <div
           style={{
@@ -294,8 +408,11 @@ export default function InsightsExplorer() {
           <FilterSelect
             label="Sort by"
             value={sort}
-            onChange={(v) => setSort(v as typeof sort)}
+            onChange={(v) => setSort(v as Sort)}
             options={[
+              ...(searching
+                ? [{ value: "relevance", label: "Relevance" }]
+                : []),
               { value: "newest", label: "Newest" },
               { value: "oldest", label: "Oldest" },
               { value: "az", label: "A to Z" },
@@ -304,17 +421,65 @@ export default function InsightsExplorer() {
         </div>
       </div>
 
+      {/* Result summary */}
+      <div
+        aria-live="polite"
+        style={{
+          minHeight: 22,
+          marginBottom: 28,
+          fontSize: 14.5,
+          color: C.body,
+          opacity: stale ? 0.55 : 1,
+          transition: "opacity 0.2s ease",
+        }}
+      >
+        {searching || filtered ? (
+          <span>
+            <strong style={{ color: C.navy }}>{hits.length}</strong>{" "}
+            {hits.length === 1 ? "article" : "articles"}
+            {searching ? (
+              <>
+                {" "}
+                matching{" "}
+                <strong style={{ color: C.navy }}>
+                  &ldquo;{deferredQuery.trim()}&rdquo;
+                </strong>
+              </>
+            ) : null}
+            {" · "}
+            <button
+              type="button"
+              onClick={clearFilters}
+              style={{
+                border: "none",
+                background: "none",
+                padding: 0,
+                font: "inherit",
+                color: C.teal,
+                fontWeight: 600,
+                cursor: "pointer",
+                textDecoration: "underline",
+              }}
+            >
+              Reset
+            </button>
+          </span>
+        ) : null}
+      </div>
+
       {/* Card grid */}
-      {posts.length > 0 ? (
+      {hits.length > 0 ? (
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))",
             gap: "56px 32px",
+            opacity: stale ? 0.6 : 1,
+            transition: "opacity 0.2s ease",
           }}
         >
-          {posts.map((p) => (
-            <PostCard key={p.href} post={p} />
+          {hits.map((h) => (
+            <PostCard key={h.post.href} post={h.post} hit={h} />
           ))}
         </div>
       ) : (

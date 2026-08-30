@@ -295,7 +295,6 @@ export default function TeamPage() {
       <CtaBand
         heading="Speak with the people who make the calls"
         body="Meet us over a free 30-minute consultation and see how we can help with your tax, accounting or financial goals."
-        background="#FFFFFF"
       />
 
       <SiteFooter omit={["about"]} />

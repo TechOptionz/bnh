@@ -305,7 +305,6 @@ export default async function TeamMemberPage({ params }: Params) {
       <CtaBand
         heading={`Speak with ${first} and the JCA-BNH team`}
         body="Meet us over a free 30-minute consultation and see how we can help with your tax, accounting or financial goals."
-        background={C.bgAlt}
       />
 
       <SiteFooter omit={["about"]} />

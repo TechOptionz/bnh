@@ -4,7 +4,7 @@ import { BOOKING_URL, C } from "@/lib/site";
 export default function CtaBand({
   heading,
   body,
-  background = C.bgAlt,
+  background = `linear-gradient(120deg,${C.navy} 0%,${C.navyDeep} 100%)`,
   padding = "70px 5vw",
   headingClamp = "clamp(26px,3vw,36px)",
   bodySize = 16.5,
@@ -25,7 +25,7 @@ export default function CtaBand({
           style={{
             fontFamily: "var(--font-lexend), Lexend, sans-serif",
             fontWeight: 600,
-            color: C.navy,
+            color: "#FFFFFF",
             fontSize: headingClamp,
             lineHeight: 1.18,
             letterSpacing: "-0.01em",
@@ -35,7 +35,12 @@ export default function CtaBand({
           {heading}
         </h2>
         <p
-          style={{ fontSize: bodySize, lineHeight: 1.65, margin: "0 0 28px" }}
+          style={{
+            color: C.lightBlue,
+            fontSize: bodySize,
+            lineHeight: 1.65,
+            margin: "0 0 28px",
+          }}
         >
           {body}
         </p>

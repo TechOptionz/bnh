@@ -3,6 +3,7 @@ import Link from "next/link";
 import ContactForm from "@/components/ContactForm";
 import PageHero from "@/components/PageHero";
 import SiteFooter from "@/components/SiteFooter";
+import SocialLinks from "@/components/SocialLinks";
 import { BOOKING_URL, C, EMAIL, OFFICES } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -137,6 +138,10 @@ export default function ContactPage() {
               <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.6 }}>
                 {brisbane.hours}
               </p>
+            </div>
+
+            <div style={{ marginTop: 30 }}>
+              <SocialLinks label="Connect with us" size={42} />
             </div>
           </div>
 

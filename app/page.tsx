@@ -604,29 +604,34 @@ export default function HomePage() {
       {/* Partners */}
       <section
         style={{
-          padding: "56px 5vw",
+          padding: "84px 0 92px",
           background: "#FFFFFF",
           borderBottom: "1px solid #EEF2F7",
         }}
       >
-        <div style={{ maxWidth: 1100, margin: "0 auto", textAlign: "center" }}>
+        <div
+          style={{
+            maxWidth: 1100,
+            margin: "0 auto 44px",
+            padding: "0 5vw",
+            textAlign: "center",
+          }}
+        >
           <Eyebrow label="Our Partners & Platforms" center />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 44,
-              flexWrap: "wrap",
-            }}
-          >
-            {PARTNERS.map((p) => (
+          <h2 style={H2}>Trusted tools, trusted accreditations</h2>
+        </div>
+        <div className="partner-marquee">
+          <div className="partner-marquee-track">
+            {/* Four copies: the first half fills even ultrawide screens, the
+                second half is what slides in behind it, so the loop never gaps. */}
+            {[...PARTNERS, ...PARTNERS, ...PARTNERS, ...PARTNERS].map((p, i) => (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                key={p.alt}
+                key={`${p.alt}-${i}`}
                 src={p.src}
                 alt={p.alt}
-                style={{ height: 64, filter: "grayscale(1)", opacity: 0.75 }}
+                aria-hidden={i >= PARTNERS.length}
+                loading="eager"
               />
             ))}
           </div>

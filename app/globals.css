@@ -58,6 +58,17 @@ img {
   border-color: var(--orange) !important;
 }
 
+/* Circular social icon chips. */
+.social-chip {
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.social-chip:hover {
+  background: var(--orange) !important;
+  border-color: var(--orange) !important;
+  color: #ffffff !important;
+}
+
 /* Cards that pick up a cyan border on hover. */
 .card-hover:hover {
   border-color: var(--cyan) !important;
@@ -151,4 +162,69 @@ input,
 textarea,
 select {
   font-family: var(--font-public-sans), "Public Sans", sans-serif;
+}
+
+/* Partner logo marquee: one track duplicated twice, sliding right to left. */
+@keyframes partner-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.partner-marquee {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+.partner-marquee-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  gap: 88px;
+  /* Matches the gap so the duplicated half lines up exactly at the seam. */
+  padding-right: 88px;
+  animation: partner-marquee 60s linear infinite;
+}
+.partner-marquee:hover .partner-marquee-track {
+  animation-play-state: paused;
+}
+.partner-marquee-track img {
+  height: 124px;
+  width: auto;
+  flex-shrink: 0;
+  object-fit: contain;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.partner-marquee-track img:hover {
+  transform: scale(1.08);
+}
+@media (max-width: 640px) {
+  .partner-marquee-track {
+    gap: 52px;
+    padding-right: 52px;
+  }
+  .partner-marquee-track img {
+    height: 84px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .partner-marquee-track {
+    animation: none;
+  }
 }

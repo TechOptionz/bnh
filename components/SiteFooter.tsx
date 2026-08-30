@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SocialLinks from "@/components/SocialLinks";
 import {
   BACHROB_URL,
   BOOKING_URL,
@@ -171,21 +172,8 @@ export default function SiteFooter({
 
         {/* ---- Legal strip ----------------------------------------- */}
         <div style={{ borderTop: `1px solid ${C.border}`, paddingTop: 18 }}>
-          <div style={{ display: "flex", gap: 18, marginBottom: 12, fontSize: 13.5 }}>
-            <a
-              href="https://www.facebook.com/bnh.finance?mibextid=ZbWKwL"
-              className="hv-orange"
-              style={LINK}
-            >
-              Facebook
-            </a>
-            <a
-              href="https://www.linkedin.com/company/bnhfinance"
-              className="hv-orange"
-              style={LINK}
-            >
-              LinkedIn
-            </a>
+          <div style={{ marginBottom: 20 }}>
+            <SocialLinks label="Follow us" size={40} />
           </div>
           <p
             style={{

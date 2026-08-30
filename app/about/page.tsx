@@ -3,6 +3,7 @@ import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import SocialLinks from "@/components/SocialLinks";
 import ValuesCarousel from "@/components/ValuesCarousel";
 import { C } from "@/lib/site";
 import { TEAM } from "@/lib/team";
@@ -43,6 +44,69 @@ function Eyebrow({ label }: { label: string }) {
     >
       <span style={EYEBROW_CHIP} />
       <span style={{ fontSize: 14.5, fontWeight: 600, color: C.body }}>
+        Image placeholder
+      </span>
+    </div>
+  );
+}
+
+/** Neutral stand-in used where a final photo hasn't been supplied yet. */
+function ImagePlaceholder({
+  ratio = "5 / 6",
+  /** Describes the image that will eventually go here (screen readers). */
+  label = "Image placeholder",
+}: {
+  ratio?: string;
+  label?: string;
+}) {
+  return (
+    <div
+      role="img"
+      aria-label={label}
+      style={{
+        width: "100%",
+        aspectRatio: ratio,
+        borderRadius: 18,
+        background: C.bgAlt,
+        border: `1px dashed ${C.border}`,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 12,
+        position: "relative",
+        zIndex: 1,
+      }}
+    >
+      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" aria-hidden>
+        <rect
+          x="3"
+          y="4"
+          width="18"
+          height="16"
+          rx="3"
+          stroke={C.navy}
+          strokeWidth="1.5"
+          opacity="0.45"
+        />
+        <circle cx="8.5" cy="9.5" r="1.75" fill={C.cyan} />
+        <path
+          d="M4 17l4.5-4.5 3.5 3.5 3-3L20 17"
+          stroke={C.cyan}
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+      <span
+        style={{
+          fontSize: 13,
+          fontWeight: 600,
+          letterSpacing: "0.02em",
+          color: C.body,
+          opacity: 0.75,
+        }}
+      >
         {label}
       </span>
     </div>
@@ -56,28 +120,33 @@ function AccentImage({
   ratio = "5 / 6",
   corner = "right",
 }: {
-  src: string;
+  /** Omit to render a placeholder until the final photo is supplied. */
+  src?: string;
   alt: string;
   ratio?: string;
   corner?: "left" | "right";
 }) {
   return (
     <div style={{ position: "relative" }}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={src}
-        alt={alt}
-        style={{
-          width: "100%",
-          aspectRatio: ratio,
-          objectFit: "cover",
-          borderRadius: 18,
-          display: "block",
-          position: "relative",
-          zIndex: 1,
-          background: C.border,
-        }}
-      />
+      {src ? (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img
+          src={src}
+          alt={alt}
+          style={{
+            width: "100%",
+            aspectRatio: ratio,
+            objectFit: "cover",
+            borderRadius: 18,
+            display: "block",
+            position: "relative",
+            zIndex: 1,
+            background: C.border,
+          }}
+        />
+      ) : (
+        <ImagePlaceholder ratio={ratio} label={alt} />
+      )}
       <div
         aria-hidden
         style={{
@@ -134,19 +203,7 @@ export default function AboutPage() {
       {/* Full-width team photo below the navy band */}
       <section style={{ background: "#FFFFFF", padding: "72px 5vw 0" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/hero-team-wide.jpg"
-            alt="The JCA-BNH team working together"
-            style={{
-              width: "100%",
-              aspectRatio: "16 / 7",
-              objectFit: "cover",
-              borderRadius: 18,
-              display: "block",
-              background: C.border,
-            }}
-          />
+          <ImagePlaceholder ratio="16 / 7" label="Image placeholder" />
         </div>
       </section>
 
@@ -221,7 +278,6 @@ export default function AboutPage() {
             </div>
           </div>
           <AccentImage
-            src="/assets/team-photo.jpg"
             alt="The JCA-BNH team"
             corner="right"
           />
@@ -252,7 +308,6 @@ export default function AboutPage() {
           }}
         >
           <AccentImage
-            src="/assets/slide-2.jpg"
             alt="JCA-BNH advisers in conversation"
             corner="right"
           />
@@ -321,6 +376,10 @@ export default function AboutPage() {
                 </div>
               </div>
             </div>
+
+            <div style={{ marginTop: 30 }}>
+              <SocialLinks label="Follow our journey" size={42} />
+            </div>
           </div>
         </div>
       </section>
@@ -343,38 +402,31 @@ export default function AboutPage() {
             >
               The people behind the numbers
             </h2>
-            <Link
-              href="/team"
-              className="hv-orange"
-              style={{
-                color: C.navy,
-                fontWeight: 700,
-                fontSize: 15.5,
-                textDecoration: "underline",
-                textUnderlineOffset: 4,
-              }}
-            >
-              Meet the full team &rarr;
-            </Link>
+            <p style={{ margin: 0, fontSize: 16.5, lineHeight: 1.75 }}>
+              Senior advisers who stay hands-on from the first conversation
+              through to long-term strategy.
+            </p>
           </div>
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))",
-              gap: 22,
+              gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+              gap: 24,
             }}
           >
-            {TEAM.map((m) => (
+            {TEAM.slice(0, 3).map((m) => (
               <Link
                 key={m.slug}
                 href={`/team/${m.slug}`}
+                className="team-card"
                 style={{
-                  background: "#FFFFFF",
-                  borderRadius: 14,
-                  overflow: "hidden",
-                  display: "flex",
-                  flexDirection: "column",
+                  display: "block",
                   color: "inherit",
+                  position: "relative",
+                  borderRadius: 16,
+                  overflow: "hidden",
+                  aspectRatio: "4 / 5",
+                  background: C.border,
                 }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -382,43 +434,82 @@ export default function AboutPage() {
                   src={m.photo}
                   alt={m.name}
                   style={{
+                    position: "absolute",
+                    inset: 0,
                     width: "100%",
-                    aspectRatio: "1/1",
+                    height: "100%",
                     objectFit: "cover",
                     objectPosition: "top",
                     display: "block",
-                    background: C.border,
                   }}
                 />
-                <div style={{ padding: "20px 22px 24px" }}>
-                  <h3
+                {/* Name + role pinned to the bottom; bio slides open on hover */}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    padding: "70px 24px 24px",
+                    background:
+                      "linear-gradient(180deg, rgba(14,27,51,0) 0%, rgba(14,27,51,0.55) 40%, rgba(14,27,51,0.88) 100%)",
+                    color: "#FFFFFF",
+                  }}
+                >
+                  <div
                     style={{
                       fontFamily: LEXEND,
                       fontWeight: 600,
-                      color: C.navy,
-                      fontSize: 18,
-                      margin: "0 0 4px",
+                      fontSize: 22,
+                      lineHeight: 1.2,
+                      marginBottom: 4,
                     }}
                   >
                     {m.name}
-                  </h3>
+                  </div>
                   <div
                     style={{
-                      fontSize: 13,
-                      fontWeight: 700,
-                      color: C.orange,
-                      letterSpacing: "0.04em",
-                      marginBottom: 10,
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: "#C9E9F4",
                     }}
                   >
                     {m.role}
                   </div>
-                  <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6 }}>
-                    {m.bio}
-                  </p>
+                  <div className="team-bio">
+                    <p
+                      style={{
+                        overflow: "hidden",
+                        margin: 0,
+                        paddingTop: 12,
+                        fontSize: 13.5,
+                        lineHeight: 1.55,
+                        color: "#E3EAF6",
+                      }}
+                    >
+                      {m.bio}
+                    </p>
+                  </div>
                 </div>
               </Link>
             ))}
+          </div>
+          <div style={{ textAlign: "center", marginTop: 48 }}>
+            <Link
+              href="/team"
+              className="btn-orange"
+              style={{
+                background: C.orange,
+                color: "#FFFFFF",
+                padding: "14px 28px",
+                borderRadius: 8,
+                fontWeight: 700,
+                fontSize: 16,
+                display: "inline-block",
+              }}
+            >
+              Meet the full team &rarr;
+            </Link>
           </div>
         </div>
       </section>
@@ -426,7 +517,6 @@ export default function AboutPage() {
       <CtaBand
         heading="Work with a team that puts you first"
         body="Meet us over a free 30-minute consultation and see how we can help with your tax, accounting or financial goals."
-        background="#FFFFFF"
       />
 
       <SiteFooter omit={["about"]} />

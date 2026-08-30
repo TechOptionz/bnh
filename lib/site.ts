@@ -26,6 +26,15 @@ export const FSG_URL =
 export const TERMS_URL = "https://jca-bnh.com.au/terms-of-engagement/";
 export const BACHROB_URL = "https://bachrob.com.au/";
 
+export const FACEBOOK_URL = "https://www.facebook.com/jcabnh/";
+export const LINKEDIN_URL = "https://www.linkedin.com/company/bnhfinance";
+
+/** Official social profiles, in the order they should be presented. */
+export const SOCIALS = [
+  { name: "Facebook", href: FACEBOOK_URL, icon: "facebook" },
+  { name: "LinkedIn", href: LINKEDIN_URL, icon: "linkedin" },
+] as const;
+
 export const PHONE_BRISBANE = "1300 264 346";
 export const PHONE_SUNSHINE = "07 5473 5444";
 export const EMAIL = "info@jca-bnh.com.au";

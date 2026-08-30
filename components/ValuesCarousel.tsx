@@ -154,15 +154,8 @@ export default function ValuesCarousel() {
     <div>
       <div
         style={{
-          maxWidth: 1200,
-          margin: "0 auto",
           padding: "0 5vw",
-          display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "space-between",
-          gap: 24,
-          flexWrap: "wrap",
-          marginBottom: 40,
+          marginBottom: 26,
         }}
       >
         <div style={{ maxWidth: 760 }}>
@@ -202,7 +195,7 @@ export default function ValuesCarousel() {
             with our clients.
           </h2>
         </div>
-        <div style={{ display: "flex", gap: 12 }}>
+        <div style={{ display: "flex", gap: 12, marginTop: 26 }}>
           <button
             type="button"
             aria-label="Previous values"
@@ -238,11 +231,11 @@ export default function ValuesCarousel() {
           gap: 24,
           overflowX: "auto",
           scrollSnapType: "x mandatory",
-          /* Track starts flush with the 1200px container, then bleeds off
+          /* Track starts flush with the left page gutter, then bleeds off
              the right edge of the viewport like the reference design. */
-          paddingLeft: "max(5vw, calc((100vw - 1200px) / 2))",
+          paddingLeft: "5vw",
           paddingRight: "5vw",
-          scrollPaddingLeft: "max(5vw, calc((100vw - 1200px) / 2))",
+          scrollPaddingLeft: "5vw",
         }}
       >
         {VALUES.map((v) => (
