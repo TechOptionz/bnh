@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import SiteFooter from "@/components/SiteFooter";
-import SiteHeader from "@/components/SiteHeader";
 import { C, POSTS } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -13,13 +12,12 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   return (
     <>
-      <SiteHeader active="blog" />
-
       <PageHero
+        active="blog"
         crumbs={[{ label: "Home", href: "/" }, { label: "Blog" }]}
         title="Insights & Articles"
         intro="Practical thinking on tax, super, property and financial planning from the JCA-BNH team."
-        padding="64px 5vw 56px"
+        padding="160px 5vw 56px"
         maxWidth={1140}
         titleClamp="clamp(32px,3.8vw,48px)"
         introMaxWidth="60ch"

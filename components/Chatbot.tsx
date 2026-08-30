@@ -1,27 +1,75 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { ACC, FA, SERVICES } from "@/lib/services";
 
-type Msg = { role: "user" | "assistant"; content: string };
+type Msg = {
+  role: "user" | "assistant";
+  content: string;
+  link?: { href: string; label: string };
+};
 
-const CHIPS = [
-  "What services do you offer?",
-  "How do I book a free consultation?",
-  "Where are your offices?",
+const BOOKING_URL =
+  "https://outlook.office365.com/owa/calendar/JCABNH@jcabrehmer.com.au/bookings/?skipRedirect=1";
+
+/** Service topics offered as quick-question chips, answered from lib/services data. */
+const SERVICE_TOPICS: { label: string; slug: keyof typeof SERVICES }[] = [
+  { label: "Tax returns & advice", slug: "taxation-advisory" },
+  { label: "Bookkeeping & payroll", slug: "bookkeeping-payroll" },
+  { label: "Business advisory", slug: "business-advisory" },
+  { label: "Virtual CFO", slug: "virtual-cfo" },
+  { label: "Retirement planning", slug: "retirement-plan" },
+  { label: "Super & SMSF", slug: "smsf-advice" },
+  { label: "Insurance & protection", slug: "life-insurances" },
+  { label: "Investment advice", slug: "managed-investments" },
+  { label: "Estate planning", slug: "estate-planning" },
+  { label: "Audit services", slug: "audit-services" },
+  { label: "Xero, MYOB & QuickBooks", slug: "business-software" },
+  { label: "Grants advice", slug: "grants-advice" },
 ];
 
 const GREETING =
-  "Hi! I'm the JCA-BNH assistant. I can help with questions about our tax, accounting and financial advice services — or help you book a free 30-minute consultation.";
+  "Hi! I'm the JCA-BNH assistant. I can help with questions about our tax, accounting and financial advice services — or help you book a free 30-minute consultation. Tap a question below or type your own.";
 
 const FALLBACK =
   "I couldn't reach the assistant just now. Please call us on 1300 264 346 (Mon–Fri, 8am–5pm) or book a free consultation via the orange button above.";
+
+const SERVICES_OVERVIEW =
+  "We're better at money matters across two divisions:\n\n" +
+  `1. ${ACC} — tax returns & advice, bookkeeping & payroll, audit, business advisory & planning, Virtual CFO, SMSF accounting and more.\n\n` +
+  `2. ${FA} — retirement planning, super & SMSF advice, personal insurance, investments and estate planning.\n\n` +
+  "Pick a topic below to see exactly how we can help:";
+
+const BOOKING_ANSWER =
+  "Easy — the consultation is free, takes 30 minutes and there's no obligation. Pick a time online with the link below, or call us on 1300 264 346 (Mon–Fri, 8am–5pm).";
+
+const OFFICES_ANSWER =
+  "We have offices across South East Queensland:\n\n" +
+  "• Brisbane — Level 1/67 Springwood Rd, Springwood QLD 4127 — 1300 264 346\n" +
+  "• Noosa — 1/31 Thomas St, Noosaville QLD 4566 — 07 5473 5444\n" +
+  "• Maroochydore — 2/68 Kingsford Smith Parade QLD 4558 — 07 5473 5444\n\n" +
+  "Open Monday–Friday, 8am–5pm.";
+
+function serviceAnswer(slug: keyof typeof SERVICES): Msg {
+  const s = SERVICES[slug];
+  return {
+    role: "assistant",
+    content:
+      `${s.title} — ${s.tagline}\n\nWe can help with:\n` +
+      s.offer.map((o) => `• ${o}`).join("\n") +
+      "\n\nWant to talk it through? The first 30-minute consultation is free.",
+    link: { href: `/services/${slug}`, label: `More about ${s.title}` },
+  };
+}
 
 /** Floating chat assistant, ported from the design's `jca-chatbot` web component. */
 export default function Chatbot() {
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [busy, setBusy] = useState(false);
-  const [showChips, setShowChips] = useState(true);
+  const [topicsOpen, setTopicsOpen] = useState(false);
+  const [asked, setAsked] = useState<string[]>([]);
   const [value, setValue] = useState("");
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -43,11 +91,22 @@ export default function Chatbot() {
     });
   }
 
+  /** Answer a chip instantly from local data, with a short typing pause. */
+  function answerLocally(question: string, reply: Msg) {
+    if (busy) return;
+    setAsked((a) => [...a, question]);
+    setMsgs((m) => [...m, { role: "user", content: question }]);
+    setBusy(true);
+    setTimeout(() => {
+      setMsgs((m) => [...m, reply]);
+      setBusy(false);
+    }, 350);
+  }
+
   async function submit(text?: string) {
     const q = (text ?? value).trim();
     if (!q || busy) return;
     setValue("");
-    setShowChips(false);
     const next: Msg[] = [...msgs, { role: "user", content: q }];
     setMsgs(next);
     setBusy(true);
@@ -56,7 +115,12 @@ export default function Chatbot() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: next.slice(-12) }),
+        body: JSON.stringify({
+          messages: next.slice(-12).map(({ role, content }) => ({
+            role,
+            content,
+          })),
+        }),
       });
       if (!res.ok) throw new Error("unavailable");
       const data = (await res.json()) as { reply?: string };
@@ -67,6 +131,45 @@ export default function Chatbot() {
     setMsgs((m) => [...m, { role: "assistant", content: reply }]);
     setBusy(false);
   }
+
+  const baseChips = [
+    {
+      label: "What services do you offer?",
+      run: () => {
+        setTopicsOpen(true);
+        answerLocally("What services do you offer?", {
+          role: "assistant",
+          content: SERVICES_OVERVIEW,
+        });
+      },
+    },
+    {
+      label: "How do I book a free consultation?",
+      run: () =>
+        answerLocally("How do I book a free consultation?", {
+          role: "assistant",
+          content: BOOKING_ANSWER,
+          link: { href: BOOKING_URL, label: "Book your free consultation" },
+        }),
+    },
+    {
+      label: "Where are your offices?",
+      run: () =>
+        answerLocally("Where are your offices?", {
+          role: "assistant",
+          content: OFFICES_ANSWER,
+          link: { href: "/contact", label: "Contact details & map" },
+        }),
+    },
+  ];
+
+  const topicChips = SERVICE_TOPICS.map((t) => ({
+    label: t.label,
+    run: () => answerLocally(t.label, serviceAnswer(t.slug)),
+  }));
+
+  const chips = (topicsOpen ? [...topicChips, ...baseChips.slice(1)] : baseChips)
+    .filter((c) => !asked.includes(c.label));
 
   return (
     <>
@@ -104,6 +207,21 @@ export default function Chatbot() {
                 className={`jb-m ${m.role === "user" ? "jb-usr" : "jb-bot"}`}
               >
                 {m.content}
+                {m.link &&
+                  (m.link.href.startsWith("/") ? (
+                    <Link className="jb-link" href={m.link.href}>
+                      {m.link.label} →
+                    </Link>
+                  ) : (
+                    <a
+                      className="jb-link"
+                      href={m.link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {m.link.label} →
+                    </a>
+                  ))}
               </div>
             ))}
             {busy && (
@@ -116,16 +234,16 @@ export default function Chatbot() {
               </div>
             )}
           </div>
-          {showChips && (
+          {chips.length > 0 && (
             <div className="jb-chips">
-              {CHIPS.map((c) => (
+              {chips.map((c) => (
                 <button
-                  key={c}
+                  key={c.label}
                   type="button"
                   className="jb-chip"
-                  onClick={() => submit(c)}
+                  onClick={c.run}
                 >
-                  {c}
+                  {c.label}
                 </button>
               ))}
             </div>
@@ -163,7 +281,9 @@ const CSS = `
 .jb-m{max-width:82%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
 .jb-bot{background:#fff;color:#33415C;border:1px solid #E6EBF2;border-bottom-left-radius:4px;align-self:flex-start}
 .jb-usr{background:#F25C0A;color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
-.jb-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 8px;background:#F4F7FA}
+.jb-link{display:inline-block;margin-top:8px;color:#F25C0A;font-weight:700;font-size:13.5px;text-decoration:none}
+.jb-link:hover{text-decoration:underline}
+.jb-chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 16px;background:#F4F7FA;max-height:96px;overflow-y:auto;flex-shrink:0;border-top:1px solid #E6EBF2}
 .jb-chip{border:1px solid #C4CEDC;background:#fff;color:#1B2A4C;border-radius:999px;padding:6px 12px;font-size:12.5px;cursor:pointer;font-family:inherit}
 .jb-chip:hover{border-color:#F25C0A;color:#F25C0A}
 .jb-in{display:flex;gap:8px;padding:12px;border-top:1px solid #E6EBF2;background:#fff}

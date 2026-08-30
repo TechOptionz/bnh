@@ -107,127 +107,155 @@ export default function HomePage() {
         </a>
       </div>
 
-      <SiteHeader />
+      <SiteHeader floating />
 
-      {/* Hero */}
+      {/* Hero — full-bleed media with floating white navbar */}
       <section
         style={{
-          background: "linear-gradient(180deg,#F4F7FA 0%,#FFFFFF 100%)",
-          padding: "72px 5vw 56px",
+          position: "relative",
+          minHeight: "92vh",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "flex-end",
+        }}
+      >
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/assets/hero-team-wide.jpg"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center",
+          }}
+        >
+          <source src="/assets/hero-video.mp4" type="video/mp4" />
+        </video>
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(180deg, rgba(18,32,60,0.05) 30%, rgba(18,32,60,0.62) 100%)",
+          }}
+        />
+
+        {/* Bottom-left copy */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 2,
+            padding: "180px 3vw 48px",
+            maxWidth: "72%",
+          }}
+        >
+          <div
+            style={{
+              color: "#FFFFFF",
+              fontSize: "clamp(17px,1.6vw,22px)",
+              fontWeight: 600,
+              lineHeight: 1.5,
+              marginBottom: 14,
+            }}
+          >
+            Accountants &amp; Financial Advisers.
+            <br />
+            Trusted across Queensland.
+          </div>
+          <h1
+            style={{
+              fontFamily: "var(--font-archivo), Archivo, sans-serif",
+              fontWeight: 800,
+              color: "#FFFFFF",
+              fontSize: "clamp(44px,6.5vw,96px)",
+              lineHeight: 1.02,
+              margin: 0,
+              textWrap: "balance",
+            }}
+          >
+            Better at <span style={{ color: C.orange }}>money matters</span>.
+          </h1>
+        </div>
+
+        {/* Bottom-right cyan card */}
+        <div
+          style={{
+            position: "absolute",
+            right: 0,
+            bottom: 0,
+            zIndex: 2,
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: -54,
+              left: -42,
+              width: 74,
+              height: 74,
+              borderRadius: 20,
+              background: C.lightBlue,
+            }}
+          />
+          <a
+            href={BOOKING_URL}
+            style={{
+              display: "block",
+              background: C.cyan,
+              borderTopLeftRadius: 32,
+              padding: "44px 46px 52px 42px",
+              width: "min(360px, 86vw)",
+              fontFamily: "var(--font-archivo), Archivo, sans-serif",
+              fontWeight: 800,
+              color: C.navyDeep,
+              fontSize: "clamp(24px,2.3vw,32px)",
+              lineHeight: 1.2,
+            }}
+          >
+            Book a Free 30-Min Consultation &rarr;
+          </a>
+        </div>
+      </section>
+
+      {/* Stats strip */}
+      <section
+        style={{
+          background: "#FFFFFF",
+          borderBottom: `1px solid ${C.border}`,
+          padding: "40px 5vw",
         }}
       >
         <div
           style={{
             maxWidth: 1200,
             margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(340px,1fr))",
-            gap: 48,
-            alignItems: "center",
+            display: "flex",
+            gap: 34,
+            flexWrap: "wrap",
+            justifyContent: "space-between",
           }}
         >
-          <div>
-            <div style={{ ...EYEBROW, marginBottom: 16 }}>
-              Accountants &amp; Financial Advisers &middot; QLD
-            </div>
-            <h1
-              style={{
-                fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                fontWeight: 800,
-                color: C.navy,
-                fontSize: "clamp(38px,4.6vw,60px)",
-                lineHeight: 1.08,
-                margin: "0 0 20px",
-                textWrap: "pretty",
-              }}
-            >
-              Better at <span style={{ color: C.orange }}>money matters</span>.
-            </h1>
-            <p
-              style={{
-                fontSize: 18,
-                lineHeight: 1.65,
-                margin: "0 0 30px",
-                maxWidth: "52ch",
-              }}
-            >
-              We deliver tailored accounting, taxation, advisory and financial
-              advice to help businesses and individuals across Australia thrive
-              &mdash; starting with a free 30-minute consultation.
-            </p>
-            <div
-              style={{
-                display: "flex",
-                gap: 14,
-                flexWrap: "wrap",
-                alignItems: "center",
-              }}
-            >
-              <a
-                href={BOOKING_URL}
-                className="btn-orange"
+          {STATS.map((s) => (
+            <div key={s.n}>
+              <div
                 style={{
-                  background: C.orange,
-                  color: "#FFFFFF",
-                  padding: "15px 28px",
-                  borderRadius: 8,
-                  fontWeight: 700,
-                  fontSize: 16,
-                }}
-              >
-                Book a Free 30-Min Consultation
-              </a>
-              <a
-                href="#services"
-                className="btn-outline"
-                style={{
+                  fontFamily: "var(--font-archivo), Archivo, sans-serif",
+                  fontWeight: 800,
+                  fontSize: 28,
                   color: C.navy,
-                  border: `2px solid ${C.navy}`,
-                  padding: "13px 26px",
-                  borderRadius: 8,
-                  fontWeight: 700,
-                  fontSize: 16,
                 }}
               >
-                Explore Our Services
-              </a>
+                {s.n}
+              </div>
+              <div style={{ fontSize: 13.5 }}>{s.l}</div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                gap: 34,
-                flexWrap: "wrap",
-                marginTop: 42,
-              }}
-            >
-              {STATS.map((s) => (
-                <div key={s.n}>
-                  <div
-                    style={{
-                      fontFamily: "var(--font-archivo), Archivo, sans-serif",
-                      fontWeight: 800,
-                      fontSize: 28,
-                      color: C.navy,
-                    }}
-                  >
-                    {s.n}
-                  </div>
-                  <div style={{ fontSize: 13.5 }}>{s.l}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/hero-graphic.png"
-            alt="Illustration: adviser assembling financial building blocks"
-            style={{
-              width: "100%",
-              maxWidth: 560,
-              justifySelf: "center",
-              display: "block",
-            }}
-          />
+          ))}
         </div>
       </section>
 

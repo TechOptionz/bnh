@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import CtaBand from "@/components/CtaBand";
 import PageHero from "@/components/PageHero";
 import SiteFooter from "@/components/SiteFooter";
-import SiteHeader from "@/components/SiteHeader";
 import { C } from "@/lib/site";
 import { TEAM } from "@/lib/team";
 
@@ -21,9 +20,8 @@ const STATS = [
 export default function AboutPage() {
   return (
     <>
-      <SiteHeader active="about" />
-
       <PageHero
+        active="about"
         crumbs={[{ label: "Home", href: "/" }, { label: "About Us" }]}
         title="About JCA-BNH"
         intro={

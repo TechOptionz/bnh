@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import CareerForm from "@/components/CareerForm";
 import PageHero from "@/components/PageHero";
 import SiteFooter from "@/components/SiteFooter";
-import SiteHeader from "@/components/SiteHeader";
 import { C, PHONE_BRISBANE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -21,13 +20,11 @@ const REASONS = [
 export default function CareersPage() {
   return (
     <>
-      <SiteHeader />
-
       <PageHero
         crumbs={[{ label: "Home", href: "/" }, { label: "Career" }]}
         title="Your first steps towards a career at JCA-BNH"
         intro="Looking for a career in accounting or financial planning? We've grown 300% in a year and we're always keen to hear from talented people. Tell us about yourself below."
-        padding="64px 5vw 56px"
+        padding="160px 5vw 56px"
         maxWidth={1140}
         titleClamp="clamp(32px,3.8vw,48px)"
         introMaxWidth="62ch"

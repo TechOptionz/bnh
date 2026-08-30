@@ -75,6 +75,17 @@ img {
   color: #ffffff !important;
 }
 
+/* Soft light-blue pill in the navbar. */
+.btn-soft:hover {
+  background: var(--navy) !important;
+  color: #ffffff !important;
+}
+
+/* Icon squares in the navbar. */
+.btn-icon:hover {
+  background: var(--light-blue) !important;
+}
+
 /* Cyan button in the contact sidebar. */
 .btn-cyan:hover {
   background: #ffffff !important;

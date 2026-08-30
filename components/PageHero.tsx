@@ -1,20 +1,25 @@
 import Link from "next/link";
+import SiteHeader, { NavKey } from "@/components/SiteHeader";
 import { C } from "@/lib/site";
 
 export type Crumb = { label: string; href?: string };
 
-/** The dark gradient hero used at the top of every inner page. */
+/** The dark gradient hero used at the top of every inner page.
+ *  Renders the floating white navbar over itself, so pages using it
+ *  should NOT also render <SiteHeader />. */
 export default function PageHero({
+  active = null,
   crumbs,
   title,
   intro,
-  padding = "72px 5vw 64px",
+  padding = "170px 5vw 64px",
   maxWidth = 1100,
   titleClamp = "clamp(34px,4vw,52px)",
   titleMaxWidth,
   introMaxWidth = "64ch",
   children,
 }: {
+  active?: NavKey;
   crumbs: Crumb[];
   title: React.ReactNode;
   intro?: React.ReactNode;
@@ -26,12 +31,15 @@ export default function PageHero({
   children?: React.ReactNode;
 }) {
   return (
-    <section
-      style={{
-        background: `linear-gradient(120deg,${C.navy} 0%,${C.navyDeep} 100%)`,
-        padding,
-      }}
-    >
+    <>
+      <SiteHeader floating active={active} />
+      <section
+        style={{
+          position: "relative",
+          background: `linear-gradient(120deg,${C.navy} 0%,${C.navyDeep} 100%)`,
+          padding,
+        }}
+      >
       <div style={{ maxWidth, margin: "0 auto" }}>
         <div style={{ fontSize: 13.5, color: C.mute, marginBottom: 18 }}>
           {crumbs.map((c, i) => (
@@ -76,5 +84,6 @@ export default function PageHero({
         {children}
       </div>
     </section>
+    </>
   );
 }

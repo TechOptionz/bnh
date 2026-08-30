@@ -3,7 +3,6 @@ import CtaBand from "@/components/CtaBand";
 import PageHero from "@/components/PageHero";
 import ServiceGroups, { type ServiceGroup } from "@/components/ServiceGroups";
 import SiteFooter from "@/components/SiteFooter";
-import SiteHeader from "@/components/SiteHeader";
 import { BOOKING_URL, C } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -88,8 +87,8 @@ const GROUPS: ServiceGroup[] = [
 export default function FinancialAdvicePage() {
   return (
     <>
-      <SiteHeader active="financial-advice" />
       <PageHero
+        active="financial-advice"
         crumbs={[{ label: "Home", href: "/" }, { label: "Financial Advice" }]}
         title="Financial Planning & Advice"
         titleMaxWidth="16ch"

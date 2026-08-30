@@ -3,7 +3,6 @@ import Link from "next/link";
 import EnquiryForm from "@/components/EnquiryForm";
 import PageHero from "@/components/PageHero";
 import SiteFooter from "@/components/SiteFooter";
-import SiteHeader from "@/components/SiteHeader";
 import { BOOKING_URL, C, OFFICES } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -22,9 +21,8 @@ const H2: React.CSSProperties = {
 export default function ContactPage() {
   return (
     <>
-      <SiteHeader active="contact" />
-
       <PageHero
+        active="contact"
         crumbs={[{ label: "Home", href: "/" }, { label: "Contact Us" }]}
         title="Let's talk money matters"
         introMaxWidth="60ch"

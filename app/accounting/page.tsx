@@ -3,7 +3,6 @@ import CtaBand from "@/components/CtaBand";
 import PageHero from "@/components/PageHero";
 import ServiceGroups, { type ServiceGroup } from "@/components/ServiceGroups";
 import SiteFooter from "@/components/SiteFooter";
-import SiteHeader from "@/components/SiteHeader";
 import { BOOKING_URL, C } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -117,8 +116,8 @@ const GROUPS: ServiceGroup[] = [
 export default function AccountingPage() {
   return (
     <>
-      <SiteHeader active="accounting" />
       <PageHero
+        active="accounting"
         crumbs={[
           { label: "Home", href: "/" },
           { label: "Accounting, Taxation & Advisory" },
