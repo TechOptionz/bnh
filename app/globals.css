@@ -280,3 +280,557 @@ select {
     animation: none;
   }
 }
+
+/* --- stats strip (home, about) ------------------------------------------ */
+
+.stats-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.stat-cell {
+  padding: 4px 30px;
+  border-left: 1px solid var(--border);
+}
+.stat-cell:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+@media (max-width: 860px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px 0;
+  }
+  .stat-cell:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+@media (max-width: 420px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .stat-cell {
+    padding: 0;
+    border-left: 0;
+  }
+}
+
+/* inline variant — a compact row of figures sitting next to body copy */
+.stats-inline {
+  display: flex;
+  flex-wrap: wrap;
+}
+.stat-cell--inline {
+  padding: 0;
+  border-left: 0;
+}
+
+/* scroll reveal — the figures fade up while the accent rule draws itself.
+   The hidden state is opt-in (.is-armed, set from JS before first paint) so
+   the server-rendered strip stays visible without JS. */
+.stat-cell {
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.stat-cell.is-armed {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.stat-cell.is-in {
+  opacity: 1;
+  transform: none;
+}
+.stat-rule {
+  height: 3px;
+  border-radius: 999px;
+  transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .stat-cell,
+  .stat-rule {
+    transition: none;
+  }
+}
+
+/* --- home: value pillars ------------------------------------------------ */
+
+.pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 980px) {
+  .pillar-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .pillar-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pillar-card {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 26px 30px;
+  box-shadow: 0 1px 2px rgba(27, 42, 76, 0.04);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease, border-color 0.3s ease;
+}
+.pillar-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent);
+  box-shadow: 0 22px 44px -26px rgba(27, 42, 76, 0.5);
+}
+/* Accent rule that wipes in along the bottom edge on hover. */
+.pillar-card::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pillar-card:hover::after {
+  transform: scaleX(1);
+}
+.pillar-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  transition: background 0.3s ease, color 0.3s ease,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pillar-card:hover .pillar-icon {
+  background: var(--accent) !important;
+  color: #ffffff !important;
+  transform: rotate(-6deg) scale(1.06);
+}
+
+/* --- home: how we work -------------------------------------------------- */
+
+.steps-grid {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+/* One dashed rule behind the row; only the segments in the gaps show through. */
+.steps-grid::before {
+  content: "";
+  position: absolute;
+  top: 46px;
+  left: 0;
+  right: 0;
+  border-top: 2px dashed var(--border);
+  z-index: 0;
+}
+@media (max-width: 1040px) {
+  .steps-grid::before {
+    display: none;
+  }
+}
+@media (max-width: 1040px) {
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 620px) {
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.step-card {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 26px 30px;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease, border-color 0.3s ease;
+}
+.step-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent);
+  box-shadow: 0 22px 44px -26px rgba(27, 42, 76, 0.5);
+}
+/* Oversized ghost numeral, tucked into the bottom-right corner. */
+.step-ghost {
+  position: absolute;
+  bottom: -30px;
+  right: 8px;
+  font-family: var(--font-lexend), Lexend, sans-serif;
+  font-weight: 700;
+  font-size: 92px;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.07;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.step-card:hover .step-ghost {
+  opacity: 0.14;
+  transform: translateY(-4px);
+}
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  font-family: var(--font-lexend), Lexend, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pillar-card,
+  .step-card,
+  .pillar-icon,
+  .step-ghost {
+    transition: none;
+  }
+  .pillar-card:hover,
+  .step-card:hover {
+    transform: none;
+  }
+}
+
+/* --- home: services cards ----------------------------------------------- */
+
+.svc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  align-items: stretch;
+}
+@media (max-width: 1040px) {
+  .svc-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* The consultation card becomes a full-width banner on two-up. */
+  .svc-card--cta {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 680px) {
+  .svc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.svc-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 30px 28px 32px;
+  box-shadow: 0 1px 2px rgba(27, 42, 76, 0.04);
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease,
+    border-color 0.3s ease;
+}
+.svc-card:hover,
+.svc-card:focus-within {
+  transform: translateY(-6px);
+  border-color: var(--accent);
+  box-shadow: 0 26px 50px -28px rgba(27, 42, 76, 0.55);
+}
+/* Accent rule that wipes in along the top edge. */
+.svc-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.svc-card:hover::before,
+.svc-card:focus-within::before {
+  transform: scaleX(1);
+}
+/* Soft accent wash that fades up from the card's bottom corner. */
+.svc-card::after {
+  content: "";
+  position: absolute;
+  right: -60px;
+  bottom: -80px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0;
+  filter: blur(46px);
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.svc-card:hover::after,
+.svc-card:focus-within::after {
+  opacity: 0.14;
+}
+.svc-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.svc-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.svc-card:hover .svc-icon,
+.svc-card:focus-within .svc-icon {
+  background: var(--accent);
+  color: #ffffff;
+  transform: rotate(-6deg) scale(1.06);
+}
+
+.svc-title {
+  font-family: var(--font-lexend), Lexend, sans-serif;
+  font-weight: 600;
+  color: var(--navy);
+  font-size: clamp(20px, 1.7vw, 23px);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.svc-copy {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--body);
+}
+
+.svc-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+}
+.svc-pill {
+  display: inline-block;
+  background: #ffffff;
+  border: 1px solid #dce4ee;
+  border-radius: 999px;
+  padding: 6px 13px;
+  font-size: 13px;
+  line-height: 1.2;
+  color: var(--navy);
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+a.svc-pill:hover,
+a.svc-pill:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 7%, #ffffff);
+  transform: translateY(-1px);
+}
+
+.svc-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 6px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--orange);
+  align-self: flex-start;
+}
+.svc-more .svc-arrow {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.svc-card:hover .svc-more .svc-arrow,
+.svc-more:hover .svc-arrow,
+.svc-more:focus-visible .svc-arrow {
+  transform: translateX(5px);
+}
+
+/* consultation card — dark, with its own accent treatment */
+.svc-card--cta {
+  background:
+    radial-gradient(
+      480px 300px at 100% 0%,
+      rgba(18, 183, 214, 0.28),
+      transparent 62%
+    ),
+    linear-gradient(160deg, #1b2a4c 0%, #12203c 100%);
+  border-color: transparent;
+  color: var(--light-blue);
+}
+.svc-card--cta:hover,
+.svc-card--cta:focus-within {
+  border-color: var(--accent);
+}
+.svc-card--cta .svc-title {
+  color: #ffffff;
+}
+.svc-card--cta .svc-copy {
+  color: var(--light-blue);
+}
+.svc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  align-self: flex-start;
+  padding: 5px 12px 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 212, 232, 0.28);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+}
+.svc-badge .svc-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 0 0 rgba(18, 183, 214, 0.7);
+  animation: svc-pulse 2.4s ease-out infinite;
+}
+@keyframes svc-pulse {
+  70% {
+    box-shadow: 0 0 0 7px rgba(18, 183, 214, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(18, 183, 214, 0);
+  }
+}
+.svc-checks {
+  list-style: none;
+  margin: 2px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.svc-checks li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--light-blue);
+}
+.svc-checks svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--cyan);
+}
+.svc-cta-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: auto;
+  background: var(--orange);
+  color: #ffffff;
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15.5px;
+  text-align: center;
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.3s ease;
+}
+.svc-cta-btn:hover,
+.svc-cta-btn:focus-visible {
+  background: var(--orange-dark);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px -16px rgba(242, 92, 10, 0.85);
+}
+.svc-cta-btn .svc-arrow {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.svc-cta-btn:hover .svc-arrow {
+  transform: translateX(4px);
+}
+
+/* scroll reveal — armed from JS before first paint, released once in view */
+.svc-card {
+  transition:
+    opacity 0.6s ease,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease,
+    border-color 0.3s ease;
+}
+.svc-card.is-armed {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.svc-card.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svc-card,
+  .svc-icon,
+  .svc-pill,
+  .svc-arrow,
+  .svc-cta-btn {
+    transition: none;
+  }
+  .svc-card:hover,
+  .svc-card:focus-within {
+    transform: none;
+  }
+  .svc-badge .svc-dot {
+    animation: none;
+  }
+}

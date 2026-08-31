@@ -1,7 +1,9 @@
 import Link from "next/link";
 import HomeFooter from "@/components/HomeFooter";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ServiceCards from "@/components/ServiceCards";
 import SiteHeader from "@/components/SiteHeader";
+import StatsStrip from "@/components/StatsStrip";
 import { BACHROB_URL, BOOKING_URL, C, POSTS } from "@/lib/site";
 
 const EYEBROW_CHIP: React.CSSProperties = {
@@ -49,14 +51,6 @@ const H2: React.CSSProperties = {
   margin: 0,
 };
 
-const PILL: React.CSSProperties = {
-  background: "#FFFFFF",
-  border: "1px solid #DCE4EE",
-  borderRadius: 999,
-  padding: "5px 13px",
-  fontSize: 13,
-  color: C.navy,
-};
 
 const STATS = [
   { n: "300%", l: "growth in the past year" },
@@ -65,30 +59,109 @@ const STATS = [
   { n: "30 min", l: "free first consultation" },
 ];
 
+/** 24px stroke icons for the pillar cards — drawn inline to avoid a icon dep. */
+const PILLAR_ICONS: Record<string, React.ReactNode> = {
+  affordability: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M14.8 9.3a3.2 3.2 0 0 0-5.6 2.7c0 2.6 5.6 2 5.6 4.4a3.2 3.2 0 0 1-5.6-1.4M12 6.2v11.6" />
+    </>
+  ),
+  care: (
+    <>
+      <path d="M20.4 6.9a4.6 4.6 0 0 0-6.5 0L12 8.7l-1.9-1.8a4.6 4.6 0 1 0-6.5 6.5l1.9 1.8 6.5 6.1 6.5-6.1 1.9-1.8a4.6 4.6 0 0 0 0-6.5Z" />
+    </>
+  ),
+  personalised: (
+    <>
+      <circle cx="12" cy="8.2" r="3.6" />
+      <path d="M4.8 20.2a7.2 7.2 0 0 1 14.4 0" />
+      <path d="M18.6 4.4 20 3l1.4 1.4" />
+    </>
+  ),
+  transparency: (
+    <>
+      <path d="M2.5 12S6 5.6 12 5.6 21.5 12 21.5 12 18 18.4 12 18.4 2.5 12 2.5 12Z" />
+      <circle cx="12" cy="12" r="2.9" />
+    </>
+  ),
+  integrity: (
+    <>
+      <path d="M12 3 4.6 6.1v5.3c0 4.4 3 8.5 7.4 9.6 4.4-1.1 7.4-5.2 7.4-9.6V6.1L12 3Z" />
+      <path d="m9 11.9 2.2 2.2L15.3 10" />
+    </>
+  ),
+  expertise: (
+    <>
+      <path d="m12 3 9 4.6-9 4.6-9-4.6L12 3Z" />
+      <path d="M6.3 10v5.1c0 1.6 2.6 2.9 5.7 2.9s5.7-1.3 5.7-2.9V10" />
+      <path d="M21 7.6v5.6" />
+    </>
+  ),
+};
+
 const PILLARS = [
-  { t: "Affordability", c: C.cyan },
-  { t: "Client Care", c: C.orange },
-  { t: "Personalised Service", c: C.navy },
-  { t: "Transparency", c: C.cyan },
-  { t: "Integrity", c: C.orange },
-  { t: "Expertise", c: C.navy },
+  {
+    t: "Affordability",
+    c: C.cyan,
+    k: "affordability",
+    d: "Fixed-fee options and pricing agreed up front, so you always know what an engagement costs.",
+  },
+  {
+    t: "Client Care",
+    c: C.orange,
+    k: "care",
+    d: "Real people who answer the phone, follow things up and treat your deadlines as their own.",
+  },
+  {
+    t: "Personalised Service",
+    c: C.navy,
+    k: "personalised",
+    d: "Advice built around your goals, structure and stage of life — never pulled off the shelf.",
+  },
+  {
+    t: "Transparency",
+    c: C.cyan,
+    k: "transparency",
+    d: "Clear scope, clear fees and plain-English reporting. No surprises at the end of the job.",
+  },
+  {
+    t: "Integrity",
+    c: C.orange,
+    k: "integrity",
+    d: "The advice we'd give our own family, even when it isn't the answer you were hoping for.",
+  },
+  {
+    t: "Expertise",
+    c: C.navy,
+    k: "expertise",
+    d: "CPA-qualified accountants and licensed advisers with global, cross-industry experience.",
+  },
 ];
 
 const STEPS = [
   {
     t: "Free 30-min consultation",
+    m: "30 minutes",
+    c: C.cyan,
     p: "It all begins when you book a free 30-minute consultation to discuss your financial or taxation matters. When you say yes, onboarding begins.",
   },
   {
     t: "Onboarding",
+    m: "3–5 business days",
+    c: C.orange,
     p: "Onboarding usually takes 3–5 business days. We stay in touch and guide you through each step, keeping the paperwork as smooth and simple as possible.",
   },
   {
     t: "Matched to the right team",
+    m: "Week one",
+    c: C.navy,
     p: "Once we identify whether you need taxation or financial services, you're assigned to the right department and a dedicated accountant takes over.",
   },
   {
     t: "Ongoing dedicated support",
+    m: "Ongoing",
+    c: C.orange,
     p: "Your dedicated team delivers personalised service and continuous support — precision, care and clear communication every step of the way.",
   },
 ];
@@ -246,357 +319,300 @@ export default function HomePage() {
         style={{
           background: "#FFFFFF",
           borderBottom: `1px solid ${C.border}`,
-          padding: "40px 5vw",
+          padding: "48px 5vw 50px",
         }}
       >
-        <div
-          style={{
-            maxWidth: 1200,
-            margin: "0 auto",
-            display: "flex",
-            gap: 34,
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-          }}
-        >
-          {STATS.map((s) => (
-            <div key={s.n}>
-              <div
-                style={{
-                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
-                  fontWeight: 600,
-                  fontSize: 28,
-                  color: C.navy,
-                }}
-              >
-                {s.n}
-              </div>
-              <div style={{ fontSize: 13.5 }}>{s.l}</div>
-            </div>
-          ))}
-        </div>
+        <StatsStrip stats={STATS} />
       </section>
 
       {/* Services */}
       <section
         id="services"
-        style={{ padding: "80px 5vw", background: "#FFFFFF" }}
+        style={{
+          position: "relative",
+          padding: "84px 5vw 92px",
+          background: "#FFFFFF",
+          overflow: "hidden",
+        }}
       >
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ maxWidth: 640, marginBottom: 44 }}>
-            <Eyebrow label="Our Services" />
-            <h2 style={{ ...H2, margin: "0 0 14px" }}>
-              Two divisions, one goal: your financial well-being
-            </h2>
-            <p style={{ fontSize: 16.5, lineHeight: 1.65, margin: 0 }}>
-              Our team consists of subject specialists with extensive global
-              experience across industries, caring for clients and creating a
-              positive impact on their financial well-being.
-            </p>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))",
-              gap: 24,
-            }}
-          >
-            <div
-              style={{
-                background: C.bgAlt,
-                borderRadius: 14,
-                padding: "34px 32px",
-                display: "flex",
-                flexDirection: "column",
-                gap: 16,
-              }}
-            >
-              <div
-                style={{
-                  width: 46,
-                  height: 46,
-                  borderRadius: 10,
-                  background: C.cyan,
-                }}
-              />
-              <h3
-                style={{
-                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
-                  fontWeight: 600,
-                  color: C.navy,
-                  fontSize: 23,
-                  margin: 0,
-                }}
-              >
-                Financial Advice
-              </h3>
-              <p style={{ margin: 0, lineHeight: 1.65 }}>
-                Strategic financial advice and solutions to meet your objectives
-                &mdash; from budgeting and retirement planning to estate
-                planning, superannuation and investment advice.
-              </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {[
-                  "Retirement",
-                  "Super & SMSF",
-                  "Insurance",
-                  "Investments",
-                  "Estate Planning",
-                ].map((t) => (
-                  <span key={t} style={PILL}>
-                    {t}
-                  </span>
-                ))}
-              </div>
-              <Link
-                href="/financial-advice"
-                className="hv-orange"
-                style={{ fontWeight: 700, color: C.orange, marginTop: "auto" }}
-              >
-                Learn more &rarr;
-              </Link>
-            </div>
-
-            <div
-              style={{
-                background: C.bgAlt,
-                borderRadius: 14,
-                padding: "34px 32px",
-                display: "flex",
-                flexDirection: "column",
-                gap: 16,
-              }}
-            >
-              <div
-                style={{
-                  width: 46,
-                  height: 46,
-                  borderRadius: 10,
-                  background: C.orange,
-                }}
-              />
-              <h3
-                style={{
-                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
-                  fontWeight: 600,
-                  color: C.navy,
-                  fontSize: 23,
-                  margin: 0,
-                }}
-              >
-                Tax &amp; Accounting
-              </h3>
-              <p style={{ margin: 0, lineHeight: 1.65 }}>
-                A comprehensive range of tax, accounting and advisory services
-                for clients Australia-wide &mdash; taxation strategy,
-                bookkeeping, audit, business advisory and more.
-              </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {[
-                  "Taxation",
-                  "Bookkeeping & Payroll",
-                  "Audit",
-                  "Virtual CFO",
-                  "SMSF",
-                ].map((t) => (
-                  <span key={t} style={PILL}>
-                    {t}
-                  </span>
-                ))}
-              </div>
-              <Link
-                href="/accounting"
-                className="hv-orange"
-                style={{ fontWeight: 700, color: C.orange, marginTop: "auto" }}
-              >
-                Learn more &rarr;
-              </Link>
-            </div>
-
-            <div
-              style={{
-                background: C.navy,
-                borderRadius: 14,
-                padding: "34px 32px",
-                display: "flex",
-                flexDirection: "column",
-                gap: 16,
-                color: C.lightBlue,
-              }}
-            >
-              <div
-                style={{
-                  width: 46,
-                  height: 46,
-                  borderRadius: 10,
-                  background: C.cyan,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#FFFFFF",
-                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
-                  fontWeight: 800,
-                  fontSize: 15,
-                }}
-              >
-                30&#39;
-              </div>
-              <h3
-                style={{
-                  fontFamily: "var(--font-lexend), Lexend, sans-serif",
-                  fontWeight: 600,
-                  color: "#FFFFFF",
-                  fontSize: 23,
-                  margin: 0,
-                }}
-              >
-                Free Consultation
-              </h3>
-              <p style={{ margin: 0, lineHeight: 1.65 }}>
-                Not sure where to start? Schedule a free 30-minute consultation
-                with one of our expert advisers and we&#39;ll tailor an offer
-                to your needs &mdash; no obligation.
-              </p>
-              <a
-                href={BOOKING_URL}
-                className="btn-orange"
-                style={{
-                  background: C.orange,
-                  color: "#FFFFFF",
-                  padding: "13px 24px",
-                  borderRadius: 8,
-                  fontWeight: 700,
-                  textAlign: "center",
-                  marginTop: "auto",
-                }}
-              >
-                Book Now
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pillars */}
-      <section style={{ padding: "72px 5vw", background: C.bgAlt }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        {/* Soft brand wash behind the grid. */}
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "radial-gradient(680px 460px at 92% 6%, rgba(18,183,214,0.07), transparent 62%)",
+            pointerEvents: "none",
+          }}
+        />
+        <div
+          style={{ position: "relative", maxWidth: 1200, margin: "0 auto" }}
+        >
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "end",
-              gap: 24,
+              gap: 28,
               flexWrap: "wrap",
-              marginBottom: 40,
+              marginBottom: 44,
             }}
           >
-            <div style={{ maxWidth: 560 }}>
-              <Eyebrow label="Our Specialty" />
-              <h2 style={H2}>The pillars we stand by</h2>
+            <div style={{ maxWidth: 640 }}>
+              <Eyebrow label="Our Services" />
+              <h2 style={{ ...H2, margin: "0 0 14px" }}>
+                Two divisions, one goal: your financial well-being
+              </h2>
+              <p style={{ fontSize: 16.5, lineHeight: 1.65, margin: 0 }}>
+                Our team consists of subject specialists with extensive global
+                experience across industries, caring for clients and creating a
+                positive impact on their financial well-being.
+              </p>
             </div>
-            <p
+            <Link
+              href="/financial-advice"
+              className="btn-outline"
               style={{
-                maxWidth: 420,
-                margin: 0,
-                lineHeight: 1.6,
-                fontSize: 15.5,
+                border: `1px solid ${C.borderInput}`,
+                borderRadius: 999,
+                padding: "12px 22px",
+                fontWeight: 600,
+                fontSize: 15,
+                color: C.navy,
+                whiteSpace: "nowrap",
               }}
             >
-              Our team has shared values &mdash; six pillars that shape every
-              engagement, from a first tax return to a full corporate
-              restructure.
-            </p>
+              View all services &rarr;
+            </Link>
           </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))",
-              gap: 16,
-            }}
-          >
-            {PILLARS.map((p) => (
-              <div
-                key={p.t}
-                style={{
-                  background: "#FFFFFF",
-                  borderRadius: 12,
-                  padding: "24px 22px",
-                  borderTop: `3px solid ${p.c}`,
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: "var(--font-lexend), Lexend, sans-serif",
-                    fontWeight: 600,
-                    color: C.navy,
-                    fontSize: 17,
-                  }}
-                >
-                  {p.t}
-                </div>
-              </div>
-            ))}
-          </div>
+          <ServiceCards />
         </div>
       </section>
 
-      {/* How we work */}
-      <section style={{ padding: "80px 5vw", background: "#FFFFFF" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ maxWidth: 640, marginBottom: 44 }}>
-            <Eyebrow label="How We Work" />
-            <h2 style={H2}>From first call to dedicated team, in four steps</h2>
-          </div>
+      {/* Pillars */}
+      <section
+        style={{
+          position: "relative",
+          padding: "96px 5vw 104px",
+          background: C.bgAlt,
+          borderTop: `1px solid ${C.border}`,
+          borderBottom: `1px solid ${C.border}`,
+          overflow: "hidden",
+        }}
+      >
+        {/* Soft brand wash behind the grid. */}
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "radial-gradient(560px 420px at 8% 0%, rgba(18,183,214,0.11), transparent 65%), radial-gradient(620px 460px at 96% 100%, rgba(242,92,10,0.09), transparent 65%)",
+            pointerEvents: "none",
+          }}
+        />
+        <div style={{ position: "relative", maxWidth: 1200, margin: "0 auto" }}>
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))",
-              gap: 22,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "end",
+              gap: 28,
+              flexWrap: "wrap",
+              marginBottom: 48,
             }}
           >
-            {STEPS.map((s, i) => (
+            <div style={{ maxWidth: 620 }}>
+              <Eyebrow label="Our Specialty" />
+              <h2 style={H2}>The pillars we stand by</h2>
+            </div>
+            <div style={{ maxWidth: 430 }}>
+              <p style={{ margin: 0, lineHeight: 1.68, fontSize: 15.5 }}>
+                Our team has shared values &mdash; six pillars that shape every
+                engagement, from a first tax return to a full corporate
+                restructure.
+              </p>
               <div
-                key={s.t}
                 style={{
-                  border: `1px solid ${C.border}`,
-                  borderRadius: 14,
-                  padding: "28px 26px",
+                  marginTop: 18,
+                  height: 3,
+                  width: 96,
+                  borderRadius: 999,
+                  background: `linear-gradient(90deg, ${C.cyan}, ${C.orange})`,
                 }}
+              />
+            </div>
+          </div>
+
+          <div className="pillar-grid">
+            {PILLARS.map((p) => (
+              <article
+                key={p.t}
+                className="pillar-card"
+                style={{ ["--accent" as string]: p.c }}
               >
-                <div
-                  style={{
-                    fontFamily: "var(--font-lexend), Lexend, sans-serif",
-                    fontWeight: 800,
-                    fontSize: 15,
-                    color: "#FFFFFF",
-                    background: C.orange,
-                    width: 34,
-                    height: 34,
-                    borderRadius: 999,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: 16,
-                  }}
+                <span
+                  className="pillar-icon"
+                  style={{ background: `${p.c}1A`, color: p.c }}
                 >
-                  {i + 1}
-                </div>
+                  <svg
+                    width="23"
+                    height="23"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden
+                  >
+                    {PILLAR_ICONS[p.k]}
+                  </svg>
+                </span>
                 <h3
                   style={{
                     fontFamily: "var(--font-lexend), Lexend, sans-serif",
                     fontWeight: 600,
                     color: C.navy,
                     fontSize: 18,
+                    letterSpacing: "-0.01em",
+                    margin: "20px 0 9px",
+                  }}
+                >
+                  {p.t}
+                </h3>
+                <p style={{ margin: 0, fontSize: 14.8, lineHeight: 1.66 }}>
+                  {p.d}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How we work */}
+      <section style={{ padding: "96px 5vw 100px", background: "#FFFFFF" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "end",
+              gap: 28,
+              flexWrap: "wrap",
+              marginBottom: 50,
+            }}
+          >
+            <div style={{ maxWidth: 640 }}>
+              <Eyebrow label="How We Work" />
+              <h2 style={H2}>
+                From first call to dedicated team, in four steps
+              </h2>
+            </div>
+            <p
+              style={{
+                maxWidth: 380,
+                margin: 0,
+                fontSize: 15.5,
+                lineHeight: 1.68,
+              }}
+            >
+              A simple, predictable process &mdash; you always know what happens
+              next and who is looking after you.
+            </p>
+          </div>
+
+          <ol className="steps-grid">
+            {STEPS.map((s, i) => (
+              <li
+                key={s.t}
+                className="step-card"
+                style={{ ["--accent" as string]: s.c }}
+              >
+                <span className="step-ghost" aria-hidden>
+                  {`0${i + 1}`}
+                </span>
+                <div
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    marginBottom: 20,
+                  }}
+                >
+                  <span className="step-num">{i + 1}</span>
+                  <span
+                    style={{
+                      fontSize: 12,
+                      fontWeight: 600,
+                      letterSpacing: "0.04em",
+                      textTransform: "uppercase",
+                      color: C.mute,
+                    }}
+                  >
+                    {s.m}
+                  </span>
+                </div>
+                <h3
+                  style={{
+                    position: "relative",
+                    fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                    fontWeight: 600,
+                    color: C.navy,
+                    fontSize: 18.5,
+                    letterSpacing: "-0.01em",
                     margin: "0 0 10px",
                   }}
                 >
                   {s.t}
                 </h3>
-                <p style={{ margin: 0, fontSize: 15, lineHeight: 1.65 }}>
+                <p
+                  style={{
+                    position: "relative",
+                    margin: 0,
+                    fontSize: 15,
+                    lineHeight: 1.66,
+                  }}
+                >
                   {s.p}
                 </p>
-              </div>
+              </li>
             ))}
+          </ol>
+
+          <div
+            style={{
+              marginTop: 44,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 18,
+              flexWrap: "wrap",
+              textAlign: "center",
+            }}
+          >
+            <p style={{ margin: 0, fontSize: 15.5 }}>
+              Ready to start? Step one takes half an hour and costs nothing.
+            </p>
+            <a
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-orange"
+              style={{
+                background: C.orange,
+                color: "#FFFFFF",
+                fontWeight: 600,
+                fontSize: 15,
+                padding: "13px 26px",
+                borderRadius: 999,
+                transition: "background .2s ease",
+              }}
+            >
+              Book a Free Consultation
+            </a>
           </div>
         </div>
       </section>

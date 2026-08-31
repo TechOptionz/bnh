@@ -4,6 +4,7 @@ import CtaBand from "@/components/CtaBand";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import SocialLinks from "@/components/SocialLinks";
+import StatsStrip from "@/components/StatsStrip";
 import ValuesCarousel from "@/components/ValuesCarousel";
 import { C } from "@/lib/site";
 import { TEAM } from "@/lib/team";
@@ -259,23 +260,12 @@ export default function AboutPage() {
               a long-term view &mdash; so they&rsquo;re prepared not just for
               today, but for what comes next.
             </p>
-            <div style={{ display: "flex", gap: 34, flexWrap: "wrap" }}>
-              {STATS.map((s) => (
-                <div key={s.n}>
-                  <div
-                    style={{
-                      fontFamily: LEXEND,
-                      fontWeight: 600,
-                      fontSize: 28,
-                      color: C.orange,
-                    }}
-                  >
-                    {s.n}
-                  </div>
-                  <div style={{ fontSize: 13.5 }}>{s.l}</div>
-                </div>
-              ))}
-            </div>
+            <StatsStrip
+              stats={STATS}
+              variant="inline"
+              numberColor={C.orange}
+              ruleColor={C.orange}
+            />
           </div>
           <AccentImage
             alt="The JCA-BNH team"
