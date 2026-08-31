@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FooterLogo from "@/components/FooterLogo";
 import SocialLinks from "@/components/SocialLinks";
 import { ACC, FA, serviceGroups } from "@/lib/services";
 import {
@@ -212,20 +213,8 @@ export default function SiteFooter({
           </div>
         </div>
 
-        {/* ---- Oversized brand wordmark ---------------------------- */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/assets/logo.png"
-          alt="JCA-BNH — Better at Money Matters"
-          style={{
-            display: "block",
-            width: "100%",
-            maxWidth: "100%",
-            height: "clamp(170px, 38vh, 400px)",
-            objectFit: "contain",
-            margin: "clamp(56px,8vw,96px) auto 32px",
-          }}
-        />
+        {/* ---- Oversized brand wordmark, assembled on scroll ------- */}
+        <FooterLogo />
 
         {/* ---- Legal strip ----------------------------------------- */}
         <div style={{ borderTop: `1px solid ${C.border}`, paddingTop: 18 }}>
