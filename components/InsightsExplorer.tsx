@@ -472,7 +472,7 @@ export default function InsightsExplorer() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))",
+            gridTemplateColumns: "repeat(auto-fill,minmax(min(300px,100%),1fr))",
             gap: "56px 32px",
             opacity: stale ? 0.6 : 1,
             transition: "opacity 0.2s ease",

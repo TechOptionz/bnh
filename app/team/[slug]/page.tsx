@@ -130,18 +130,18 @@ export default async function TeamMemberPage({ params }: Params) {
       <SiteHeader floating active="about" />
 
       {/* Profile hero — pale blue band, name left, photo hanging over the edge */}
-      <section style={{ background: HERO_BLUE, padding: "160px 5vw 0" }}>
+      <section style={{ background: HERO_BLUE, padding: "clamp(120px,22vw,160px) 5vw 0" }}>
         <div
           style={{
             maxWidth: 1200,
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(320px,100%),1fr))",
             gap: "40px 84px",
             alignItems: "start",
           }}
         >
-          <div style={{ padding: "26px 0 90px" }}>
+          <div className="member-hero-copy" style={{ padding: "26px 0 90px" }}>
             <div style={{ fontSize: 14, color: C.mute, marginBottom: 40 }}>
               <Link href="/" className="hv-orange" style={{ color: C.mute }}>
                 Home
@@ -225,6 +225,7 @@ export default async function TeamMemberPage({ params }: Params) {
           <img
             src={m.photo}
             alt={m.name}
+            className="member-portrait"
             style={{
               width: "100%",
               maxWidth: 440,
@@ -244,13 +245,13 @@ export default async function TeamMemberPage({ params }: Params) {
       </section>
 
       {/* Body — intro + sections left, qualifications card right */}
-      <section style={{ background: "#FFFFFF", padding: "90px 5vw 100px" }}>
+      <section style={{ background: "#FFFFFF", padding: "clamp(60px,9vw,90px) 5vw clamp(64px,10vw,100px)" }}>
         <div
           style={{
             maxWidth: 1200,
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(320px,100%),1fr))",
             gap: "70px 84px",
             alignItems: "start",
           }}
@@ -279,6 +280,7 @@ export default async function TeamMemberPage({ params }: Params) {
 
           {/* Sidebar card — sits below the overlapping portrait */}
           <div
+            className="member-side"
             style={{
               maxWidth: 440,
               justifySelf: "end",

@@ -87,13 +87,13 @@ export default function ContactPage() {
       />
 
       {/* Main office + map */}
-      <section style={{ padding: "72px 5vw 40px", background: "#FFFFFF" }}>
+      <section style={{ padding: "clamp(52px,8vw,72px) 5vw 40px", background: "#FFFFFF" }}>
         <div
           style={{
             maxWidth: 1200,
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(320px,100%),1fr))",
             gap: "40px 64px",
             alignItems: "center",
           }}
@@ -162,13 +162,13 @@ export default function ContactPage() {
       </section>
 
       {/* Other offices + enquiry card */}
-      <section style={{ padding: "48px 5vw 88px", background: "#FFFFFF" }}>
+      <section style={{ padding: "48px 5vw clamp(60px,9vw,88px)", background: "#FFFFFF" }}>
         <div
           style={{
             maxWidth: 1200,
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(320px,100%),1fr))",
             gap: "48px 64px",
             alignItems: "start",
           }}

@@ -35,7 +35,7 @@ export default function EnquiryForm() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
       <div
-        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}
+        style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(180px,100%),1fr))", gap: 14 }}
       >
         <input
           placeholder="Full name"

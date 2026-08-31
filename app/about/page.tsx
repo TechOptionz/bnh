@@ -45,7 +45,7 @@ function Eyebrow({ label }: { label: string }) {
     >
       <span style={EYEBROW_CHIP} />
       <span style={{ fontSize: 14.5, fontWeight: 600, color: C.body }}>
-        Image placeholder
+        {label}
       </span>
     </div>
   );
@@ -173,7 +173,7 @@ export default function AboutPage() {
       <section
         style={{
           background: `linear-gradient(120deg,${C.navy} 0%,${C.navyDeep} 100%)`,
-          padding: "170px 5vw 72px",
+          padding: "clamp(126px,22vw,170px) 5vw clamp(48px,8vw,72px)",
         }}
       >
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
@@ -202,7 +202,7 @@ export default function AboutPage() {
       </section>
 
       {/* Full-width team photo below the navy band */}
-      <section style={{ background: "#FFFFFF", padding: "72px 5vw 0" }}>
+      <section style={{ background: "#FFFFFF", padding: "clamp(52px,8vw,72px) 5vw 0" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <ImagePlaceholder ratio="16 / 7" label="Image placeholder" />
         </div>
@@ -212,7 +212,7 @@ export default function AboutPage() {
       <section
         style={{
           background: "#FFFFFF",
-          padding: "96px 5vw 120px",
+          padding: "clamp(60px,9vw,96px) 5vw clamp(72px,11vw,120px)",
           overflowX: "clip",
         }}
       >
@@ -221,7 +221,7 @@ export default function AboutPage() {
             maxWidth: 1200,
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(320px,100%),1fr))",
             gap: "56px 84px",
             alignItems: "start",
           }}
@@ -275,7 +275,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values carousel */}
-      <section style={{ background: "#FFFFFF", padding: "0 0 120px" }}>
+      <section style={{ background: "#FFFFFF", padding: "0 0 clamp(72px,11vw,120px)" }}>
         <ValuesCarousel />
       </section>
 
@@ -283,7 +283,7 @@ export default function AboutPage() {
       <section
         style={{
           background: "#FFFFFF",
-          padding: "0 5vw 110px",
+          padding: "0 5vw clamp(64px,10vw,110px)",
           overflowX: "clip",
         }}
       >
@@ -292,7 +292,7 @@ export default function AboutPage() {
             maxWidth: 1200,
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(320px,100%),1fr))",
             gap: "56px 84px",
             alignItems: "center",
           }}
@@ -375,7 +375,7 @@ export default function AboutPage() {
       </section>
 
       {/* Team */}
-      <section style={{ padding: "76px 5vw", background: C.bgAlt }}>
+      <section style={{ padding: "clamp(54px,8vw,76px) 5vw", background: C.bgAlt }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ maxWidth: 640, marginBottom: 44 }}>
             <Eyebrow label="Meet Our Team" />
@@ -400,7 +400,7 @@ export default function AboutPage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+              gridTemplateColumns: "repeat(auto-fit,minmax(min(280px,100%),1fr))",
               gap: 24,
             }}
           >

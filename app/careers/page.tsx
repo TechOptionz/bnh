@@ -30,13 +30,13 @@ export default function CareersPage() {
         introMaxWidth="62ch"
       />
 
-      <section style={{ padding: "72px 5vw", background: "#FFFFFF" }}>
+      <section style={{ padding: "clamp(52px,8vw,72px) 5vw", background: "#FFFFFF" }}>
         <div
           style={{
             maxWidth: 1140,
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(320px,100%),1fr))",
             gap: 48,
             alignItems: "start",
           }}

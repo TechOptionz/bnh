@@ -28,7 +28,7 @@ export default function BlogPage() {
         introMaxWidth="60ch"
       />
 
-      <section style={{ padding: "64px 5vw 88px", background: "#FFFFFF" }}>
+      <section style={{ padding: "clamp(48px,7vw,64px) 5vw clamp(60px,9vw,88px)", background: "#FFFFFF" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <InsightsExplorer />
           <div style={{ textAlign: "center", marginTop: 72 }}>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BOOKING_URL, BACHROB_URL, C, EMAIL, PHONE_BRISBANE } from "@/lib/site";
 import { ACC, FA, SERVICES } from "@/lib/services";
@@ -231,6 +232,10 @@ export default function SiteHeader({
   const [open, setOpen] = useState(false);
   /** Which nav item's hover dropdown is showing. */
   const [dropdown, setDropdown] = useState<Exclude<NavKey, null> | null>(null);
+  const pathname = usePathname();
+  /** Marks the currently open page's link inside the dropdowns and mega-menu. */
+  const linkClass = (href: string) =>
+    pathname === href ? "mega-link mega-link--active" : "mega-link";
 
   useEffect(() => {
     if (!dropdown) return;
@@ -272,6 +277,13 @@ export default function SiteHeader({
   return (
     <>
       <header
+        className={[
+          "site-header",
+          floating ? "site-header--floating" : "",
+          open ? "site-header--menu-open" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
         style={{
           ...(floating
             ? {
@@ -307,6 +319,7 @@ export default function SiteHeader({
           <img
             src="/assets/logo.png"
             alt="JCA-BNH — Better at Money Matters"
+            className="site-logo"
             style={{ height: 62, display: "block" }}
           />
         </Link>
@@ -323,6 +336,7 @@ export default function SiteHeader({
           {/* Nav items lift up and fade out while the mega-menu is open. */}
           <div
             aria-hidden={open}
+            className="site-nav-links"
             style={{
               display: "flex",
               alignItems: "center",
@@ -450,6 +464,7 @@ export default function SiteHeader({
             <div
               key={d.key}
               aria-hidden={!showing}
+              className="nav-dropdown"
               style={{
                 position: "absolute",
                 top: "100%",
@@ -501,7 +516,7 @@ export default function SiteHeader({
                       <Link
                         key={l.href}
                         href={l.href}
-                        className="mega-link"
+                        className={linkClass(l.href)}
                         style={{
                           opacity: showing ? 1 : 0,
                           transform: showing ? "translateY(0)" : "translateY(10px)",
@@ -573,6 +588,7 @@ export default function SiteHeader({
         role="dialog"
         aria-modal="true"
         aria-hidden={!open}
+        className="mega-panel"
         style={{
           position: "fixed",
           top: 16,
@@ -630,7 +646,7 @@ export default function SiteHeader({
                   }}
                 >
                   {col.links.map((l) => (
-                    <Link key={l.href} href={l.href} className="mega-link">
+                    <Link key={l.href} href={l.href} className={linkClass(l.href)}>
                       {l.label}
                       {ARROW}
                     </Link>

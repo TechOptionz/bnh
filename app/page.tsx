@@ -211,9 +211,9 @@ export default function HomePage() {
 
       {/* Hero — full-bleed media with floating white navbar */}
       <section
+        className="home-hero"
         style={{
           position: "relative",
-          minHeight: "92vh",
           overflow: "hidden",
           display: "flex",
           alignItems: "flex-end",
@@ -248,6 +248,7 @@ export default function HomePage() {
 
         {/* Bottom-left copy */}
         <div
+          className="home-hero-copy"
           style={{
             position: "relative",
             zIndex: 2,
@@ -286,6 +287,7 @@ export default function HomePage() {
 
         {/* Bottom-right cyan card */}
         <div
+          className="home-hero-card"
           style={{
             position: "absolute",
             right: 0,
@@ -330,7 +332,7 @@ export default function HomePage() {
         id="services"
         style={{
           position: "relative",
-          padding: "84px 5vw 92px",
+          padding: "clamp(56px,9vw,84px) 5vw clamp(60px,9vw,92px)",
           background: "#FFFFFF",
           overflow: "hidden",
         }}
@@ -394,7 +396,7 @@ export default function HomePage() {
       <section
         style={{
           position: "relative",
-          padding: "96px 5vw 104px",
+          padding: "clamp(60px,9vw,96px) 5vw clamp(64px,10vw,104px)",
           background: C.bgAlt,
           borderTop: `1px solid ${C.border}`,
           borderBottom: `1px solid ${C.border}`,
@@ -492,7 +494,7 @@ export default function HomePage() {
       </section>
 
       {/* How we work */}
-      <section style={{ padding: "96px 5vw 100px", background: "#FFFFFF" }}>
+      <section style={{ padding: "clamp(60px,9vw,96px) 5vw clamp(64px,10vw,100px)", background: "#FFFFFF" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div
             style={{
@@ -620,7 +622,7 @@ export default function HomePage() {
       {/* Partners */}
       <section
         style={{
-          padding: "84px 0 92px",
+          padding: "clamp(56px,9vw,84px) 0 clamp(60px,9vw,92px)",
           background: "#FFFFFF",
           borderBottom: "1px solid #EEF2F7",
         }}
@@ -655,7 +657,7 @@ export default function HomePage() {
       </section>
 
       {/* Recent blogs */}
-      <section style={{ padding: "80px 5vw", background: "#FFFFFF" }}>
+      <section style={{ padding: "clamp(56px,8vw,80px) 5vw", background: "#FFFFFF" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div
             style={{
@@ -682,7 +684,7 @@ export default function HomePage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+              gridTemplateColumns: "repeat(auto-fit,minmax(min(280px,100%),1fr))",
               gap: 24,
             }}
           >
@@ -756,7 +758,7 @@ export default function HomePage() {
           backgroundImage: "url('/assets/hero-team-wide.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          padding: "230px 5vw 56px",
+          padding: "clamp(140px,30vw,230px) 5vw 56px",
         }}
       >
         <div
@@ -811,7 +813,7 @@ export default function HomePage() {
       {/* Closing CTA */}
       <section
         style={{
-          padding: "76px 5vw",
+          padding: "clamp(54px,8vw,76px) 5vw",
           background: `linear-gradient(120deg,${C.navy} 0%,${C.navyDeep} 100%)`,
         }}
       >

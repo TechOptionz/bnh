@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
+import ImagePlaceholder from "@/components/ImagePlaceholder";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { C } from "@/lib/site";
@@ -48,7 +49,7 @@ export default function TeamPage() {
       <SiteHeader floating active="about" />
 
       {/* Statement hero — breadcrumb, oversized headline, full-width photo */}
-      <section style={{ background: "#FFFFFF", padding: "170px 5vw 0" }}>
+      <section style={{ background: "#FFFFFF", padding: "clamp(126px,22vw,170px) 5vw 0" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ fontSize: 14, color: C.mute, marginBottom: 26 }}>
             <Link href="/" className="hv-orange" style={{ color: C.mute }}>
@@ -71,24 +72,12 @@ export default function TeamPage() {
           >
             Hands-on. Always.
           </h1>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/hero-team-wide.jpg"
-            alt="The JCA-BNH team working together"
-            style={{
-              width: "100%",
-              aspectRatio: "16 / 7",
-              objectFit: "cover",
-              borderRadius: 18,
-              display: "block",
-              background: C.border,
-            }}
-          />
+          <ImagePlaceholder ratio="16 / 7" radius={18} label="Team photo" />
         </div>
       </section>
 
       {/* Intro statement */}
-      <section style={{ background: "#FFFFFF", padding: "96px 5vw 40px" }}>
+      <section style={{ background: "#FFFFFF", padding: "clamp(60px,9vw,96px) 5vw 40px" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto" }}>
           <h2
             style={{
@@ -125,7 +114,7 @@ export default function TeamPage() {
       <section
         style={{
           background: "#FFFFFF",
-          padding: "70px 5vw 110px",
+          padding: "clamp(48px,8vw,70px) 5vw clamp(64px,10vw,110px)",
           overflowX: "clip",
         }}
       >
@@ -134,24 +123,12 @@ export default function TeamPage() {
             maxWidth: 1200,
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(320px,100%),1fr))",
             gap: "56px 84px",
             alignItems: "center",
           }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/team-photo.jpg"
-            alt="JCA-BNH advisers in a meeting"
-            style={{
-              width: "100%",
-              aspectRatio: "5 / 6",
-              objectFit: "cover",
-              borderRadius: 18,
-              display: "block",
-              background: C.border,
-            }}
-          />
+          <ImagePlaceholder ratio="5 / 6" radius={18} label="Team photo" />
           <div>
             <Eyebrow label="Our People" />
             <h2
@@ -184,7 +161,7 @@ export default function TeamPage() {
       </section>
 
       {/* Full roster */}
-      <section style={{ padding: "90px 5vw 100px", background: C.bgAlt }}>
+      <section style={{ padding: "clamp(60px,9vw,90px) 5vw clamp(64px,10vw,100px)", background: C.bgAlt }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <h2
             style={{
@@ -205,7 +182,7 @@ export default function TeamPage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill,minmax(290px,1fr))",
+              gridTemplateColumns: "repeat(auto-fill,minmax(min(290px,100%),1fr))",
               gap: 24,
             }}
           >

@@ -34,6 +34,7 @@ export default function PageHero({
     <>
       <SiteHeader floating active={active} />
       <section
+        className="page-hero"
         style={{
           position: "relative",
           background: `linear-gradient(120deg,${C.navy} 0%,${C.navyDeep} 100%)`,

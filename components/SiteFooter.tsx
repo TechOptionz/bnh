@@ -69,7 +69,7 @@ export default function SiteFooter({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(230px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(230px,100%),1fr))",
             gap: "36px 36px",
             marginBottom: 40,
           }}
@@ -163,9 +163,10 @@ export default function SiteFooter({
           alt="JCA-BNH — Better at Money Matters"
           style={{
             display: "block",
-            width: "auto",
+            width: "100%",
             maxWidth: "100%",
-            height: "clamp(200px, 32vh, 340px)",
+            height: "clamp(140px, 32vh, 340px)",
+            objectFit: "contain",
             margin: "0 auto 24px",
           }}
         />

@@ -46,7 +46,7 @@ export default function CareerForm() {
         maxWidth: 560,
       }}
     >
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(180px,100%),1fr))", gap: 14 }}>
         <input
           placeholder="Full name"
           style={FIELD}

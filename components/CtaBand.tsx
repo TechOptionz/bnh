@@ -5,7 +5,7 @@ export default function CtaBand({
   heading,
   body,
   background = `linear-gradient(120deg,${C.navy} 0%,${C.navyDeep} 100%)`,
-  padding = "70px 5vw",
+  padding = "clamp(52px,8vw,70px) 5vw",
   headingClamp = "clamp(26px,3vw,36px)",
   bodySize = 16.5,
   buttonPadding = "15px 30px",

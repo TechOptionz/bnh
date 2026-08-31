@@ -91,7 +91,7 @@ export default async function BlogArticlePage({ params }: Params) {
       </PageHero>
 
       {/* ---- Article body ---- */}
-      <article style={{ background: "#FFFFFF", padding: "56px 5vw 40px" }}>
+      <article style={{ background: "#FFFFFF", padding: "clamp(44px,7vw,56px) 5vw 40px" }}>
         <div style={WRAP}>
           {/* Feature image (placeholder until final assets arrive) */}
           <div style={{ marginBottom: 44 }}>
@@ -272,7 +272,7 @@ export default async function BlogArticlePage({ params }: Params) {
       </article>
 
       {/* ---- More articles ---- */}
-      <section style={{ background: "#FFFFFF", padding: "40px 5vw 80px" }}>
+      <section style={{ background: "#FFFFFF", padding: "40px 5vw clamp(56px,8vw,80px)" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div
             style={{
@@ -309,7 +309,7 @@ export default async function BlogArticlePage({ params }: Params) {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+              gridTemplateColumns: "repeat(auto-fit,minmax(min(280px,100%),1fr))",
               gap: 24,
             }}
           >

@@ -104,7 +104,7 @@ export default async function ServicePage({ params }: Params) {
       />
 
       {/* ---- Light hero: breadcrumb, oversized title, full-width image ---- */}
-      <section style={{ background: "#EAF4F9", padding: "176px 4vw 64px" }}>
+      <section style={{ background: "#EAF4F9", padding: "clamp(126px,22vw,176px) max(18px,4vw) clamp(44px,7vw,64px)" }}>
         <div style={WRAP}>
           <div style={{ fontSize: 13.5, color: C.mute, marginBottom: 26 }}>
             {[
@@ -149,7 +149,7 @@ export default async function ServicePage({ params }: Params) {
       </section>
 
       {/* ---- Intro: eyebrow + big statement + lead paragraph ---- */}
-      <section style={{ background: "#FFFFFF", padding: "104px 4vw 72px" }}>
+      <section style={{ background: "#FFFFFF", padding: "clamp(64px,10vw,104px) max(18px,4vw) clamp(52px,8vw,72px)" }}>
         <div style={WRAP}>
           <Eyebrow>{service.title}</Eyebrow>
           <h2
@@ -180,12 +180,12 @@ export default async function ServicePage({ params }: Params) {
       </section>
 
       {/* ---- Image left / heading, copy and bullets right ---- */}
-      <section style={{ background: "#FFFFFF", padding: "40px 4vw 104px" }}>
+      <section style={{ background: "#FFFFFF", padding: "40px max(18px,4vw) clamp(64px,10vw,104px)" }}>
         <div
           style={{
             ...WRAP,
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(320px,100%),1fr))",
             gap: 64,
             alignItems: "start",
           }}
@@ -258,12 +258,12 @@ export default async function ServicePage({ params }: Params) {
       </section>
 
       {/* ---- Big statement left / image + cyan accent card right ---- */}
-      <section style={{ background: "#FFFFFF", padding: "0 4vw 120px" }}>
+      <section style={{ background: "#FFFFFF", padding: "0 max(18px,4vw) clamp(72px,11vw,120px)" }}>
         <div
           style={{
             ...WRAP,
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(320px,100%),1fr))",
             gap: 64,
             alignItems: "start",
           }}
@@ -336,7 +336,7 @@ export default async function ServicePage({ params }: Params) {
       </section>
 
       {/* ---- Trust statement ---- */}
-      <section style={{ background: C.bgAlt, padding: "96px 4vw" }}>
+      <section style={{ background: C.bgAlt, padding: "clamp(60px,9vw,96px) max(18px,4vw)" }}>
         <div style={WRAP}>
           <Eyebrow>{service.division}</Eyebrow>
           <h2
@@ -367,7 +367,7 @@ export default async function ServicePage({ params }: Params) {
       </section>
 
       {/* ---- "Speak with an Adviser" contact panel + form card ---- */}
-      <section style={{ background: "#FFFFFF", padding: "96px 4vw" }}>
+      <section style={{ background: "#FFFFFF", padding: "clamp(60px,9vw,96px) max(18px,4vw)" }}>
         <div
           style={{
             ...WRAP,
@@ -375,7 +375,7 @@ export default async function ServicePage({ params }: Params) {
             borderRadius: 28,
             padding: "clamp(36px,5vw,72px)",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(320px,100%),1fr))",
             gap: 56,
             alignItems: "center",
           }}
@@ -438,7 +438,7 @@ export default async function ServicePage({ params }: Params) {
 
       {/* ---- FAQ + related services (navy) ---- */}
       {(faqs.length > 0 || related.length > 0) && (
-        <section style={{ background: C.navy, padding: "80px 4vw 96px" }}>
+        <section style={{ background: C.navy, padding: "clamp(56px,8vw,80px) max(18px,4vw) clamp(60px,9vw,96px)" }}>
           <div style={WRAP}>
             {faqs.length > 0 && (
               <>

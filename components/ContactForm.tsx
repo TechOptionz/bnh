@@ -111,7 +111,7 @@ export default function ContactForm() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(200px,100%),1fr))",
             gap: 22,
           }}
         >
