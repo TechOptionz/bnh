@@ -9,7 +9,9 @@ import {
   DISCLAIMER,
   EMAIL,
   FSG_URL,
+  HOURS,
   OFFICES,
+  PHONE_BRISBANE,
   TERMS_URL,
 } from "@/lib/site";
 
@@ -55,6 +57,24 @@ const COL: React.CSSProperties = {
   fontSize: 15.5,
 };
 
+/** Column heading with a short orange accent bar. */
+function ColHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{ marginBottom: 18 }}>
+      <div style={{ ...COL_HEADING, marginBottom: 9 }}>{children}</div>
+      <span
+        style={{
+          display: "block",
+          width: 26,
+          height: 3,
+          borderRadius: 2,
+          background: C.orange,
+        }}
+      />
+    </div>
+  );
+}
+
 /** One heading + link-list column. */
 function LinkColumn({
   heading,
@@ -65,7 +85,7 @@ function LinkColumn({
 }) {
   return (
     <div>
-      <div style={COL_HEADING}>{heading}</div>
+      <ColHeading>{heading}</ColHeading>
       <div style={COL}>
         {links.map((l) =>
           l.external ? (
@@ -141,23 +161,46 @@ export default function SiteFooter({
             >
               Better at money matters &mdash; let&rsquo;s talk.
             </div>
+            <p
+              style={{
+                margin: "8px 0 0",
+                fontSize: 15,
+                lineHeight: 1.55,
+                color: C.body,
+                maxWidth: 520,
+              }}
+            >
+              The first 30-minute consultation is free &mdash; no cost, no
+              obligation.
+            </p>
           </div>
-          <a
-            href={BOOKING_URL}
-            className="btn-orange"
-            style={{
-              background: C.orange,
-              color: "#FFFFFF",
-              padding: "14px 26px",
-              borderRadius: 8,
-              fontWeight: 700,
-              fontSize: 15.5,
-              display: "inline-block",
-              flexShrink: 0,
-            }}
-          >
-            Book a Free Consultation &rarr;
-          </a>
+          <div style={{ flexShrink: 0, textAlign: "center" }}>
+            <a
+              href={BOOKING_URL}
+              className="btn-orange"
+              style={{
+                background: C.orange,
+                color: "#FFFFFF",
+                padding: "14px 26px",
+                borderRadius: 8,
+                fontWeight: 700,
+                fontSize: 15.5,
+                display: "inline-block",
+              }}
+            >
+              Book a Free Consultation &rarr;
+            </a>
+            <div style={{ marginTop: 10, fontSize: 13.5, color: C.body }}>
+              or call{" "}
+              <a
+                href="tel:1300264346"
+                className="hv-orange"
+                style={{ color: C.navy, fontWeight: 700 }}
+              >
+                {PHONE_BRISBANE}
+              </a>
+            </div>
+          </div>
         </div>
 
         {/* ---- Service directory + company + offices ---------------- */}
@@ -174,24 +217,45 @@ export default function SiteFooter({
           <LinkColumn heading="Explore" links={explore} />
 
           <div>
-            <div style={COL_HEADING}>Offices</div>
+            <ColHeading>Offices</ColHeading>
             <div
               style={{
+                background: C.bgAlt,
+                border: `1px solid ${C.border}`,
+                borderRadius: 14,
+                padding: "18px 20px",
                 display: "flex",
                 flexDirection: "column",
-                gap: 16,
-                fontSize: 15,
+                gap: 15,
+                fontSize: 14.5,
                 lineHeight: 1.55,
                 color: C.body,
               }}
             >
               {OFFICES.map((o) => (
                 <div key={o.name}>
-                  <strong style={{ color: C.navy }}>{o.name}</strong>
+                  <strong
+                    style={{
+                      color: C.navy,
+                      fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                      fontWeight: 600,
+                      fontSize: 15,
+                    }}
+                  >
+                    {o.name}
+                  </strong>
                   <br />
-                  {o.name === "Maroochydore"
-                    ? "2/68 Kingsford Smith Parade, QLD 4558"
-                    : o.address}
+                  <a
+                    href={o.map}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hv-orange"
+                    style={{ color: C.body }}
+                  >
+                    {o.name === "Maroochydore"
+                      ? "2/68 Kingsford Smith Parade, QLD 4558"
+                      : o.address}
+                  </a>
                   <br />
                   <a
                     href={`tel:${o.tel}`}
@@ -202,13 +266,23 @@ export default function SiteFooter({
                   </a>
                 </div>
               ))}
-              <a
-                href={`mailto:${EMAIL}`}
-                className="hv-orange"
-                style={{ color: C.navy, fontWeight: 600 }}
+              <div
+                style={{
+                  borderTop: `1px solid ${C.border}`,
+                  paddingTop: 14,
+                  fontSize: 13.5,
+                }}
               >
-                {EMAIL}
-              </a>
+                {HOURS}
+                <br />
+                <a
+                  href={`mailto:${EMAIL}`}
+                  className="hv-orange"
+                  style={{ color: C.navy, fontWeight: 600 }}
+                >
+                  {EMAIL}
+                </a>
+              </div>
             </div>
           </div>
         </div>

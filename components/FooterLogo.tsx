@@ -21,7 +21,8 @@ const scattered = (i: number) => {
 /**
  * The oversized footer wordmark, assembled letter-by-letter: the image is
  * cut into vertical strips that fly together once the footer scrolls into
- * view. Swaps to the plain image after the motion settles.
+ * view. After the motion settles, each strip lifts under the cursor like
+ * the hero headline letters.
  */
 export default function FooterLogo() {
   const ref = useRef<HTMLDivElement>(null);
@@ -70,48 +71,40 @@ export default function FooterLogo() {
         margin: "clamp(56px,8vw,96px) auto 32px",
       }}
     >
-      {!done && (
-        <div
-          aria-hidden="true"
-          style={{ display: "flex", position: "absolute", inset: 0 }}
-        >
-          {Array.from({ length: SLICES }, (_, i) => (
-            <div
-              key={i}
-              style={{
-                flex: 1,
-                backgroundImage: `url(${SRC})`,
-                backgroundRepeat: "no-repeat",
-                backgroundSize: `${SLICES * 100}% 100%`,
-                backgroundPosition: `${(i / (SLICES - 1)) * 100}% 0`,
-                opacity: assembled ? 1 : 0,
-                transform: assembled ? "none" : scattered(i),
-                filter: assembled ? "blur(0px)" : "blur(6px)",
-                transition: instant
-                  ? "none"
-                  : `transform ${DURATION_MS}ms cubic-bezier(0.22,1,0.36,1) ${i * STAGGER_MS}ms,` +
-                    `opacity ${DURATION_MS * 0.7}ms ease ${i * STAGGER_MS}ms,` +
-                    `filter ${DURATION_MS}ms ease ${i * STAGGER_MS}ms`,
-                willChange: "transform, opacity, filter",
-              }}
-            />
-          ))}
-        </div>
-      )}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={SRC}
-        alt=""
+      <div
         aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          display: "block",
-          opacity: done ? 1 : 0,
-        }}
-      />
+        style={{ display: "flex", position: "absolute", inset: 0 }}
+      >
+        {/* Once settled, the slices stay mounted so each can lift under the
+            cursor (`.logo-slice`, same feel as the hero letters); inline
+            motion styles are dropped so the hover class controls transform. */}
+        {Array.from({ length: SLICES }, (_, i) => (
+          <div
+            key={i}
+            className={done ? "logo-slice" : undefined}
+            style={{
+              flex: 1,
+              backgroundImage: `url(${SRC})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: `${SLICES * 100}% 100%`,
+              backgroundPosition: `${(i / (SLICES - 1)) * 100}% 0`,
+              ...(done
+                ? {}
+                : {
+                    opacity: assembled ? 1 : 0,
+                    transform: assembled ? "none" : scattered(i),
+                    filter: assembled ? "blur(0px)" : "blur(6px)",
+                    transition: instant
+                      ? "none"
+                      : `transform ${DURATION_MS}ms cubic-bezier(0.22,1,0.36,1) ${i * STAGGER_MS}ms,` +
+                        `opacity ${DURATION_MS * 0.7}ms ease ${i * STAGGER_MS}ms,` +
+                        `filter ${DURATION_MS}ms ease ${i * STAGGER_MS}ms`,
+                    willChange: "transform, opacity, filter",
+                  }),
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }

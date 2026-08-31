@@ -15,6 +15,37 @@ const EYEBROW_CHIP: React.CSSProperties = {
   flexShrink: 0,
 };
 
+/** Per-letter entrance delay, sweeping the headline left to right. */
+const letterDelay = (index: number) => `${0.15 + index * 0.045}s`;
+
+/** One word split into per-letter spans that pop in on load (staggered from
+ *  `start`, the word's first letter index in the headline) and lift under
+ *  the cursor. */
+function LiftWord({
+  word,
+  start = 0,
+  children,
+}: {
+  word: string;
+  start?: number;
+  children?: React.ReactNode;
+}) {
+  return (
+    <span style={{ display: "inline-block", whiteSpace: "nowrap" }}>
+      {word.split("").map((ch, i) => (
+        <span
+          key={i}
+          className="hero-letter"
+          style={{ animationDelay: letterDelay(start + i) }}
+        >
+          {ch}
+        </span>
+      ))}
+      {children}
+    </span>
+  );
+}
+
 /** Small square chip + label, matching the services-page eyebrows. */
 function Eyebrow({
   label,
@@ -59,82 +90,35 @@ const STATS = [
   { n: "30 min", l: "free first consultation" },
 ];
 
-/** 24px stroke icons for the pillar cards — drawn inline to avoid a icon dep. */
-const PILLAR_ICONS: Record<string, React.ReactNode> = {
-  affordability: (
-    <>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M14.8 9.3a3.2 3.2 0 0 0-5.6 2.7c0 2.6 5.6 2 5.6 4.4a3.2 3.2 0 0 1-5.6-1.4M12 6.2v11.6" />
-    </>
-  ),
-  care: (
-    <>
-      <path d="M20.4 6.9a4.6 4.6 0 0 0-6.5 0L12 8.7l-1.9-1.8a4.6 4.6 0 1 0-6.5 6.5l1.9 1.8 6.5 6.1 6.5-6.1 1.9-1.8a4.6 4.6 0 0 0 0-6.5Z" />
-    </>
-  ),
-  personalised: (
-    <>
-      <circle cx="12" cy="8.2" r="3.6" />
-      <path d="M4.8 20.2a7.2 7.2 0 0 1 14.4 0" />
-      <path d="M18.6 4.4 20 3l1.4 1.4" />
-    </>
-  ),
-  transparency: (
-    <>
-      <path d="M2.5 12S6 5.6 12 5.6 21.5 12 21.5 12 18 18.4 12 18.4 2.5 12 2.5 12Z" />
-      <circle cx="12" cy="12" r="2.9" />
-    </>
-  ),
-  integrity: (
-    <>
-      <path d="M12 3 4.6 6.1v5.3c0 4.4 3 8.5 7.4 9.6 4.4-1.1 7.4-5.2 7.4-9.6V6.1L12 3Z" />
-      <path d="m9 11.9 2.2 2.2L15.3 10" />
-    </>
-  ),
-  expertise: (
-    <>
-      <path d="m12 3 9 4.6-9 4.6-9-4.6L12 3Z" />
-      <path d="M6.3 10v5.1c0 1.6 2.6 2.9 5.7 2.9s5.7-1.3 5.7-2.9V10" />
-      <path d="M21 7.6v5.6" />
-    </>
-  ),
-};
-
 const PILLARS = [
   {
     t: "Affordability",
     c: C.cyan,
-    k: "affordability",
     d: "Fixed-fee options and pricing agreed up front, so you always know what an engagement costs.",
   },
   {
     t: "Client Care",
     c: C.orange,
-    k: "care",
     d: "Real people who answer the phone, follow things up and treat your deadlines as their own.",
   },
   {
     t: "Personalised Service",
     c: C.navy,
-    k: "personalised",
     d: "Advice built around your goals, structure and stage of life — never pulled off the shelf.",
   },
   {
     t: "Transparency",
     c: C.cyan,
-    k: "transparency",
     d: "Clear scope, clear fees and plain-English reporting. No surprises at the end of the job.",
   },
   {
     t: "Integrity",
     c: C.orange,
-    k: "integrity",
     d: "The advice we'd give our own family, even when it isn't the answer you were hoping for.",
   },
   {
     t: "Expertise",
     c: C.navy,
-    k: "expertise",
     d: "CPA-qualified accountants and licensed advisers with global, cross-industry experience.",
   },
 ];
@@ -235,7 +219,7 @@ export default function HomePage() {
             objectPosition: "center",
           }}
         >
-          <source src="/assets/hero-video.mp4" type="video/mp4" />
+          <source src="/assets/hero-video-1080.mp4" type="video/mp4" />
         </video>
         <div
           style={{
@@ -270,6 +254,7 @@ export default function HomePage() {
             Trusted across Queensland.
           </div>
           <h1
+            aria-label="Better at money matters."
             style={{
               fontFamily: "var(--font-lexend), Lexend, sans-serif",
               fontWeight: 400,
@@ -281,7 +266,18 @@ export default function HomePage() {
               textWrap: "balance",
             }}
           >
-            Better at <span style={{ color: C.orange }}>money matters</span>.
+            <LiftWord word="Better" /> <LiftWord word="at" start={6} />{" "}
+            <span style={{ color: C.orange }}>
+              <LiftWord word="money" start={8} />{" "}
+              <LiftWord word="matters" start={13}>
+                <span
+                  className="hero-letter"
+                  style={{ color: "#FFFFFF", animationDelay: letterDelay(20) }}
+                >
+                  .
+                </span>
+              </LiftWord>
+            </span>
           </h1>
         </div>
 
@@ -297,6 +293,7 @@ export default function HomePage() {
         >
           <a
             href={BOOKING_URL}
+            className="hero-book-card"
             style={{
               display: "block",
               background: C.cyan,
@@ -311,7 +308,10 @@ export default function HomePage() {
               letterSpacing: "-0.01em",
             }}
           >
-            Book a Free 30-Min Consultation &rarr;
+            Book a Free 30-Min Consultation{" "}
+            <span className="hero-arrow" aria-hidden>
+              &rarr;
+            </span>
           </a>
         </div>
       </section>
@@ -447,46 +447,43 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="pillar-grid">
-            {PILLARS.map((p) => (
+          <div className="pillar-list">
+            {PILLARS.map((p, i) => (
               <article
                 key={p.t}
-                className="pillar-card"
+                className="pillar-row"
                 style={{ ["--accent" as string]: p.c }}
               >
                 <span
-                  className="pillar-icon"
-                  style={{ background: `${p.c}1A`, color: p.c }}
-                >
-                  <svg
-                    width="23"
-                    height="23"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden
-                  >
-                    {PILLAR_ICONS[p.k]}
-                  </svg>
-                </span>
-                <h3
+                  aria-hidden
                   style={{
                     fontFamily: "var(--font-lexend), Lexend, sans-serif",
                     fontWeight: 600,
-                    color: C.navy,
-                    fontSize: 18,
-                    letterSpacing: "-0.01em",
-                    margin: "20px 0 9px",
+                    fontSize: 14.5,
+                    letterSpacing: "0.06em",
+                    color: p.c,
+                    paddingTop: 6,
                   }}
                 >
-                  {p.t}
-                </h3>
-                <p style={{ margin: 0, fontSize: 14.8, lineHeight: 1.66 }}>
-                  {p.d}
-                </p>
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3
+                    style={{
+                      fontFamily: "var(--font-lexend), Lexend, sans-serif",
+                      fontWeight: 600,
+                      color: C.navy,
+                      fontSize: 20,
+                      letterSpacing: "-0.01em",
+                      margin: "0 0 9px",
+                    }}
+                  >
+                    {p.t}
+                  </h3>
+                  <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.7 }}>
+                    {p.d}
+                  </p>
+                </div>
               </article>
             ))}
           </div>

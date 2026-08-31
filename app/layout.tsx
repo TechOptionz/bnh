@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Lexend, Public_Sans } from "next/font/google";
 import Chatbot from "@/components/Chatbot";
+import ScrollReveal from "@/components/ScrollReveal";
 import { EMAIL, FACEBOOK_URL, LINKEDIN_URL, PHONE_BRISBANE } from "@/lib/site";
 import "./globals.css";
 
@@ -51,6 +52,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSONLD) }}
         />
         {children}
+        <ScrollReveal />
         <Chatbot />
       </body>
     </html>
