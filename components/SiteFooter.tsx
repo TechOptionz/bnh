@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SocialLinks from "@/components/SocialLinks";
+import { ACC, FA, serviceGroups } from "@/lib/services";
 import {
   BACHROB_URL,
   BOOKING_URL,
@@ -8,8 +9,6 @@ import {
   EMAIL,
   FSG_URL,
   OFFICES,
-  PHONE_BRISBANE,
-  PHONE_SUNSHINE,
   TERMS_URL,
 } from "@/lib/site";
 
@@ -23,28 +22,69 @@ const NAV: { key: Key; href: string; label: string }[] = [
   { key: "contact", href: "/contact", label: "Contact & Careers" },
 ];
 
+/* Detailed service links, resolved once from the service catalog. */
+const ACC_GROUPS = serviceGroups(ACC);
+const groupLinks = (labels: string[]) =>
+  ACC_GROUPS.filter((g) => labels.includes(g.label)).flatMap((g) => g.links);
+
+const FA_LINKS = serviceGroups(FA).flatMap((g) => g.links);
+const BUSINESS_LINKS = groupLinks(["Business", "Accounting"]);
+const TAX_AUDIT_LINKS = groupLinks(["Taxation", "Audit"]);
+
 const COL_HEADING: React.CSSProperties = {
-  fontSize: 12,
+  fontSize: 13,
   fontWeight: 700,
   letterSpacing: "0.14em",
   textTransform: "uppercase",
   color: C.mute,
-  marginBottom: 14,
+  marginBottom: 16,
 };
 
-const LINK: React.CSSProperties = { color: C.navy, fontWeight: 500 };
+const LINK: React.CSSProperties = {
+  color: C.navy,
+  fontWeight: 500,
+  lineHeight: 1.45,
+};
 
 const COL: React.CSSProperties = {
   display: "flex",
   flexDirection: "column",
   alignItems: "start",
-  gap: 9,
-  fontSize: 14.5,
+  gap: 11,
+  fontSize: 15.5,
 };
 
+/** One heading + link-list column. */
+function LinkColumn({
+  heading,
+  links,
+}: {
+  heading: string;
+  links: { href: string; label: string; external?: boolean }[];
+}) {
+  return (
+    <div>
+      <div style={COL_HEADING}>{heading}</div>
+      <div style={COL}>
+        {links.map((l) =>
+          l.external ? (
+            <a key={l.href} href={l.href} className="hv-orange" style={LINK}>
+              {l.label}
+            </a>
+          ) : (
+            <Link key={l.href} href={l.href} className="hv-orange" style={LINK}>
+              {l.label}
+            </Link>
+          ),
+        )}
+      </div>
+    </div>
+  );
+}
+
 /**
- * The site-wide footer — white ground, navy type, and an oversized brand
- * wordmark spanning the full width above the legal strip.
+ * The site-wide footer — booking strip, detailed service directory,
+ * oversized brand wordmark, then the legal strip.
  */
 export default function SiteFooter({
   omit = [],
@@ -53,7 +93,13 @@ export default function SiteFooter({
   omit?: Key[];
   showTerms?: boolean;
 }) {
-  const nav = NAV.filter((l) => !omit.includes(l.key));
+  const explore: { href: string; label: string; external?: boolean }[] = [
+    ...NAV.filter((l) => !omit.includes(l.key) && l.key !== "home"),
+    { href: "/blog", label: "Blog" },
+    { href: BACHROB_URL, label: "BachRob (sister firm)", external: true },
+    { href: FSG_URL, label: "Financial Services Guide", external: true },
+    { href: TERMS_URL, label: "Terms of Engagement", external: true },
+  ];
 
   return (
     <footer
@@ -61,75 +107,70 @@ export default function SiteFooter({
         background: "#FFFFFF",
         color: C.navy,
         borderTop: `1px solid ${C.border}`,
-        padding: "48px 5vw 24px",
+        padding: "clamp(44px,6vw,64px) 5vw 24px",
       }}
     >
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-        {/* ---- Link columns ---------------------------------------- */}
+        {/* ---- Booking strip --------------------------------------- */}
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(min(230px,100%),1fr))",
-            gap: "36px 36px",
-            marginBottom: 40,
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "20px 32px",
+            paddingBottom: 36,
+            borderBottom: `1px solid ${C.border}`,
+            marginBottom: 44,
           }}
         >
           <div>
-            <div style={COL_HEADING}>Book a consultation</div>
-            <a
-              href={BOOKING_URL}
-              className="hv-orange"
+            <div style={{ ...COL_HEADING, marginBottom: 10 }}>
+              Book a consultation
+            </div>
+            <div
               style={{
                 fontFamily: "var(--font-lexend), Lexend, sans-serif",
                 fontWeight: 600,
-                fontSize: 17,
+                fontSize: "clamp(20px,2.4vw,27px)",
+                letterSpacing: "-0.01em",
                 color: C.navy,
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 10,
+                lineHeight: 1.25,
               }}
             >
-              Book a Free Consultation <span aria-hidden>&rarr;</span>
-            </a>
-          </div>
-
-          <div>
-            <div style={COL_HEADING}>Services</div>
-            <div style={COL}>
-              {nav.map((l) => (
-                <Link key={l.key} href={l.href} className="hv-orange" style={LINK}>
-                  {l.label}
-                </Link>
-              ))}
-              <Link href="/blog" className="hv-orange" style={LINK}>
-                Blog
-              </Link>
-              <a href={BACHROB_URL} className="hv-orange" style={LINK}>
-                BachRob (sister firm)
-              </a>
+              Better at money matters &mdash; let&rsquo;s talk.
             </div>
           </div>
+          <a
+            href={BOOKING_URL}
+            className="btn-orange"
+            style={{
+              background: C.orange,
+              color: "#FFFFFF",
+              padding: "14px 26px",
+              borderRadius: 8,
+              fontWeight: 700,
+              fontSize: 15.5,
+              display: "inline-block",
+              flexShrink: 0,
+            }}
+          >
+            Book a Free Consultation &rarr;
+          </a>
+        </div>
 
-          <div>
-            <div style={COL_HEADING}>Get in touch</div>
-            <div style={COL}>
-              <a href="tel:1300264346" className="hv-orange" style={LINK}>
-                {PHONE_BRISBANE} (Brisbane)
-              </a>
-              <a href="tel:0754735444" className="hv-orange" style={LINK}>
-                {PHONE_SUNSHINE} (Sunshine Coast)
-              </a>
-              <a href={`mailto:${EMAIL}`} className="hv-orange" style={LINK}>
-                {EMAIL}
-              </a>
-              <a href={FSG_URL} className="hv-orange" style={LINK}>
-                Financial Services Guide
-              </a>
-              <a href={TERMS_URL} className="hv-orange" style={LINK}>
-                Terms of Engagement
-              </a>
-            </div>
-          </div>
+        {/* ---- Service directory + company + offices ---------------- */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(min(205px,100%),1fr))",
+            gap: "40px 32px",
+          }}
+        >
+          <LinkColumn heading="Financial Advice" links={FA_LINKS} />
+          <LinkColumn heading="Business & Accounting" links={BUSINESS_LINKS} />
+          <LinkColumn heading="Tax & Audit" links={TAX_AUDIT_LINKS} />
+          <LinkColumn heading="Explore" links={explore} />
 
           <div>
             <div style={COL_HEADING}>Offices</div>
@@ -137,8 +178,8 @@ export default function SiteFooter({
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: 14,
-                fontSize: 13.5,
+                gap: 16,
+                fontSize: 15,
                 lineHeight: 1.55,
                 color: C.body,
               }}
@@ -150,8 +191,23 @@ export default function SiteFooter({
                   {o.name === "Maroochydore"
                     ? "2/68 Kingsford Smith Parade, QLD 4558"
                     : o.address}
+                  <br />
+                  <a
+                    href={`tel:${o.tel}`}
+                    className="hv-orange"
+                    style={{ color: C.navy, fontWeight: 600 }}
+                  >
+                    {o.phone}
+                  </a>
                 </div>
               ))}
+              <a
+                href={`mailto:${EMAIL}`}
+                className="hv-orange"
+                style={{ color: C.navy, fontWeight: 600 }}
+              >
+                {EMAIL}
+              </a>
             </div>
           </div>
         </div>
@@ -165,9 +221,9 @@ export default function SiteFooter({
             display: "block",
             width: "100%",
             maxWidth: "100%",
-            height: "clamp(140px, 32vh, 340px)",
+            height: "clamp(170px, 38vh, 400px)",
             objectFit: "contain",
-            margin: "0 auto 24px",
+            margin: "clamp(56px,8vw,96px) auto 32px",
           }}
         />
 
@@ -178,7 +234,7 @@ export default function SiteFooter({
           </div>
           <p
             style={{
-              fontSize: 12.5,
+              fontSize: 13.5,
               lineHeight: 1.6,
               color: C.body,
               margin: "0 0 14px",
@@ -194,7 +250,7 @@ export default function SiteFooter({
               alignItems: "center",
               gap: "12px 24px",
               flexWrap: "wrap",
-              fontSize: 12.5,
+              fontSize: 13.5,
               color: C.body,
             }}
           >
