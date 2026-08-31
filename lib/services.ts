@@ -472,6 +472,66 @@ export const SERVICES: Record<string, Service> = {
   },
 };
 
+/** Sub-category groupings used by the navigation menus, in display order. */
+const SERVICE_GROUPS: {
+  division: typeof FA | typeof ACC;
+  label: string;
+  slugs: string[];
+}[] = [
+  {
+    division: FA,
+    label: "Retirement & Super",
+    slugs: ["retirement-plan", "retirement-savings", "super-advice", "smsf-advice"],
+  },
+  {
+    division: FA,
+    label: "Investments",
+    slugs: ["managed-investments", "stocks-bonds", "margin-lending"],
+  },
+  {
+    division: FA,
+    label: "Protection & Estate",
+    slugs: ["life-insurances", "estate-planning"],
+  },
+  {
+    division: ACC,
+    label: "Business",
+    slugs: [
+      "business-advisory",
+      "business-planning",
+      "business-software",
+      "business-support",
+      "process-improvement",
+    ],
+  },
+  {
+    division: ACC,
+    label: "Taxation",
+    slugs: ["taxation-advisory", "tax-audit-insurance", "grants-advice"],
+  },
+  {
+    division: ACC,
+    label: "Audit",
+    slugs: ["internal-audit", "audit-services"],
+  },
+  {
+    division: ACC,
+    label: "Accounting",
+    slugs: ["smsf-accounting", "virtual-cfo", "bookkeeping-payroll"],
+  },
+];
+
+/** A division's services grouped by sub-category, resolved to nav links. */
+export function serviceGroups(division: typeof FA | typeof ACC) {
+  return SERVICE_GROUPS.filter((g) => g.division === division).map((g) => ({
+    label: g.label,
+    links: g.slugs.map((slug) => ({
+      href: `/services/${slug}`,
+      label: SERVICES[slug].title,
+    })),
+  }));
+}
+
 export type Faq = { q: string; a: string };
 
 /** Per-service FAQ content shown in the accordion at the bottom of each

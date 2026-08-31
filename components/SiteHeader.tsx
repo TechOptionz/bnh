@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { BOOKING_URL, BACHROB_URL, C, EMAIL, PHONE_BRISBANE } from "@/lib/site";
-import { ACC, FA, SERVICES } from "@/lib/services";
+import { ACC, FA, serviceGroups } from "@/lib/services";
 import SocialLinks from "@/components/SocialLinks";
 
 export type NavKey =
@@ -23,34 +23,38 @@ const LINKS: { key: Exclude<NavKey, null>; href: string; label: string }[] = [
   { key: "blog", href: "/blog", label: "Blog" },
 ];
 
-const serviceLinks = (division: typeof FA | typeof ACC) =>
-  Object.entries(SERVICES)
-    .filter(([, s]) => s.division === division)
-    .map(([slug, s]) => ({ href: `/services/${slug}`, label: s.title }));
+type LinkItem = { href: string; label: string };
+type LinkGroup = { label: string; links: LinkItem[] };
 
 /** Hover dropdowns for the two service nav items. */
 const DROPDOWNS: {
   key: Exclude<NavKey, null>;
   heading: string;
   href: string;
-  links: { href: string; label: string }[];
+  groups: LinkGroup[];
 }[] = [
   {
     key: "financial-advice",
     heading: "Financial Advice",
     href: "/financial-advice",
-    links: serviceLinks(FA),
+    groups: serviceGroups(FA),
   },
   {
     key: "accounting",
     heading: "Accounting, Taxation & Advisory",
     href: "/accounting",
-    links: serviceLinks(ACC),
+    groups: serviceGroups(ACC),
   },
 ];
 
-/** Columns of the mega-menu, in display order. */
-const MENU_COLUMNS: { heading: string; href: string; links: { href: string; label: string }[] }[] = [
+/** Columns of the mega-menu, in display order. Columns carry either a flat
+ *  link list or sub-category groups. */
+const MENU_COLUMNS: {
+  heading: string;
+  href: string;
+  links?: LinkItem[];
+  groups?: LinkGroup[];
+}[] = [
   {
     heading: "About",
     href: "/about",
@@ -65,12 +69,12 @@ const MENU_COLUMNS: { heading: string; href: string; links: { href: string; labe
   {
     heading: "Financial Advice",
     href: "/financial-advice",
-    links: serviceLinks(FA),
+    groups: serviceGroups(FA),
   },
   {
     heading: "Accounting & Tax",
     href: "/accounting",
-    links: serviceLinks(ACC),
+    groups: serviceGroups(ACC),
   },
 ];
 
@@ -121,6 +125,37 @@ function ColumnHeading({ href, children }: { href: string; children: React.React
       </div>
       <div style={{ height: 1, background: C.border, marginBottom: 12 }} />
     </>
+  );
+}
+
+/** Small uppercase sub-category label with an orange chip and a hairline
+ *  running out to the right, used above each service group. */
+function GroupLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 9 }}>
+      <span
+        style={{
+          width: 7,
+          height: 7,
+          borderRadius: 2,
+          background: C.orange,
+          flexShrink: 0,
+        }}
+      />
+      <span
+        style={{
+          fontSize: 11.5,
+          fontWeight: 700,
+          letterSpacing: "0.13em",
+          textTransform: "uppercase",
+          color: C.navy,
+          whiteSpace: "nowrap",
+        }}
+      >
+        {children}
+      </span>
+      <span style={{ flex: 1, height: 1, background: C.border, minWidth: 18 }} />
+    </div>
   );
 }
 
@@ -232,6 +267,32 @@ export default function SiteHeader({
   const [open, setOpen] = useState(false);
   /** Which nav item's hover dropdown is showing. */
   const [dropdown, setDropdown] = useState<Exclude<NavKey, null> | null>(null);
+  const headerRef = useRef<HTMLElement>(null);
+  /** Viewport top of the header bar, so the mega-panel drops from exactly
+   *  behind it (the bar's position varies: announcement bar above it on the
+   *  home page, sticky offset, or pinned-to-top while open below 1200px). */
+  const [panelTop, setPanelTop] = useState(16);
+
+  /* Measured after the open state (and the <1200px pin class) hits the DOM
+     but before paint, so the panel always lines up with where the bar is.
+     Not reset on close — the panel retracts to the same spot it opened from. */
+  useLayoutEffect(() => {
+    if (open && headerRef.current) {
+      setPanelTop(Math.round(headerRef.current.getBoundingClientRect().top));
+    }
+  }, [open]);
+
+  /** Keeps the <1200px pinned-bar class on through the close animation, so
+   *  the bar still covers the panel while it retracts up behind it. */
+  const [pinned, setPinned] = useState(false);
+  useEffect(() => {
+    if (open) {
+      setPinned(true);
+      return;
+    }
+    const t = setTimeout(() => setPinned(false), 500);
+    return () => clearTimeout(t);
+  }, [open]);
   const pathname = usePathname();
   /** Marks the currently open page's link inside the dropdowns and mega-menu. */
   const linkClass = (href: string) =>
@@ -248,13 +309,23 @@ export default function SiteHeader({
 
   useEffect(() => {
     if (!open) return;
-    document.body.style.overflow = "hidden";
+    /* Lock scrolling on the root element — it is the page's real scroller
+       (html carries overflow-x: clip, so body's overflow never propagates
+       to the viewport). Hiding overflow on <body> instead would make body
+       the sticky bar's scrollport and un-stick it the moment the menu
+       opens, dropping the logo and close button off screen. The padding
+       compensates for the vanished scrollbar so the page doesn't shift. */
+    const root = document.documentElement;
+    const scrollbarGap = window.innerWidth - root.clientWidth;
+    root.style.overflow = "hidden";
+    if (scrollbarGap > 0) document.body.style.paddingRight = `${scrollbarGap}px`;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = "";
+      root.style.overflow = "";
+      document.body.style.paddingRight = "";
       window.removeEventListener("keydown", onKey);
     };
   }, [open]);
@@ -277,10 +348,11 @@ export default function SiteHeader({
   return (
     <>
       <header
+        ref={headerRef}
         className={[
           "site-header",
           floating ? "site-header--floating" : "",
-          open ? "site-header--menu-open" : "",
+          pinned ? "site-header--menu-open" : "",
         ]
           .filter(Boolean)
           .join(" ")}
@@ -506,26 +578,33 @@ export default function SiteHeader({
                   </Link>
                   <div
                     style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))",
-                      gap: "14px 32px",
-                      fontSize: 15.5,
+                      columnWidth: 215,
+                      columnCount: 3,
+                      columnGap: 36,
+                      fontSize: 15,
                     }}
                   >
-                    {d.links.map((l, i) => (
-                      <Link
-                        key={l.href}
-                        href={l.href}
-                        className={linkClass(l.href)}
+                    {d.groups.map((g, gi) => (
+                      <div
+                        key={g.label}
                         style={{
+                          breakInside: "avoid",
+                          marginBottom: 26,
                           opacity: showing ? 1 : 0,
                           transform: showing ? "translateY(0)" : "translateY(10px)",
-                          transition: `opacity 0.4s ease ${0.06 + i * 0.025}s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) ${0.06 + i * 0.025}s, background 0.22s ease, color 0.22s ease`,
+                          transition: `opacity 0.4s ease ${0.06 + gi * 0.06}s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) ${0.06 + gi * 0.06}s`,
                         }}
                       >
-                        {l.label}
-                        {ARROW}
-                      </Link>
+                        <GroupLabel>{g.label}</GroupLabel>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                          {g.links.map((l) => (
+                            <Link key={l.href} href={l.href} className={linkClass(l.href)}>
+                              {l.label}
+                              {ARROW}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
                     ))}
                   </div>
                   <Link
@@ -583,32 +662,30 @@ export default function SiteHeader({
         }}
       />
 
-      {/* Mega-menu panel */}
+      {/* Mega-menu panel — unrolls downward out of the nav bar (Perks-style):
+          the card is revealed top-to-bottom via clip-path, so it reads as the
+          header bar itself extending, and retracts back up into it on close. */}
       <div
         role="dialog"
         aria-modal="true"
         aria-hidden={!open}
-        className="mega-panel"
+        className={`mega-panel ${floating ? "mega-panel--floating" : "mega-panel--flush"}`}
         style={{
           position: "fixed",
-          top: 16,
-          left: "3vw",
-          right: "3vw",
-          bottom: 20,
+          top: panelTop,
+          maxHeight: `calc(100vh - ${panelTop + 20}px)`,
           zIndex: 49,
           background: "#FFFFFF",
-          borderRadius: 14,
           boxShadow: "0 24px 64px rgba(10,18,36,0.28)",
           overflowY: "auto",
           padding: "130px 48px 32px",
           display: "flex",
           flexDirection: "column",
-          opacity: open ? 1 : 0,
-          transform: open ? "translateY(0)" : "translateY(-28px)",
+          clipPath: open ? "inset(0 0 0 0)" : "inset(0 0 100% 0)",
           pointerEvents: open ? "auto" : "none",
           transition: open
-            ? "opacity 0.4s ease 0.1s, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s, visibility 0.4s linear 0.1s"
-            : "opacity 0.35s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.35s",
+            ? "clip-path 0.7s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.7s linear"
+            : "clip-path 0.45s cubic-bezier(0.6, 0, 0.3, 1), visibility 0.45s linear",
           visibility: open ? "visible" : "hidden",
         }}
       >
@@ -626,10 +703,11 @@ export default function SiteHeader({
             flexDirection: "column",
           }}
         >
-          <div className="mega-grid" style={{ marginBottom: 56 }}>
+          <div className="mega-grid" style={{ marginBottom: 40 }}>
             {MENU_COLUMNS.map((col, i) => (
               <div
                 key={col.heading}
+                className="mega-col"
                 style={{
                   opacity: open ? 1 : 0,
                   transform: open ? "translateY(0)" : "translateY(18px)",
@@ -637,25 +715,64 @@ export default function SiteHeader({
                 }}
               >
                 <ColumnHeading href={col.href}>{col.heading}</ColumnHeading>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                    fontSize: 15.5,
-                  }}
-                >
-                  {col.links.map((l) => (
-                    <Link key={l.href} href={l.href} className={linkClass(l.href)}>
-                      {l.label}
-                      {ARROW}
-                    </Link>
-                  ))}
-                </div>
+                {col.groups ? (
+                  /* Balanced newspaper columns: groups stack top-down and
+                     split into even sub-columns when the track is wide
+                     enough, so no group floats mid-air beside a taller one. */
+                  <div
+                    style={{
+                      columnWidth: 180,
+                      columnCount: col.groups.length > 3 ? 2 : 1,
+                      columnGap: 36,
+                    }}
+                  >
+                    {col.groups.map((g) => (
+                      <div key={g.label} style={{ breakInside: "avoid", marginBottom: 26 }}>
+                        <GroupLabel>{g.label}</GroupLabel>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 2,
+                            fontSize: 15,
+                          }}
+                        >
+                          {g.links.map((l) => (
+                            <Link key={l.href} href={l.href} className={linkClass(l.href)}>
+                              {l.label}
+                              {ARROW}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 2,
+                      fontSize: 15.5,
+                    }}
+                  >
+                    {(col.links ?? []).map((l) => (
+                      <Link key={l.href} href={l.href} className={linkClass(l.href)}>
+                        {l.label}
+                        {ARROW}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+                {/* The promo card tucks under the short About column instead
+                    of taking a grid track of its own. */}
+                {i === 0 && (
+                  <div style={{ marginTop: 30 }}>
+                    <PromoCard show={open} delay={open ? 0.45 : 0} />
+                  </div>
+                )}
               </div>
             ))}
-
-            <PromoCard show={open} delay={open ? 0.54 : 0} />
           </div>
 
           {/* Bottom strip */}

@@ -74,9 +74,14 @@ export default function Chatbot() {
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Keep the latest question pinned to the top of the view so long answers
+  // read from the start instead of jumping to the bottom.
   useEffect(() => {
     const el = listRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
+    if (!el) return;
+    const users = el.querySelectorAll<HTMLElement>(".jb-usr");
+    const anchor = users[users.length - 1];
+    el.scrollTop = anchor ? anchor.offsetTop - 8 : el.scrollHeight;
   }, [msgs, busy]);
 
   function toggle() {
@@ -199,6 +204,21 @@ export default function Chatbot() {
               <b>JCA-BNH Assistant</b>
               <small>Ask about our services or booking</small>
             </div>
+            <button
+              type="button"
+              className="jb-close"
+              aria-label="Close chat"
+              onClick={() => setOpen(false)}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M3 3l10 10M13 3L3 13"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
           </div>
           <div className="jb-msgs" ref={listRef}>
             {msgs.map((m, i) => (
@@ -277,7 +297,9 @@ const CSS = `
 .jb-dot{width:10px;height:10px;border-radius:99px;background:#2ECC8F;flex-shrink:0}
 .jb-hd b{font-family:var(--font-lexend),Lexend,sans-serif;font-size:15px;display:block}
 .jb-hd small{color:#C9D4E8;font-size:12px}
-.jb-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#F4F7FA}
+.jb-close{margin-left:auto;flex-shrink:0;width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.08);border:none;border-radius:8px;color:#C9D4E8;cursor:pointer;transition:background .15s,color .15s}
+.jb-close:hover{background:rgba(255,255,255,.16);color:#fff}
+.jb-msgs{position:relative;flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#F4F7FA}
 .jb-m{max-width:82%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
 .jb-bot{background:#fff;color:#33415C;border:1px solid #E6EBF2;border-bottom-left-radius:4px;align-self:flex-start}
 .jb-usr{background:#F25C0A;color:#fff;border-bottom-right-radius:4px;align-self:flex-end}

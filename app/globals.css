@@ -225,12 +225,22 @@ select {
 }
 /* --- mega-menu ---------------------------------------------------------- */
 
-/* Three link columns plus the promo card; collapses on narrow viewports. */
+/* Three link columns (promo card lives under the first); the Accounting
+   column gets a double track so its groups flow into two sub-columns and
+   the panel fits on screen without scrolling. */
 .mega-grid {
   display: grid;
-  grid-template-columns: 0.92fr 1.2fr 1.2fr 330px;
-  gap: 44px 52px;
+  grid-template-columns: 1fr 1.15fr 2fr;
+  gap: 40px 44px;
   align-content: start;
+}
+/* Hairline dividers between the main sections keep them reading as
+   separate blocks on wide screens. */
+@media (min-width: 1181px) {
+  .mega-grid > .mega-col + .mega-col {
+    border-left: 1px solid #e6ebf2;
+    padding-left: 44px;
+  }
 }
 @media (max-width: 1180px) {
   .mega-grid {
@@ -1259,6 +1269,29 @@ body {
   }
   .site-logo {
     height: 50px !important;
+  }
+}
+
+/* Mega-menu panel geometry mirrors the bar it drops out of, so the
+   clip-path reveal reads as the nav bar itself extending downward.
+   (Vertical position is measured from the bar and set inline.) */
+.mega-panel--floating {
+  left: 3vw;
+  right: 3vw;
+  border-radius: 14px;
+}
+.mega-panel--flush {
+  left: 0;
+  right: 0;
+  border-radius: 0 0 14px 14px;
+}
+@media (max-width: 1199.98px) {
+  /* The open bar pins to a floating card below 1200px (see
+     .site-header--menu-open above), so the panel follows it. */
+  .mega-panel--flush {
+    left: 3vw;
+    right: 3vw;
+    border-radius: 14px;
   }
 }
 
