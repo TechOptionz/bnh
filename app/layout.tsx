@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Lexend, Public_Sans } from "next/font/google";
 import BackToTop from "@/components/BackToTop";
@@ -67,6 +68,7 @@ export default function RootLayout({
         <SamePageScroll />
         <BackToTop />
         <Chatbot />
+        <Analytics />
       </body>
     </html>
   );
