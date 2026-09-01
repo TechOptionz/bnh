@@ -937,6 +937,54 @@ export const FAQS: Record<string, Faq[]> = {
 
 export const DEFAULT_SLUG = "taxation-advisory";
 
+/** Themed photography for the service detail page: wide hero, side portrait
+ *  and insight portrait. Services in the same topic share a theme set. */
+export type ServiceImages = {
+  hero: string;
+  side: string;
+  insight: string;
+  alt: string;
+};
+
+function themeImages(theme: string, alt: string): ServiceImages {
+  return {
+    hero: `/assets/svc-${theme}-wide.jpg`,
+    side: `/assets/svc-${theme}-a.jpg`,
+    insight: `/assets/svc-${theme}-b.jpg`,
+    alt,
+  };
+}
+
+const THEME_BY_SLUG: Record<string, [theme: string, alt: string]> = {
+  "life-insurances": ["protection", "Adviser helping a family protect what matters"],
+  "retirement-plan": ["retirement", "Planning for a confident retirement"],
+  "retirement-savings": ["retirement", "Reviewing retirement savings options"],
+  "super-advice": ["retirement", "Superannuation strategy discussion"],
+  "smsf-advice": ["invest", "Reviewing an SMSF investment portfolio"],
+  "managed-investments": ["invest", "Analysing managed fund performance"],
+  "stocks-bonds": ["invest", "Share market and bond analysis"],
+  "margin-lending": ["invest", "Assessing a margin lending strategy"],
+  "smsf-accounting": ["invest", "SMSF administration and reporting"],
+  "estate-planning": ["estate", "Planning a family's estate and legacy"],
+  "business-advisory": ["business", "Business strategy meeting"],
+  "business-planning": ["business", "Business planning and forecasting session"],
+  "business-support": ["business", "Day-to-day business support"],
+  "virtual-cfo": ["business", "Virtual CFO reviewing business performance"],
+  "grants-advice": ["business", "Exploring grant opportunities for a business"],
+  "business-software": ["tech", "Implementing cloud business software"],
+  "process-improvement": ["tech", "Digitising and streamlining business processes"],
+  "internal-audit": ["audit", "Internal audit and risk review"],
+  "audit-services": ["audit", "Independent audit of financial reports"],
+  "taxation-advisory": ["audit", "Tax advisers reviewing a client position"],
+  "tax-audit-insurance": ["audit", "Preparing for an ATO audit response"],
+  "bookkeeping-payroll": ["books", "Bookkeeper managing accounts and payroll"],
+};
+
+export function serviceImages(slug: string): ServiceImages | undefined {
+  const entry = THEME_BY_SLUG[slug];
+  return entry ? themeImages(entry[0], entry[1]) : undefined;
+}
+
 /** Up to six other services in the same division, in declaration order. */
 export function relatedServices(slug: string) {
   const current = SERVICES[slug];

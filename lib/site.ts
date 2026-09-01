@@ -116,6 +116,7 @@ export const POSTS: readonly Post[] = [
   {
     slug: "10-step-personal-financial-audit-checklist",
     href: "/blog/10-step-personal-financial-audit-checklist",
+    img: "/assets/blog-audit.jpg",
     alt: "Personal financial audit checklist",
     iso: "2026-03-26",
     date: "26 Mar 2026",
@@ -128,6 +129,7 @@ export const POSTS: readonly Post[] = [
   {
     slug: "inflation-proof-your-household-budget",
     href: "/blog/inflation-proof-your-household-budget",
+    img: "/assets/blog-inflation.jpg",
     alt: "Inflation-proofing a household budget",
     iso: "2026-03-24",
     date: "24 Mar 2026",
@@ -140,6 +142,7 @@ export const POSTS: readonly Post[] = [
   {
     slug: "help-your-kids-buy-a-home-without-risking-retirement",
     href: "/blog/help-your-kids-buy-a-home-without-risking-retirement",
+    img: "/assets/blog-kids-home.jpg",
     alt: "Parents helping their children buy a home",
     iso: "2025-12-11",
     date: "11 Dec 2025",
@@ -152,6 +155,7 @@ export const POSTS: readonly Post[] = [
   {
     slug: "the-safer-way-to-tap-and-pay",
     href: "/blog/the-safer-way-to-tap-and-pay",
+    img: "/assets/blog-tap-pay.jpg",
     alt: "Contactless payment with a mobile wallet",
     iso: "2025-11-22",
     date: "22 Nov 2025",
@@ -164,6 +168,7 @@ export const POSTS: readonly Post[] = [
   {
     slug: "top-5-mistakes-business-owners-make-when-applying-for-a-loan",
     href: "/blog/top-5-mistakes-business-owners-make-when-applying-for-a-loan",
+    img: "/assets/blog-loans.jpg",
     alt: "Business owner preparing a loan application",
     iso: "2025-04-10",
     date: "10 Apr 2025",

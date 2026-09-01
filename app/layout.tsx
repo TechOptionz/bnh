@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Lexend, Public_Sans } from "next/font/google";
+import BackToTop from "@/components/BackToTop";
 import Chatbot from "@/components/Chatbot";
+import SamePageScroll from "@/components/SamePageScroll";
 import ScrollReveal from "@/components/ScrollReveal";
+import ScrollToTop from "@/components/ScrollToTop";
 import { EMAIL, FACEBOOK_URL, LINKEDIN_URL, PHONE_BRISBANE } from "@/lib/site";
 import "./globals.css";
 
@@ -45,7 +48,14 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en-AU" className={`${lexend.variable} ${publicSans.variable}`}>
+    <html
+      lang="en-AU"
+      className={`${lexend.variable} ${publicSans.variable}`}
+      /* CSS smooth scrolling is declared in globals.css; this tells Next.js to
+         suspend it during route transitions so new pages open at the top
+         instantly instead of slow-scrolling up from the old position. */
+      data-scroll-behavior="smooth"
+    >
       <body>
         <script
           type="application/ld+json"
@@ -53,6 +63,9 @@ export default function RootLayout({
         />
         {children}
         <ScrollReveal />
+        <ScrollToTop />
+        <SamePageScroll />
+        <BackToTop />
         <Chatbot />
       </body>
     </html>

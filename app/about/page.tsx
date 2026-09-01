@@ -196,7 +196,7 @@ export default function AboutPage() {
               maxWidth: "18ch",
             }}
           >
-            Better at money matters, for what comes next.
+            Better at money matters, securing your financial future.
           </h1>
         </div>
       </section>
@@ -204,7 +204,18 @@ export default function AboutPage() {
       {/* Full-width team photo below the navy band */}
       <section style={{ background: "#FFFFFF", padding: "clamp(52px,8vw,72px) 5vw 0" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <ImagePlaceholder ratio="16 / 7" label="Image placeholder" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/about-team-group.jpg"
+            alt="The JCA-BNH team together"
+            style={{
+              width: "100%",
+              aspectRatio: "16 / 9",
+              objectFit: "cover",
+              borderRadius: 18,
+              display: "block",
+            }}
+          />
         </div>
       </section>
 
@@ -258,7 +269,7 @@ export default function AboutPage() {
               We don&rsquo;t believe in one-size-fits-all advice. We listen
               first, ask better questions, and work alongside our clients with
               a long-term view &mdash; so they&rsquo;re prepared not just for
-              today, but for what comes next.
+              today, but for the years ahead.
             </p>
             <StatsStrip
               stats={STATS}
@@ -268,7 +279,9 @@ export default function AboutPage() {
             />
           </div>
           <AccentImage
-            alt="The JCA-BNH team"
+            src="/assets/about-team-meeting.jpg"
+            alt="JCA-BNH team members in a meeting"
+            ratio="3 / 2"
             corner="right"
           />
         </div>
@@ -298,7 +311,8 @@ export default function AboutPage() {
           }}
         >
           <AccentImage
-            alt="JCA-BNH advisers in conversation"
+            src="/assets/about-ceo-standing.jpg"
+            alt="Nayyar Hayat, CEO of JCA-BNH"
             corner="right"
           />
           <div>

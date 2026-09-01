@@ -198,11 +198,26 @@ export default async function BlogArticlePage({ params }: Params) {
                 </div>
               )}
               {/* Mid-article visual break */}
-              {i === 1 && (
-                <div style={{ margin: "36px 0 8px" }}>
-                  <ImagePlaceholder ratio="16 / 7" radius={12} />
-                </div>
-              )}
+              {i === 1 &&
+                (article.midImg ? (
+                  <div style={{ margin: "36px 0 8px", borderRadius: 12, overflow: "hidden" }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={article.midImg}
+                      alt={article.midAlt ?? ""}
+                      style={{
+                        width: "100%",
+                        aspectRatio: "16/7",
+                        objectFit: "cover",
+                        display: "block",
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div style={{ margin: "36px 0 8px" }}>
+                    <ImagePlaceholder ratio="16 / 7" radius={12} />
+                  </div>
+                ))}
             </section>
           ))}
 

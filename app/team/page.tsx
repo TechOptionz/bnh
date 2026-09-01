@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
-import ImagePlaceholder from "@/components/ImagePlaceholder";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { C } from "@/lib/site";
@@ -72,7 +71,18 @@ export default function TeamPage() {
           >
             Hands-on. Always.
           </h1>
-          <ImagePlaceholder ratio="16 / 7" radius={18} label="Team photo" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/hero-team-wide.jpg"
+            alt="The JCA-BNH team"
+            style={{
+              width: "100%",
+              aspectRatio: "16 / 7",
+              objectFit: "cover",
+              borderRadius: 18,
+              display: "block",
+            }}
+          />
         </div>
       </section>
 
@@ -128,7 +138,18 @@ export default function TeamPage() {
             alignItems: "center",
           }}
         >
-          <ImagePlaceholder ratio="5 / 6" radius={18} label="Team photo" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/team-photo.jpg"
+            alt="JCA-BNH team members working together"
+            style={{
+              width: "100%",
+              aspectRatio: "5 / 6",
+              objectFit: "cover",
+              borderRadius: 18,
+              display: "block",
+            }}
+          />
           <div>
             <Eyebrow label="Our People" />
             <h2

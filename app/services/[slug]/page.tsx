@@ -11,6 +11,7 @@ import {
   FA,
   FAQS,
   relatedServices,
+  serviceImages,
   SERVICES,
 } from "@/lib/services";
 import { BOOKING_URL, C, PHONE_BRISBANE } from "@/lib/site";
@@ -72,6 +73,7 @@ export default async function ServicePage({ params }: Params) {
 
   const related = relatedServices(slug);
   const faqs = FAQS[slug] ?? [];
+  const images = serviceImages(slug);
   const isFA = service.division === FA;
 
   const insightEyebrow = isFA
@@ -144,7 +146,22 @@ export default async function ServicePage({ params }: Params) {
           >
             {service.title}
           </h1>
-          <ImagePlaceholder ratio="16 / 7" radius={10} />
+          {images ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={images.hero}
+              alt={images.alt}
+              style={{
+                width: "100%",
+                aspectRatio: "16 / 7",
+                objectFit: "cover",
+                borderRadius: 10,
+                display: "block",
+              }}
+            />
+          ) : (
+            <ImagePlaceholder ratio="16 / 7" radius={10} />
+          )}
         </div>
       </section>
 
@@ -190,7 +207,22 @@ export default async function ServicePage({ params }: Params) {
             alignItems: "start",
           }}
         >
-          <ImagePlaceholder ratio="4 / 5" radius={10} />
+          {images ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={images.side}
+              alt={images.alt}
+              style={{
+                width: "100%",
+                aspectRatio: "4 / 5",
+                objectFit: "cover",
+                borderRadius: 10,
+                display: "block",
+              }}
+            />
+          ) : (
+            <ImagePlaceholder ratio="4 / 5" radius={10} />
+          )}
           <div>
             <Eyebrow>{service.title}</Eyebrow>
             <h2
@@ -311,7 +343,22 @@ export default async function ServicePage({ params }: Params) {
             ))}
           </div>
           <div style={{ position: "relative", paddingBottom: 56 }}>
-            <ImagePlaceholder ratio="4 / 5" radius={10} />
+            {images ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={images.insight}
+                alt={images.alt}
+                style={{
+                  width: "100%",
+                  aspectRatio: "4 / 5",
+                  objectFit: "cover",
+                  borderRadius: 10,
+                  display: "block",
+                }}
+              />
+            ) : (
+              <ImagePlaceholder ratio="4 / 5" radius={10} />
+            )}
             <div
               style={{
                 position: "absolute",
@@ -329,7 +376,7 @@ export default async function ServicePage({ params }: Params) {
                 boxShadow: "0 18px 40px rgba(10,18,36,0.18)",
               }}
             >
-              For what comes next.
+              Securing your financial future.
             </div>
           </div>
         </div>

@@ -78,6 +78,38 @@ const MENU_COLUMNS: {
   },
 ];
 
+/** Mobile menu (≤700px): a few main rows; services fold out as accordions. */
+const MOBILE_MENU: {
+  key: string;
+  label: string;
+  href: string;
+  groups?: LinkGroup[];
+  links?: LinkItem[];
+}[] = [
+  {
+    key: "financial-advice",
+    label: "Financial Advice",
+    href: "/financial-advice",
+    groups: serviceGroups(FA),
+  },
+  {
+    key: "accounting",
+    label: "Accounting & Tax",
+    href: "/accounting",
+    groups: serviceGroups(ACC),
+  },
+  {
+    key: "about",
+    label: "About",
+    href: "/about",
+    links: [
+      { href: "/about", label: "About Us" },
+      { href: "/team", label: "Meet Our Team" },
+      { href: "/careers", label: "Careers" },
+    ],
+  },
+];
+
 const COL_HEADING: React.CSSProperties = {
   fontFamily: "var(--font-lexend), Lexend, sans-serif",
   fontWeight: 600,
@@ -267,6 +299,8 @@ export default function SiteHeader({
   const [open, setOpen] = useState(false);
   /** Which nav item's hover dropdown is showing. */
   const [dropdown, setDropdown] = useState<Exclude<NavKey, null> | null>(null);
+  /** Which accordion section is expanded in the mobile menu. */
+  const [mobileSection, setMobileSection] = useState<string | null>(null);
   const headerRef = useRef<HTMLElement>(null);
   /** Viewport top of the header bar, so the mega-panel drops from exactly
    *  behind it (the bar's position varies: announcement bar above it on the
@@ -292,6 +326,11 @@ export default function SiteHeader({
     }
     const t = setTimeout(() => setPinned(false), 500);
     return () => clearTimeout(t);
+  }, [open]);
+
+  /** Collapse any expanded mobile accordion when the menu closes. */
+  useEffect(() => {
+    if (!open) setMobileSection(null);
   }, [open]);
   const pathname = usePathname();
   /** Marks the currently open page's link inside the dropdowns and mega-menu. */
@@ -384,8 +423,22 @@ export default function SiteHeader({
       >
         <Link
           href="/"
+          aria-label="JCA-BNH — back to home"
           style={{ display: "flex", alignItems: "center" }}
           onMouseEnter={() => setDropdown(null)}
+          onClick={() => {
+            /* Close any open menu, and when already on the home page glide
+               back up to the hero. The delay lets the menu's scroll lock
+               release first, so the scroll isn't swallowed. */
+            setOpen(false);
+            setDropdown(null);
+            if (pathname === "/") {
+              setTimeout(
+                () => window.scrollTo({ top: 0, behavior: "smooth" }),
+                80,
+              );
+            }
+          }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -703,6 +756,105 @@ export default function SiteHeader({
             flexDirection: "column",
           }}
         >
+          {/* Phone layout: main rows only; the two service menus and About
+              fold out as accordions instead of dumping every link at once.
+              CSS swaps this in for .mega-grid at ≤700px. */}
+          <div
+            className="mm-menu"
+            style={{
+              opacity: open ? 1 : 0,
+              transform: open ? "translateY(0)" : "translateY(18px)",
+              transition: `opacity 0.45s ease ${open ? 0.3 : 0}s, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) ${open ? 0.3 : 0}s`,
+            }}
+          >
+            {MOBILE_MENU.map((item) => {
+              const expanded = mobileSection === item.key;
+              return (
+                <div key={item.key} className="mm-item">
+                  <button
+                    type="button"
+                    className="mm-row"
+                    aria-expanded={expanded}
+                    onClick={() => setMobileSection(expanded ? null : item.key)}
+                  >
+                    <span>{item.label}</span>
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}
+                    >
+                      <path d="M2 4l4 4 4-4" />
+                    </svg>
+                  </button>
+                  <div className="mm-body" data-open={expanded ? "true" : "false"}>
+                    <div className="mm-body-inner">
+                      <div className="mm-body-pad">
+                        {item.groups ? (
+                          <>
+                            {item.groups.map((g) => (
+                              <div key={g.label} style={{ marginBottom: 18 }}>
+                                <GroupLabel>{g.label}</GroupLabel>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: 2,
+                                    fontSize: 15,
+                                  }}
+                                >
+                                  {g.links.map((l) => (
+                                    <Link key={l.href} href={l.href} className={linkClass(l.href)}>
+                                      {l.label}
+                                      {ARROW}
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                            <Link href={item.href} className="mm-viewall">
+                              View all {item.label.toLowerCase()} services →
+                            </Link>
+                          </>
+                        ) : (
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: 2,
+                              fontSize: 15,
+                            }}
+                          >
+                            {(item.links ?? []).map((l) => (
+                              <Link key={l.href} href={l.href} className={linkClass(l.href)}>
+                                {l.label}
+                                {ARROW}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+            <Link href="/blog" className="mm-item mm-row">
+              Blog
+            </Link>
+            <Link href="/contact" className="mm-item mm-row">
+              Contact
+            </Link>
+            <a href={BOOKING_URL} className="btn-soft mm-cta">
+              Book a Free Consultation &rarr;
+            </a>
+          </div>
+
           <div className="mega-grid" style={{ marginBottom: 40 }}>
             {MENU_COLUMNS.map((col, i) => (
               <div

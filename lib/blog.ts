@@ -12,6 +12,9 @@ export type Article = {
   sections: ArticleSection[];
   /** Rendered as the "Key takeaways" card near the end of the article. */
   takeaways: string[];
+  /** Mid-article visual break shown after the second section. */
+  midImg?: string;
+  midAlt?: string;
 };
 
 export function postBySlug(slug: string): Post | undefined {
@@ -22,6 +25,8 @@ export function postBySlug(slug: string): Post | undefined {
  *  general information — swap for the final approved copy when it arrives. */
 export const ARTICLES: Record<string, Article> = {
   "financial-planning-for-digital-nomads-and-remote-workers": {
+    midImg: "/assets/blog-nomads-mid.jpg",
+    midAlt: "Remote worker with a laptop at a seaside cafe",
     intro: [
       "Conventional employees can usually plan for their financial future knowing certain fundamental parameters will not change: a predictable salary, a fixed home base, employer-paid super and a tax return that mostly takes care of itself. Digital nomads and remote workers enjoy freedoms that office-bound workers can only envy — but those freedoms remove most of the guard rails that traditional financial planning relies on.",
       "If your income arrives from multiple countries, your \"home\" changes with the seasons and your work happens wherever the Wi-Fi is strongest, your financial plan needs to be deliberately built rather than left to default settings.",
@@ -65,6 +70,8 @@ export const ARTICLES: Record<string, Article> = {
   },
 
   "are-offset-accounts-always-the-best-option-for-home-loans": {
+    midImg: "/assets/blog-offset-mid.jpg",
+    midAlt: "Model house beside coins and mortgage documents",
     intro: [
       "Mortgage offset accounts have steadily increased in popularity since they were introduced in Australia in the late 1980s. The pitch is compelling: every dollar sitting in the offset reduces the loan balance your interest is calculated on, effectively earning you your mortgage rate, tax-free, while staying fully accessible.",
       "For many borrowers that is exactly how it plays out. But \"popular\" and \"always best\" are not the same thing, and for some households an offset account quietly costs more than it saves.",
@@ -108,6 +115,8 @@ export const ARTICLES: Record<string, Article> = {
   },
 
   "10-step-personal-financial-audit-checklist": {
+    midImg: "/assets/blog-audit-mid.jpg",
+    midAlt: "Reviewing bank statements during a personal financial audit",
     intro: [
       "Most people can tell you their salary. Far fewer can tell you their net worth, their true monthly spend, or how long they could last if their income stopped tomorrow. A personal financial audit closes that gap — and it takes about an hour, once a year.",
       "Work through the ten steps below in order. You don't need to fix everything today; the goal of the audit is a clear, honest picture and a short list of what to tackle first.",
@@ -164,6 +173,8 @@ export const ARTICLES: Record<string, Article> = {
   },
 
   "inflation-proof-your-household-budget": {
+    midImg: "/assets/blog-inflation-mid.jpg",
+    midAlt: "Comparing household bills and quotes at a laptop",
     intro: [
       "Inflation doesn't need to be making headlines to be eroding your budget. Even at moderate rates, prices quietly compound: a 3% rise every year turns $100 of groceries into $116 within five years, while a budget written in 2023 and never revisited slowly stops matching reality.",
       "Inflation-proofing a household budget isn't about heroic frugality. It's about building a budget that automatically adjusts, targeting the costs that rise fastest, and making sure your savings and income keep pace.",
@@ -207,6 +218,8 @@ export const ARTICLES: Record<string, Article> = {
   },
 
   "help-your-kids-buy-a-home-without-risking-retirement": {
+    midImg: "/assets/blog-kids-home-mid.jpg",
+    midAlt: "Family signing a documented loan agreement with an adviser",
     intro: [
       "With deposits stretching beyond what most young Australians can save in under a decade, the \"Bank of Mum and Dad\" has become one of the country's biggest lenders. For many families, helping the kids into a home is one of the most meaningful things their money will ever do.",
       "But there is a hard truth underneath the generosity: your children can borrow for a house, while you cannot borrow for your retirement. Help that is structured badly — or sized emotionally rather than mathematically — can undo decades of careful planning.",
@@ -255,6 +268,8 @@ export const ARTICLES: Record<string, Article> = {
   },
 
   "the-safer-way-to-tap-and-pay": {
+    midImg: "/assets/blog-tap-pay-mid.jpg",
+    midAlt: "Smartwatch tapped on a contactless payment terminal",
     intro: [
       "Tapping a card — or a phone, or a watch — has become the default way Australians pay for almost everything. It's fast, it's frictionless, and by and large it's safe. But not every way of tapping is equally safe, and a few small habits separate an inconvenience from a genuinely bad week.",
       "Here's how contactless payments actually protect you, where the real risks are, and the safer way to set yourself up.",
@@ -304,6 +319,8 @@ export const ARTICLES: Record<string, Article> = {
   },
 
   "top-5-mistakes-business-owners-make-when-applying-for-a-loan": {
+    midImg: "/assets/blog-loans-mid.jpg",
+    midAlt: "Cash flow forecast charts and reports on a desk",
     intro: [
       "Whether it's funding new equipment, smoothing seasonal cash flow or buying a premises, most businesses will need finance at some point. Yet a surprising share of loan applications fail — or get approved on worse terms than necessary — for reasons that have nothing to do with the health of the business itself.",
       "Lenders assess an application long before the paperwork is lodged. These are the five mistakes we see business owners make most often, and how to avoid each one.",
