@@ -3,6 +3,7 @@ import HomeFooter from "@/components/HomeFooter";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
 import KeyobPartnerBanner from "@/components/partners/KeyobPartnerBanner";
 import KeyobPartnerSection from "@/components/partners/KeyobPartnerSection";
+import KeyobPartnerTicker from "@/components/partners/KeyobPartnerTicker";
 import ServiceCards from "@/components/ServiceCards";
 import SiteHeader from "@/components/SiteHeader";
 import StatsStrip from "@/components/StatsStrip";
@@ -656,6 +657,7 @@ export default function HomePage() {
       </section>
 
       {/* Technology partner — KEYOB */}
+      <KeyobPartnerTicker />
       <KeyobPartnerSection />
 
       {/* Recent blogs */}

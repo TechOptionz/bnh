@@ -1877,6 +1877,114 @@ body {
   color: rgba(201, 212, 232, 0.72);
 }
 
+/* --- form validation ----------------------------------------------------- */
+
+.field-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 7px 0 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: #b3261e;
+}
+.field-error svg {
+  flex: none;
+  margin-top: 1px;
+}
+
+/* Invalid controls: red hairline plus a soft ring, so the state reads at a
+   glance without the field jumping size. */
+.field-invalid {
+  border-color: #b3261e !important;
+  box-shadow: 0 0 0 3px rgba(179, 38, 30, 0.12);
+}
+
+/* Summary shown above the button when a submit is blocked. */
+.form-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 0;
+  padding: 13px 16px;
+  border: 1px solid rgba(179, 38, 30, 0.35);
+  background: rgba(179, 38, 30, 0.06);
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #8c1d18;
+}
+.form-summary svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+/* Discount announcement ticker — dark navy, scrolls right to left. */
+.kbp-ticker {
+  overflow: hidden;
+  background: linear-gradient(90deg, #1b2a4c 0%, #12203c 100%);
+  border-bottom: 2px solid var(--cyan);
+  padding: 13px 0;
+}
+.kbp-ticker-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  gap: 44px;
+  /* Matches the gap so the duplicated half lines up exactly at the seam. */
+  padding-right: 44px;
+  animation: kbp-ticker-scroll 36s linear infinite;
+}
+.kbp-ticker:hover .kbp-ticker-track {
+  animation-play-state: paused;
+}
+@keyframes kbp-ticker-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.kbp-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-lexend), Lexend, sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.kbp-ticker-pct {
+  color: var(--cyan);
+  font-weight: 700;
+}
+.kbp-ticker-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  flex-shrink: 0;
+}
+@media (max-width: 640px) {
+  .kbp-ticker-track {
+    gap: 30px;
+    padding-right: 30px;
+  }
+  .kbp-ticker-item {
+    font-size: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kbp-ticker-track {
+    animation: none;
+  }
+}
+
 /* Variant B — compact partnership card */
 .kbp-banner {
   display: flex;
