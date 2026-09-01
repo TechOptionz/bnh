@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
+import KeyobPartnerStrip from "@/components/partners/KeyobPartnerStrip";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import SocialLinks from "@/components/SocialLinks";
@@ -517,6 +518,9 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* Technology partner — slim strip between the team and the closing CTA */}
+      <KeyobPartnerStrip />
 
       <CtaBand
         heading="Work with a team that puts you first"

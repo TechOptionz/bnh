@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import AdviserForm from "@/components/AdviserForm";
 import FaqAccordion from "@/components/FaqAccordion";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
+import KeyobPartnerBanner from "@/components/partners/KeyobPartnerBanner";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import {
@@ -412,6 +413,20 @@ export default async function ServicePage({ params }: Params) {
           </p>
         </div>
       </section>
+
+      {/* ---- Technology partner (business & accounting services only) ---- */}
+      {!isFA && (
+        <section
+          style={{
+            background: "#FFFFFF",
+            padding: "clamp(52px,8vw,72px) max(18px,4vw) 0",
+          }}
+        >
+          <div style={WRAP}>
+            <KeyobPartnerBanner />
+          </div>
+        </section>
+      )}
 
       {/* ---- "Speak with an Adviser" contact panel + form card ---- */}
       <section style={{ background: "#FFFFFF", padding: "clamp(60px,9vw,96px) max(18px,4vw)" }}>

@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { BOOKING_URL, C } from "@/lib/site";
+import KeyobPartnerTile from "@/components/partners/KeyobPartnerTile";
+import { C } from "@/lib/site";
 
 /** Layout effect on the client, plain effect on the server (no SSR warning). */
 const useIsoLayoutEffect =
@@ -66,24 +67,6 @@ function Icon({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Check() {
-  return (
-    <svg
-      width="17"
-      height="17"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="m5 12.6 4.4 4.4L19 7.4" />
-    </svg>
-  );
-}
-
 type Division = {
   key: string;
   accent: string;
@@ -141,12 +124,6 @@ const DIVISIONS: Division[] = [
       { label: "SMSF", slug: "smsf-accounting" },
     ],
   },
-];
-
-const CONSULT_POINTS = [
-  "A 30-minute call with a qualified specialist",
-  "A clear view of where you stand today",
-  "An offer tailored to you — no obligation",
 ];
 
 /**
@@ -208,29 +185,7 @@ export default function ServiceCards() {
         className={revealClass(2)}
         style={{ ...delay(2), "--accent": C.cyan } as React.CSSProperties}
       >
-        <span className="svc-badge">
-          <span className="svc-dot" aria-hidden />
-          Free 30-min consultation
-        </span>
-        <h3 className="svc-title">Not sure where to start?</h3>
-        <p className="svc-copy">
-          Talk it through with one of our advisers. We&rsquo;ll listen first,
-          then point you to the division and the specialist that fits.
-        </p>
-        <ul className="svc-checks">
-          {CONSULT_POINTS.map((p) => (
-            <li key={p}>
-              <Check />
-              <span>{p}</span>
-            </li>
-          ))}
-        </ul>
-        <a href={BOOKING_URL} className="svc-cta-btn">
-          Book your consultation
-          <span className="svc-arrow" aria-hidden>
-            &rarr;
-          </span>
-        </a>
+        <KeyobPartnerTile variant="svc" />
       </article>
     </div>
   );

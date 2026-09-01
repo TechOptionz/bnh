@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import InsightsExplorer from "@/components/InsightsExplorer";
+import KeyobPartnerStrip from "@/components/partners/KeyobPartnerStrip";
 import PageHero from "@/components/PageHero";
 import SiteFooter from "@/components/SiteFooter";
 import { C } from "@/lib/site";
@@ -49,6 +50,9 @@ export default function BlogPage() {
           </div>
         </div>
       </section>
+
+      {/* Technology partner — slim strip above the footer */}
+      <KeyobPartnerStrip />
 
       <SiteFooter omit={["about"]} />
     </>

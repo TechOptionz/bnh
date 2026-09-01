@@ -144,7 +144,7 @@ export default function AccountingPage() {
         </a>
       </PageHero>
 
-      <ServiceGroups groups={GROUPS} />
+      <ServiceGroups groups={GROUPS} helpCard="partner" />
 
       <CtaBand
         heading="Let's take tax time off your plate"

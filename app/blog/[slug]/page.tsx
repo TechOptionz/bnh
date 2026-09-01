@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import CtaBand from "@/components/CtaBand";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
+import KeyobPartnerCard from "@/components/partners/KeyobPartnerCard";
 import PageHero from "@/components/PageHero";
 import SiteFooter from "@/components/SiteFooter";
 import { ARTICLES, postBySlug } from "@/lib/blog";
@@ -384,6 +385,9 @@ export default async function BlogArticlePage({ params }: Params) {
                 </div>
               </Link>
             ))}
+
+            {/* Technology partner — fills the grid's fourth cell */}
+            <KeyobPartnerCard />
           </div>
         </div>
       </section>
