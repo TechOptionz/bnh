@@ -257,8 +257,10 @@ function PromoCard({ show, delay = 0.12 }: { show: boolean; delay?: number }) {
         </span>
         <KeyobLogo height={11} light />
       </span>
-      <Link
-        href="/#technology-partner"
+      <a
+        href={KEYOB_PARTNER.website}
+        target="_blank"
+        rel="noopener noreferrer"
         className="btn-soft"
         style={{
           marginTop: 6,
@@ -271,7 +273,8 @@ function PromoCard({ show, delay = 0.12 }: { show: boolean; delay?: number }) {
         }}
       >
         Explore technology support &rarr;
-      </Link>
+        <span className="visually-hidden"> (opens in a new tab)</span>
+      </a>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CtaBand from "@/components/CtaBand";
+import KeyobPartnerStrip from "@/components/partners/KeyobPartnerStrip";
 import PageHero from "@/components/PageHero";
 import ServiceGroups, { type ServiceGroup } from "@/components/ServiceGroups";
 import SiteFooter from "@/components/SiteFooter";
@@ -144,7 +145,10 @@ export default function AccountingPage() {
         </a>
       </PageHero>
 
-      <ServiceGroups groups={GROUPS} helpCard="partner" />
+      <ServiceGroups groups={GROUPS} />
+
+      {/* Technology partner — slim strip above the closing CTA */}
+      <KeyobPartnerStrip />
 
       <CtaBand
         heading="Let's take tax time off your plate"

@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import KeyobPartnerTile from "@/components/partners/KeyobPartnerTile";
 import { BOOKING_URL } from "@/lib/site";
 
 /** Layout effect on the client, plain effect on the server (no SSR warning). */
@@ -54,12 +53,9 @@ export type ServiceGroup = {
   /** Accent colour for the group's rule, card icons and hover states. */
   dot: string;
   cards: { slug: string; title: string; blurb: string }[];
-  /** Appends the closing tile (consultation, or the technology partner) to this group. */
+  /** Appends the "Not sure what you need?" tile to this group. */
   showHelpCard?: boolean;
 };
-
-/** Which closing tile the group's grid ends with. */
-export type HelpCard = "consultation" | "partner";
 
 /** 24px stroke icons, drawn inline to avoid an icon dependency. */
 function Icon({ children }: { children: React.ReactNode }) {
@@ -276,33 +272,19 @@ const HELP_POINTS = [
  * headed band of linked service cards, with the consultation tile appended
  * to whichever group asks for it. Cards reveal on scroll.
  */
-export default function ServiceGroups({
-  groups,
-  helpCard = "consultation",
-}: {
-  groups: ServiceGroup[];
-  helpCard?: HelpCard;
-}) {
+export default function ServiceGroups({ groups }: { groups: ServiceGroup[] }) {
   return (
     <section className="sg-section">
       <div className="sg-wrap">
         {groups.map((g, i) => (
-          <Group key={g.heading} group={g} index={i} helpCard={helpCard} />
+          <Group key={g.heading} group={g} index={i} />
         ))}
       </div>
     </section>
   );
 }
 
-function Group({
-  group,
-  index,
-  helpCard,
-}: {
-  group: ServiceGroup;
-  index: number;
-  helpCard: HelpCard;
-}) {
+function Group({ group, index }: { group: ServiceGroup; index: number }) {
   const { ref, phase } = useReveal<HTMLDivElement>();
 
   const cardClass = [
@@ -359,35 +341,29 @@ function Group({
               { "--reveal-delay": `${count * 70}ms` } as React.CSSProperties
             }
           >
-            {helpCard === "partner" ? (
-              <KeyobPartnerTile variant="sg" />
-            ) : (
-              <>
-                <span className="sg-badge">
-                  <span className="sg-dot" aria-hidden />
-                  Free 30-min consultation
-                </span>
-                <h3 className="sg-title">Not sure what you need?</h3>
-                <p className="sg-copy">
-                  Tell us where you&rsquo;re at and we&rsquo;ll point you to the
-                  right service — and the specialist who handles it.
-                </p>
-                <ul className="sg-checks">
-                  {HELP_POINTS.map((p) => (
-                    <li key={p}>
-                      <Check />
-                      <span>{p}</span>
-                    </li>
-                  ))}
-                </ul>
-                <a href={BOOKING_URL} className="sg-cta-btn">
-                  Book now
-                  <span className="sg-arrow" aria-hidden>
-                    &rarr;
-                  </span>
-                </a>
-              </>
-            )}
+            <span className="sg-badge">
+              <span className="sg-dot" aria-hidden />
+              Free 30-min consultation
+            </span>
+            <h3 className="sg-title">Not sure what you need?</h3>
+            <p className="sg-copy">
+              Tell us where you&rsquo;re at and we&rsquo;ll point you to the
+              right service — and the specialist who handles it.
+            </p>
+            <ul className="sg-checks">
+              {HELP_POINTS.map((p) => (
+                <li key={p}>
+                  <Check />
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+            <a href={BOOKING_URL} className="sg-cta-btn">
+              Book now
+              <span className="sg-arrow" aria-hidden>
+                &rarr;
+              </span>
+            </a>
           </div>
         )}
       </div>

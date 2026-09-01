@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
+import KeyobPartnerStrip from "@/components/partners/KeyobPartnerStrip";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { C } from "@/lib/site";
@@ -289,6 +290,9 @@ export default function TeamPage() {
           </div>
         </div>
       </section>
+
+      {/* Technology partner — slim strip above the closing CTA */}
+      <KeyobPartnerStrip />
 
       <CtaBand
         heading="Speak with the people who make the calls"

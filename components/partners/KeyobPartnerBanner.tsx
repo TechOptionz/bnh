@@ -1,4 +1,3 @@
-import Link from "next/link";
 import KeyobLogo from "@/components/partners/KeyobLogo";
 import PartnerDisclaimer from "@/components/partners/PartnerDisclaimer";
 import { KEYOB_PARTNER, keyobRateBadge } from "@/lib/partners";
@@ -84,8 +83,10 @@ export default function KeyobPartnerBanner() {
             complimentary first conversation.
           </p>
           <div className="kbp-banner-foot">
-            <Link
-              href="/#technology-partner"
+            <a
+              href={KEYOB_PARTNER.website}
+              target="_blank"
+              rel="noopener noreferrer"
               className="kb-btn-navy"
               style={{
                 background: C.navy,
@@ -98,7 +99,8 @@ export default function KeyobPartnerBanner() {
               }}
             >
               Explore technology support
-            </Link>
+              <span className="visually-hidden"> (opens in a new tab)</span>
+            </a>
             <span className="kbp-rate-chip">{keyobRateBadge()}</span>
           </div>
         </div>

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import KeyobLogo from "@/components/partners/KeyobLogo";
 import { KEYOB_PARTNER } from "@/lib/partners";
 import { C } from "@/lib/site";
@@ -40,10 +39,18 @@ export default function KeyobPartnerStrip() {
           <span className="kbp-strip-with">Our technology partner</span>
           <KeyobLogo height={13} />
         </span>
-        <Link href="/#technology-partner" className="kbp-strip-cta kb-btn-navy">
+        <a
+          href={KEYOB_PARTNER.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="kbp-strip-cta kb-btn-navy"
+        >
           Learn more
-          <span className="visually-hidden"> about our technology partner</span>
-        </Link>
+          <span className="visually-hidden">
+            {" "}
+            about our technology partner KEYOB (opens in a new tab)
+          </span>
+        </a>
       </div>
     </section>
   );

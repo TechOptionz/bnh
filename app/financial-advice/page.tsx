@@ -111,7 +111,7 @@ export default function FinancialAdvicePage() {
         </a>
       </PageHero>
 
-      <ServiceGroups groups={GROUPS} helpCard="partner" />
+      <ServiceGroups groups={GROUPS} />
 
       <CtaBand
         heading="Talk to a financial adviser today"

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CareerForm from "@/components/CareerForm";
+import KeyobPartnerStrip from "@/components/partners/KeyobPartnerStrip";
 import PageHero from "@/components/PageHero";
 import SiteFooter from "@/components/SiteFooter";
 import { C, PHONE_BRISBANE } from "@/lib/site";
@@ -149,6 +150,9 @@ export default function CareersPage() {
           </div>
         </div>
       </section>
+
+      {/* Technology partner — slim strip above the footer */}
+      <KeyobPartnerStrip />
 
       <SiteFooter omit={["about"]} />
     </>

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import KeyobLogo from "@/components/partners/KeyobLogo";
 import { KEYOB_PARTNER } from "@/lib/partners";
 
@@ -44,9 +43,15 @@ export default function KeyobPartnerCard() {
         clients run on &mdash; at a preferred rate.
       </p>
 
-      <Link href="/#technology-partner" className="kbp-block-cta">
+      <a
+        href={KEYOB_PARTNER.website}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="kbp-block-cta"
+      >
         Find out more
-      </Link>
+        <span className="visually-hidden"> about KEYOB (opens in a new tab)</span>
+      </a>
 
       <span className="kbp-block-partner">
         <span className="kbp-block-with">In partnership with</span>
