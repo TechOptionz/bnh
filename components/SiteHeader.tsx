@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { BOOKING_URL, BACHROB_URL, C, EMAIL, PHONE_BRISBANE } from "@/lib/site";
 import { ACC, FA, serviceGroups } from "@/lib/services";
+import { KEYOB_PARTNER } from "@/lib/partners";
+import KeyobLogo from "@/components/partners/KeyobLogo";
 import SocialLinks from "@/components/SocialLinks";
 
 export type NavKey =
@@ -191,8 +193,9 @@ function GroupLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** Navy "book a call" card shared by the hover dropdowns and the mega-menu. */
+/** Navy technology-partner card shared by the hover dropdowns and the mega-menu. */
 function PromoCard({ show, delay = 0.12 }: { show: boolean; delay?: number }) {
+  const { discount } = KEYOB_PARTNER;
   return (
     <div
       style={{
@@ -218,7 +221,7 @@ function PromoCard({ show, delay = 0.12 }: { show: boolean; delay?: number }) {
           color: C.cyan,
         }}
       >
-        Free consultation
+        Technology partner
       </span>
       <div
         style={{
@@ -229,16 +232,36 @@ function PromoCard({ show, delay = 0.12 }: { show: boolean; delay?: number }) {
           lineHeight: 1.3,
         }}
       >
-        Not sure where to start?
+        {discount != null
+          ? `${discount}% off your business systems`
+          : "Better systems for your business"}
       </div>
       <div style={{ color: C.lightBlue, fontSize: 15, lineHeight: 1.6 }}>
-        Book a free 30-minute consultation with the people who make the calls.
+        Websites, AI and automation through our technology partner &mdash; at a
+        preferred client rate.
       </div>
-      <a
-        href={BOOKING_URL}
+      <span
+        style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+      >
+        <span
+          style={{
+            fontSize: 10,
+            fontWeight: 600,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "rgba(255,255,255,0.65)",
+            whiteSpace: "nowrap",
+          }}
+        >
+          In partnership with
+        </span>
+        <KeyobLogo height={11} light />
+      </span>
+      <Link
+        href="/#technology-partner"
         className="btn-soft"
         style={{
-          marginTop: 10,
+          marginTop: 6,
           background: C.cyan,
           color: C.navy,
           padding: "12px 22px",
@@ -247,8 +270,8 @@ function PromoCard({ show, delay = 0.12 }: { show: boolean; delay?: number }) {
           fontSize: 14.5,
         }}
       >
-        Book a Free Consultation &rarr;
-      </a>
+        Explore technology support &rarr;
+      </Link>
     </div>
   );
 }
