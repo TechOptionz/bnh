@@ -222,7 +222,7 @@ export default function HomePage() {
             objectPosition: "center",
           }}
         >
-          <source src="/assets/hero-video-1080.mp4" type="video/mp4" />
+          <source src="/assets/hero-video.mp4" type="video/mp4" />
         </video>
         <div
           style={{
@@ -616,6 +616,45 @@ export default function HomePage() {
               Book a Free Consultation
             </a>
           </div>
+        </div>
+      </section>
+
+      {/* Brand video — orange band, sits between How We Work and Partners.
+          The iframe is lazy so it never competes with the hero video for
+          bandwidth on first paint. */}
+      <section
+        aria-label="Who We Are: JCA-BNH Accountants &amp; Financial Advisers"
+        style={{
+          background: C.orange,
+          padding: "clamp(52px,8vw,88px) 5vw",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 1140,
+            margin: "0 auto",
+            position: "relative",
+            aspectRatio: "16 / 9",
+            borderRadius: 14,
+            overflow: "hidden",
+            boxShadow: "0 26px 60px -30px rgba(10,18,36,0.55)",
+          }}
+        >
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/AnLzNzHE7JY"
+            title="Who We Are: JCA-BNH Accountants &amp; Financial Advisers"
+            loading="lazy"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              border: 0,
+              display: "block",
+            }}
+          />
         </div>
       </section>
 
