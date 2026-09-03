@@ -3,7 +3,7 @@ import HomeFooter from "@/components/HomeFooter";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
 import KeyobPartnerBanner from "@/components/partners/KeyobPartnerBanner";
 import KeyobPartnerSection from "@/components/partners/KeyobPartnerSection";
-import KeyobAnnounceBanner from "@/components/partners/KeyobAnnounceBanner";
+import KeyobPartnerStrip from "@/components/partners/KeyobPartnerStrip";
 import ServiceCards from "@/components/ServiceCards";
 import SiteHeader from "@/components/SiteHeader";
 import StatsStrip from "@/components/StatsStrip";
@@ -695,8 +695,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Technology partner — KEYOB */}
-      <KeyobAnnounceBanner />
+      {/* IT partner — KEYOB */}
+      <KeyobPartnerStrip />
       <KeyobPartnerSection />
 
       {/* Recent blogs */}
@@ -794,7 +794,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Technology partner — compact card */}
+      {/* IT partner — compact card */}
       <section style={{ padding: "0 5vw clamp(56px,8vw,80px)", background: "#FFFFFF" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <KeyobPartnerBanner />

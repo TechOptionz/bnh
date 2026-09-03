@@ -1,107 +1,56 @@
+import Link from "next/link";
 import KeyobLogo from "@/components/partners/KeyobLogo";
 import PartnerDisclaimer from "@/components/partners/PartnerDisclaimer";
-import { KEYOB_PARTNER, keyobRateBadge } from "@/lib/partners";
-import { C } from "@/lib/site";
-
-const LEXEND = "var(--font-lexend), Lexend, sans-serif";
+import { KEYOB_PARTNER } from "@/lib/partners";
 
 /**
- * Variant B — compact partnership card, JCA-BNH branded with KEYOB as the
- * named partner. The left panel carries the lock-up, or the agreed discount
- * once one is configured in lib/partners.ts.
+ * Variant B — compact partnership card, content-width. Left panel carries
+ * the discount figure, the body links into the homepage partner section.
+ * Used mid-page on the home page and on the business/accounting service
+ * pages.
  */
 export default function KeyobPartnerBanner() {
   const { discount } = KEYOB_PARTNER;
 
   return (
     <div>
-      <aside aria-label="Technology partner" className="kbp-banner">
+      <aside aria-label="IT partner" className="kbp-banner">
         <div className="kbp-banner-mark">
           {discount != null ? (
             <>
-              <span
-                style={{
-                  fontFamily: LEXEND,
-                  fontWeight: 600,
-                  fontSize: 42,
-                  lineHeight: 1,
-                  color: C.navy,
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                {discount}%
-              </span>
+              <span className="kbp-banner-num">{discount}%</span>
               <span className="kbp-banner-mark-label">Client discount</span>
             </>
           ) : (
             <>
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 9,
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: LEXEND,
-                    fontWeight: 600,
-                    fontSize: 14,
-                    color: C.navy,
-                    letterSpacing: "0.02em",
-                  }}
-                >
-                  JCA-BNH
-                </span>
-                <span aria-hidden style={{ color: C.mute, fontSize: 12 }}>
-                  &times;
-                </span>
-                <KeyobLogo height={12} />
+              <span className="kbp-banner-num kbp-banner-num--text">
+                Preferred
               </span>
-              <span className="kbp-banner-mark-label">Technology partner</span>
+              <span className="kbp-banner-mark-label">Client rate</span>
             </>
           )}
         </div>
 
         <div className="kbp-banner-body">
-          <h3
-            style={{
-              fontFamily: LEXEND,
-              fontWeight: 600,
-              color: C.navy,
-              fontSize: 20,
-              lineHeight: 1.3,
-              letterSpacing: "-0.01em",
-              margin: 0,
-            }}
-          >
-            Preferred technology support for JCA-BNH clients.
+          <h3 className="kbp-banner-title">
+            We advise on your systems. Our IT partner builds them.
           </h3>
-          <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6 }}>
-            Websites, AI, automation and business systems through our
-            technology partner KEYOB, with preferred client pricing and a
-            complimentary first conversation.
+          <p className="kbp-banner-copy">
+            Websites, social media, AI and automation for growing businesses
+            &mdash; at a preferred rate for JCA-BNH clients. The first
+            conversation is free.
           </p>
           <div className="kbp-banner-foot">
-            <a
-              href={KEYOB_PARTNER.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="kb-btn-navy"
-              style={{
-                background: C.navy,
-                color: "#FFFFFF",
-                fontWeight: 600,
-                fontSize: 14,
-                padding: "11px 20px",
-                borderRadius: 999,
-                whiteSpace: "nowrap",
-              }}
+            <Link
+              href={KEYOB_PARTNER.sectionHref}
+              className="kbp-banner-cta kb-btn-navy"
             >
-              Explore technology support
-              <span className="visually-hidden"> (opens in a new tab)</span>
-            </a>
-            <span className="kbp-rate-chip">{keyobRateBadge()}</span>
+              See what&rsquo;s included
+            </Link>
+            <span className="kbp-banner-partner">
+              <span className="kbp-banner-with">In partnership with</span>
+              <KeyobLogo height={14} />
+            </span>
           </div>
         </div>
       </aside>

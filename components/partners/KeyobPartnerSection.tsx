@@ -1,50 +1,60 @@
 import KeyobLogo from "@/components/partners/KeyobLogo";
-import PartnerDisclaimer from "@/components/partners/PartnerDisclaimer";
-import { KEYOB_PARTNER, keyobPricingLabel } from "@/lib/partners";
-import { C } from "@/lib/site";
+import { KEYOB_PARTNER, keyobOfferBadge } from "@/lib/partners";
 
-const LEXEND = "var(--font-lexend), Lexend, sans-serif";
+const SYSTEM = [
+  {
+    t: "Website",
+    d: "A site built to turn visitors into enquiries — not just to look tidy.",
+  },
+  {
+    t: "Aleesa.ai",
+    d: "An AI assistant that answers calls, emails and messages around the clock.",
+  },
+  {
+    t: "Connected CRM",
+    d: "One place where every lead and conversation is captured automatically.",
+  },
+];
 
 const CAPABILITIES = [
-  {
-    t: "Websites & Digital Presence",
-    c: C.cyan,
-    d: "High-performing websites designed around your business, customers and enquiries.",
-  },
-  {
-    t: "AI & Automation",
-    c: C.orange,
-    d: "Practical automation designed to reduce repetitive work and improve responsiveness.",
-  },
-  {
-    t: "Business Systems",
-    c: C.navy,
-    d: "CRM, integrations and custom software that help the systems your business relies on work together.",
-  },
+  "AI & Automation",
+  "Social Media Management",
+  "Website Design",
+  "Custom Software",
+  "CRM Setup",
+  "System Integrations",
+  "ERP Systems",
+  "Dashboards & Reporting",
+  "Mobile Apps",
+  "Cloud & Hosting",
+  "Discovery & Scoping",
+  "Ongoing Support",
 ];
 
 const BENEFITS = [
-  "Capture more enquiries",
-  "Reduce repetitive admin",
-  "Connect your business systems",
+  {
+    t: "Stop losing enquiries",
+    d: "Every call, email and web enquiry answered and captured — including after hours and weekends.",
+  },
+  {
+    t: "Less manual admin",
+    d: "Automate the repetitive work your team is still doing by hand, and give those hours back.",
+  },
+  {
+    t: "A presence that keeps up",
+    d: "Social media managed and posting consistently, without it eating into your week.",
+  },
+  {
+    t: "Numbers you can trust",
+    d: "Clean, connected data means you and your accountant are always working from the same figures.",
+  },
 ];
 
-function Check() {
+const STEPS = ["Free chat", "We scope it", "They build it", "Ongoing support"];
+
+function Tick() {
   return (
-    <span
-      aria-hidden
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: 20,
-        height: 20,
-        borderRadius: 999,
-        background: "color-mix(in srgb, #12B7D6 14%, transparent)",
-        color: C.teal,
-        flexShrink: 0,
-      }}
-    >
+    <span className="kbp-tick" aria-hidden>
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
         <path
           d="M4.5 12.5l5 5 10-11"
@@ -59,21 +69,13 @@ function Check() {
 }
 
 /**
- * Homepage-only technology-partner section — JCA-BNH-led introduction of
- * KEYOB. Sits between "Partners & Platforms" and "Recent Blogs".
+ * Homepage-only IT-partner section — JCA-BNH-led introduction of KEYOB.
+ * Sits between "Partners & Platforms" and "Recent Blogs"; every partner
+ * banner on the site links here via `#it-partner`.
  */
 export default function KeyobPartnerSection() {
   return (
-    <section
-      id="technology-partner"
-      style={{
-        position: "relative",
-        padding: "clamp(56px,9vw,84px) 5vw clamp(60px,9vw,92px)",
-        background: C.bgAlt,
-        borderBottom: `1px solid ${C.border}`,
-        overflow: "hidden",
-      }}
-    >
+    <section id="it-partner" className="kbp-section">
       {/* Soft brand wash, matching the other tinted home sections. */}
       <div
         aria-hidden
@@ -86,226 +88,123 @@ export default function KeyobPartnerSection() {
         }}
       />
 
-      <div style={{ position: "relative", maxWidth: 1200, margin: "0 auto" }}>
-        {/* Eyebrow */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            marginBottom: 18,
-          }}
-        >
-          <span
-            style={{
-              width: 12,
-              height: 12,
-              borderRadius: 4,
-              background: C.cyan,
-              display: "inline-block",
-              flexShrink: 0,
-            }}
-          />
-          <span style={{ fontSize: 14.5, fontWeight: 600, color: C.body }}>
-            {KEYOB_PARTNER.label}
-          </span>
-        </div>
-
+      <div className="kbp-wrap">
         {/* Partnership lock-up: JCA-BNH leads, KEYOB is the named partner. */}
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 10,
-            background: "#FFFFFF",
-            border: `1px solid ${C.border}`,
-            borderRadius: 999,
-            padding: "8px 18px",
-            marginBottom: 22,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: LEXEND,
-              fontWeight: 600,
-              fontSize: 14,
-              color: C.navy,
-              letterSpacing: "0.02em",
-            }}
-          >
-            JCA-BNH
-          </span>
-          <span aria-hidden style={{ color: C.mute, fontSize: 13 }}>
+        <span className="kbp-lockup">
+          <span className="kbp-dot" aria-hidden />
+          JCA-BNH
+          <span className="kbp-lockup-x" aria-hidden>
             &times;
           </span>
           <KeyobLogo height={13} />
-        </div>
+        </span>
 
-        <h2
-          style={{
-            fontFamily: LEXEND,
-            fontWeight: 600,
-            color: C.navy,
-            fontSize: "clamp(27px,3.1vw,40px)",
-            lineHeight: 1.18,
-            letterSpacing: "-0.01em",
-            margin: "0 0 14px",
-          }}
-        >
-          Good businesses need good systems
-          <span style={{ color: C.cyan }}>.</span>
+        <h2 className="kbp-h2">
+          We advise on your systems.
+          <br />
+          KEYOB builds them<span className="kbp-accent">.</span>
         </h2>
-        <p
-          style={{
-            fontSize: 16.5,
-            lineHeight: 1.65,
-            margin: 0,
-            maxWidth: "62ch",
-          }}
-        >
-          JCA-BNH clients can access specialist technology support through
-          KEYOB, helping businesses build better websites, automate repetitive
-          work and connect the systems they rely on.
+
+        <p className="kbp-lede">
+          Good numbers depend on good systems. We&rsquo;ve partnered with KEYOB
+          &mdash; an Australian software, AI and digital marketing team based
+          in Springwood &mdash; so our clients have a trusted place to turn for
+          the technology side of their business.
         </p>
 
-        {/* Three editorial capability items */}
-        <div className="kbp-caps">
-          {CAPABILITIES.map((cap, i) => (
-            <article
-              key={cap.t}
-              className="kbp-cap"
-              style={{ ["--accent" as string]: cap.c }}
-            >
-              <span
-                aria-hidden
-                style={{
-                  fontFamily: LEXEND,
-                  fontWeight: 600,
-                  fontSize: 14,
-                  letterSpacing: "0.06em",
-                  color: cap.c,
-                  display: "block",
-                  marginBottom: 12,
-                }}
-              >
+        {/* Offer */}
+        <div className="kbp-offer">
+          <span className="kbp-offer-badge">{keyobOfferBadge()}</span>
+          <p className="kbp-offer-text">
+            <strong>Exclusive to JCA-BNH clients.</strong> Mention us when you
+            get in touch, or ask your adviser for an introduction. The first
+            conversation is free and there&rsquo;s no obligation.
+          </p>
+        </div>
+
+        {/* The three-part system */}
+        <div className="kbp-sys">
+          {SYSTEM.map((s, i) => (
+            <article key={s.t} className="kbp-sys-card">
+              <span className="kbp-sys-num" aria-hidden>
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <h3
-                style={{
-                  fontFamily: LEXEND,
-                  fontWeight: 600,
-                  color: C.navy,
-                  fontSize: 19,
-                  letterSpacing: "-0.01em",
-                  margin: "0 0 9px",
-                }}
-              >
-                {cap.t}
+              <h3>{s.t}</h3>
+              <p>{s.d}</p>
+            </article>
+          ))}
+        </div>
+        <p className="kbp-sys-note">
+          KEYOB call this the Digital Growth System &mdash; the foundation
+          every client starts with.
+        </p>
+
+        {/* Capabilities */}
+        <ul className="kbp-chips" aria-label="KEYOB capabilities">
+          {CAPABILITIES.map((c) => (
+            <li key={c}>{c}</li>
+          ))}
+        </ul>
+
+        {/* Benefits */}
+        <div className="kbp-grid">
+          {BENEFITS.map((b) => (
+            <article key={b.t} className="kbp-card">
+              <h3>
+                <Tick />
+                {b.t}
               </h3>
-              <p style={{ margin: 0, fontSize: 15, lineHeight: 1.66 }}>
-                {cap.d}
-              </p>
+              <p>{b.d}</p>
             </article>
           ))}
         </div>
 
-        {/* Client benefit */}
-        <div className="kbp-offer">
-          <div style={{ flex: 1, minWidth: 260 }}>
-            <h3
-              style={{
-                fontFamily: LEXEND,
-                fontWeight: 600,
-                color: C.navy,
-                fontSize: 19,
-                letterSpacing: "-0.01em",
-                margin: "0 0 8px",
-              }}
+        {/* Steps */}
+        <ol className="kbp-steps" aria-label="How it works">
+          {STEPS.map((s, i) => (
+            <li
+              key={s}
+              className={
+                i === STEPS.length - 1 ? "kbp-step kbp-step--last" : "kbp-step"
+              }
             >
-              A benefit for JCA-BNH clients
-            </h3>
-            <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.65 }}>
-              JCA-BNH clients receive preferred pricing on eligible KEYOB
-              services, together with a complimentary first conversation.
-            </p>
-          </div>
-          <span
-            style={{
-              flexShrink: 0,
-              background: "color-mix(in srgb, #12B7D6 9%, #FFFFFF)",
-              border: "1px solid color-mix(in srgb, #12B7D6 35%, #FFFFFF)",
-              borderRadius: 999,
-              padding: "9px 18px",
-              fontSize: 14,
-              fontWeight: 600,
-              color: C.navy,
-              whiteSpace: "nowrap",
-            }}
-          >
-            {keyobPricingLabel()}
-          </span>
-        </div>
-
-        {/* Short benefits */}
-        <ul className="kbp-checks">
-          {BENEFITS.map((b) => (
-            <li key={b}>
-              <Check />
-              {b}
+              <span className="kbp-step-num" aria-hidden>
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              {s}
             </li>
           ))}
-        </ul>
+        </ol>
 
-        {/* CTAs — deliberately quieter than the site's orange booking CTAs. */}
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            gap: 12,
-            marginTop: 34,
-          }}
-        >
-          <a
-            href={KEYOB_PARTNER.introHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="kb-btn-navy"
-            style={{
-              background: C.navy,
-              color: "#FFFFFF",
-              fontWeight: 600,
-              fontSize: 15,
-              padding: "13px 26px",
-              borderRadius: 999,
-            }}
-          >
-            Request an introduction
-            <span className="visually-hidden"> (opens in a new tab)</span>
-          </a>
-          <a
-            href={KEYOB_PARTNER.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-outline"
-            style={{
-              border: `1px solid ${C.borderInput}`,
-              borderRadius: 999,
-              padding: "12px 24px",
-              fontWeight: 600,
-              fontSize: 15,
-              color: C.navy,
-            }}
-          >
-            Explore KEYOB{" "}
-            <span aria-hidden style={{ fontSize: 13 }}>
-              &#8599;
-            </span>
-            <span className="visually-hidden"> (opens in a new tab)</span>
-          </a>
+        {/* CTA */}
+        <div className="kbp-cta">
+          <div>
+            <h3>
+              Ready to look at your systems
+              <span className="kbp-accent">?</span>
+            </h3>
+            <p>
+              Book a chat with KEYOB, or mention it at your next appointment
+              and we&rsquo;ll make the introduction for you.
+            </p>
+          </div>
+          <div className="kbp-actions">
+            <a href={KEYOB_PARTNER.talkHref} className="kbp-btn kbp-btn-primary">
+              Talk to KEYOB
+            </a>
+            <a
+              href={KEYOB_PARTNER.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="kbp-btn kbp-btn-ghost"
+            >
+              Visit keyob.com
+              <span className="visually-hidden"> (opens in a new tab)</span>
+            </a>
+          </div>
         </div>
 
-        <PartnerDisclaimer style={{ marginTop: 26, maxWidth: "78ch" }} />
+        <p className="kbp-fineprint">{KEYOB_PARTNER.disclaimer}</p>
       </div>
     </section>
   );
