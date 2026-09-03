@@ -67,7 +67,7 @@ export default function KeyobPartnerStrip() {
         <a
           href={KEYOB_PARTNER.contactHref}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener"
           className="kbp-strip-cta kb-btn-navy"
         >
           Learn more

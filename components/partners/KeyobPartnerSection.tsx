@@ -193,7 +193,7 @@ export default function KeyobPartnerSection() {
             <a
               href={KEYOB_PARTNER.contactHref}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener"
               className="kbp-btn kbp-btn-primary"
             >
               Talk to KEYOB
@@ -202,7 +202,7 @@ export default function KeyobPartnerSection() {
             <a
               href={KEYOB_PARTNER.website}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener"
               className="kbp-btn kbp-btn-ghost"
             >
               Visit keyob.com

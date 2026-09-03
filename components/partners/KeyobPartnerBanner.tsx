@@ -43,7 +43,7 @@ export default function KeyobPartnerBanner() {
             <a
               href={KEYOB_PARTNER.contactHref}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener"
               className="kbp-banner-cta kb-btn-navy"
             >
               See what&rsquo;s included

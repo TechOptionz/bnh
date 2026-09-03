@@ -32,7 +32,7 @@ export default function KeyobPartnerCard() {
       <a
         href={KEYOB_PARTNER.contactHref}
         target="_blank"
-        rel="noopener noreferrer"
+        rel="noopener"
         className="kbp-block-cta"
       >
         Find out more

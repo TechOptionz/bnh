@@ -260,7 +260,7 @@ function PromoCard({ show, delay = 0.12 }: { show: boolean; delay?: number }) {
       <a
         href={KEYOB_PARTNER.website}
         target="_blank"
-        rel="noopener noreferrer"
+        rel="noopener"
         className="btn-soft"
         style={{
           marginTop: 6,
