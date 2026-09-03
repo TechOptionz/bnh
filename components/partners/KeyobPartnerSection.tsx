@@ -70,8 +70,9 @@ function Tick() {
 
 /**
  * Homepage-only IT-partner section — JCA-BNH-led introduction of KEYOB.
- * Sits between "Partners & Platforms" and "Recent Blogs"; every partner
- * banner on the site links here via `#it-partner`.
+ * Sits between "Partners & Platforms" and "Recent Blogs". Both CTAs go
+ * off-site: "Talk to KEYOB" to the contact page, the ghost button to the
+ * homepage.
  */
 export default function KeyobPartnerSection() {
   return (
@@ -189,8 +190,14 @@ export default function KeyobPartnerSection() {
             </p>
           </div>
           <div className="kbp-actions">
-            <a href={KEYOB_PARTNER.talkHref} className="kbp-btn kbp-btn-primary">
+            <a
+              href={KEYOB_PARTNER.contactHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="kbp-btn kbp-btn-primary"
+            >
               Talk to KEYOB
+              <span className="visually-hidden"> (opens in a new tab)</span>
             </a>
             <a
               href={KEYOB_PARTNER.website}

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useSyncExternalStore } from "react";
 import KeyobLogo from "@/components/partners/KeyobLogo";
 import { KEYOB_PARTNER } from "@/lib/partners";
@@ -20,8 +19,8 @@ const serverSnapshot = () => false;
 
 /**
  * Variant A — slim, host-brand-tinted announcement strip. One line of copy
- * with the discount, the partner wordmark, a link into the homepage partner
- * section and a dismiss button. Used on the home page and between sections
+ * with the discount, the partner wordmark, a button to KEYOB's contact page
+ * and a dismiss button. Used on the home page and between sections
  * on the inner pages.
  */
 export default function KeyobPartnerStrip() {
@@ -65,13 +64,18 @@ export default function KeyobPartnerStrip() {
           <span className="kbp-strip-with">Our IT partner</span>
           <KeyobLogo height={13} />
         </span>
-        <Link
-          href={KEYOB_PARTNER.sectionHref}
+        <a
+          href={KEYOB_PARTNER.contactHref}
+          target="_blank"
+          rel="noopener noreferrer"
           className="kbp-strip-cta kb-btn-navy"
         >
           Learn more
-          <span className="visually-hidden"> about our IT partner KEYOB</span>
-        </Link>
+          <span className="visually-hidden">
+            {" "}
+            — contact our IT partner KEYOB (opens in a new tab)
+          </span>
+        </a>
       </div>
       <button
         type="button"

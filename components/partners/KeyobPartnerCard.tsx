@@ -1,11 +1,10 @@
-import Link from "next/link";
 import KeyobLogo from "@/components/partners/KeyobLogo";
 import { KEYOB_PARTNER } from "@/lib/partners";
 
 /**
  * Variant C — narrow dark block for grids and rails (e.g. the "More from
  * the blog" grid). Site-navy surface with a cyan top rule, the discount as
- * the anchor, and a white CTA into the homepage partner section.
+ * the anchor, and a white CTA to KEYOB's contact page.
  */
 export default function KeyobPartnerCard() {
   const { discount } = KEYOB_PARTNER;
@@ -30,10 +29,18 @@ export default function KeyobPartnerCard() {
         systems our clients run on &mdash; at a preferred rate.
       </p>
 
-      <Link href={KEYOB_PARTNER.sectionHref} className="kbp-block-cta">
+      <a
+        href={KEYOB_PARTNER.contactHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="kbp-block-cta"
+      >
         Find out more
-        <span className="visually-hidden"> about our IT partner KEYOB</span>
-      </Link>
+        <span className="visually-hidden">
+          {" "}
+          — contact our IT partner KEYOB (opens in a new tab)
+        </span>
+      </a>
 
       <span className="kbp-block-partner">
         <span className="kbp-block-with">In partnership with</span>

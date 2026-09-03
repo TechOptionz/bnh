@@ -1,11 +1,10 @@
-import Link from "next/link";
 import KeyobLogo from "@/components/partners/KeyobLogo";
 import PartnerDisclaimer from "@/components/partners/PartnerDisclaimer";
 import { KEYOB_PARTNER } from "@/lib/partners";
 
 /**
  * Variant B — compact partnership card, content-width. Left panel carries
- * the discount figure, the body links into the homepage partner section.
+ * the discount figure, the body's button goes to KEYOB's contact page.
  * Used mid-page on the home page and on the business/accounting service
  * pages.
  */
@@ -41,12 +40,15 @@ export default function KeyobPartnerBanner() {
             conversation is free.
           </p>
           <div className="kbp-banner-foot">
-            <Link
-              href={KEYOB_PARTNER.sectionHref}
+            <a
+              href={KEYOB_PARTNER.contactHref}
+              target="_blank"
+              rel="noopener noreferrer"
               className="kbp-banner-cta kb-btn-navy"
             >
               See what&rsquo;s included
-            </Link>
+              <span className="visually-hidden"> (opens in a new tab)</span>
+            </a>
             <span className="kbp-banner-partner">
               <span className="kbp-banner-with">In partnership with</span>
               <KeyobLogo height={14} />

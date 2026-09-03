@@ -7,12 +7,10 @@
 export const KEYOB_PARTNER = {
   name: "KEYOB",
   label: "IT Partner",
-  website: "https://keyob.com",
+  website: "https://www.keyob.com",
   logo: "/partners/keyob-logo.png",
-  /** Homepage partner section. Absolute so it works from every page. */
-  sectionHref: "/#it-partner",
-  /** "Talk to KEYOB" — pre-filled subject so KEYOB knows the lead came via JCA-BNH. */
-  talkHref: "mailto:info@keyob.com?subject=JCA-BNH%20client%20enquiry",
+  /** KEYOB contact page — every "Talk to KEYOB" / "Learn more" button lands here. */
+  contactHref: "https://www.keyob.com/contact#contact",
   /**
    * Agreed JCA-BNH client discount as a whole percentage.
    * Set to `null` to hide every figure and fall back to the generic
