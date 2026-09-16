@@ -204,6 +204,7 @@ export default function HomePage() {
           overflow: "hidden",
           display: "flex",
           alignItems: "flex-end",
+          background: "#12203C",
         }}
       >
         <video
@@ -212,7 +213,6 @@ export default function HomePage() {
           loop
           playsInline
           preload="auto"
-          poster="/assets/hero-team-wide.jpg"
           style={{
             position: "absolute",
             inset: 0,
