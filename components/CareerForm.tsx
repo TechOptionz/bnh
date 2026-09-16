@@ -1,7 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import FieldError from "@/components/FieldError";
+import Turnstile, { type TurnstileHandle } from "@/components/Turnstile";
+import { CAPTCHA_FAILED, CAPTCHA_REQUIRED, verifyCaptcha } from "@/lib/captcha";
 import {
   emailAddress,
   personName,
@@ -40,7 +42,8 @@ const ALLOWED = [".pdf", ".doc", ".docx"];
 
 /**
  * Career expression-of-interest form. Fields are validated on blur and on
- * submit; the resume itself is attached by the applicant to the composed
+ * submit, and the Turnstile security check must pass server-side before the
+ * email is composed; the resume itself is attached by the applicant to the composed
  * email (a file cannot be sent from the browser without a backend).
  */
 export default function CareerForm() {
@@ -55,6 +58,10 @@ export default function CareerForm() {
   const [touched, setTouched] = useState<Partial<Record<Key, boolean>>>({});
   const [blocked, setBlocked] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const [captcha, setCaptcha] = useState("");
+  const [captchaError, setCaptchaError] = useState<string>();
+  const [sending, setSending] = useState(false);
+  const turnstile = useRef<TurnstileHandle>(null);
 
   const change = (key: Key) => (value: string) => {
     setValues((v) => ({ ...v, [key]: value }));
@@ -103,7 +110,14 @@ export default function CareerForm() {
     setErrors((e) => ({ ...e, resume: undefined }));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  /** Track the widget's current token, clearing the error once it passes. */
+  const gotToken = useCallback((token: string) => {
+    setCaptcha(token);
+    if (token) setCaptchaError(undefined);
+  }, []);
+
+  async function handleSubmit(e: React.FormEvent) {
+    if (sending) return;
     e.preventDefault();
     const found = validateAll(RULES, values);
     setErrors(found);
@@ -119,6 +133,20 @@ export default function CareerForm() {
     }
 
     setBlocked(false);
+    if (!captcha) {
+      setCaptchaError(CAPTCHA_REQUIRED);
+      return;
+    }
+
+    setSending(true);
+    const verified = await verifyCaptcha(captcha);
+    turnstile.current?.reset();
+    setSending(false);
+    if (!verified) {
+      setCaptchaError(CAPTCHA_FAILED);
+      return;
+    }
+
     window.location.href =
       `mailto:${EMAIL}?subject=` +
       encodeURIComponent("Career enquiry") +
@@ -246,6 +274,11 @@ export default function CareerForm() {
         <FieldError id="jf-resume-error">{errors.resume}</FieldError>
       </div>
 
+      <div>
+        <Turnstile ref={turnstile} onToken={gotToken} />
+        <FieldError id="jf-captcha-error">{captchaError}</FieldError>
+      </div>
+
       {blocked && Object.values(errors).some(Boolean) && (
         <p className="form-summary" role="alert">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -264,6 +297,8 @@ export default function CareerForm() {
       <button
         type="submit"
         className="btn-orange"
+        disabled={sending}
+        aria-busy={sending}
         style={{
           background: C.orange,
           color: "#FFFFFF",
@@ -275,9 +310,10 @@ export default function CareerForm() {
           border: 0,
           cursor: "pointer",
           fontFamily: "inherit",
+          opacity: sending ? 0.7 : 1,
         }}
       >
-        Submit
+        {sending ? "Verifying…" : "Submit"}
       </button>
       <div style={{ fontSize: 13, color: C.mute }}>
         Prefer email? Send your resume to <a href={`mailto:${EMAIL}`}>{EMAIL}</a>

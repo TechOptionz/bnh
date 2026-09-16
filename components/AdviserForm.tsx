@@ -1,7 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import FieldError from "@/components/FieldError";
+import Turnstile, { type TurnstileHandle } from "@/components/Turnstile";
+import { CAPTCHA_FAILED, CAPTCHA_REQUIRED, verifyCaptcha } from "@/lib/captcha";
 import {
   emailAddress,
   enquiryMessage,
@@ -65,7 +67,8 @@ function Label({
 }
 
 /** The white "Speak with an Adviser" enquiry card. Fields are validated on
- *  blur and on submit; the mailto only opens once everything is valid. */
+ *  blur and on submit; the mailto only opens once everything is valid and
+ *  the Turnstile security check has been confirmed server-side. */
 export default function AdviserForm({ service }: { service: string }) {
   const [values, setValues] = useState<Record<Key, string>>({
     first: "",
@@ -78,6 +81,10 @@ export default function AdviserForm({ service }: { service: string }) {
   const [touched, setTouched] = useState<Partial<Record<Key, boolean>>>({});
   const [blocked, setBlocked] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const [captcha, setCaptcha] = useState("");
+  const [captchaError, setCaptchaError] = useState<string>();
+  const [sending, setSending] = useState(false);
+  const turnstile = useRef<TurnstileHandle>(null);
 
   const change = (key: Key) => (value: string) => {
     setValues((v) => ({ ...v, [key]: value }));
@@ -96,7 +103,14 @@ export default function AdviserForm({ service }: { service: string }) {
   const describedBy = (key: Key) =>
     invalid(key) ? `af-${key}-error` : undefined;
 
-  function handleSubmit(e: React.FormEvent) {
+  /** Track the widget's current token, clearing the error once it passes. */
+  const gotToken = useCallback((token: string) => {
+    setCaptcha(token);
+    if (token) setCaptchaError(undefined);
+  }, []);
+
+  async function handleSubmit(e: React.FormEvent) {
+    if (sending) return;
     e.preventDefault();
     const found = validateAll(RULES, values);
     setErrors(found);
@@ -112,6 +126,20 @@ export default function AdviserForm({ service }: { service: string }) {
     }
 
     setBlocked(false);
+    if (!captcha) {
+      setCaptchaError(CAPTCHA_REQUIRED);
+      return;
+    }
+
+    setSending(true);
+    const verified = await verifyCaptcha(captcha);
+    turnstile.current?.reset();
+    setSending(false);
+    if (!verified) {
+      setCaptchaError(CAPTCHA_FAILED);
+      return;
+    }
+
     window.location.href =
       `mailto:${EMAIL}?subject=` +
       encodeURIComponent(`Enquiry — ${service}`) +
@@ -237,6 +265,11 @@ export default function AdviserForm({ service }: { service: string }) {
             <FieldError id="af-message-error">{errors.message}</FieldError>
           </div>
 
+          <div>
+            <Turnstile ref={turnstile} onToken={gotToken} />
+            <FieldError id="af-captcha-error">{captchaError}</FieldError>
+          </div>
+
           {blocked && Object.values(errors).some(Boolean) && (
             <p className="form-summary" role="alert">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -255,6 +288,8 @@ export default function AdviserForm({ service }: { service: string }) {
           <button
             type="submit"
             className="btn-orange"
+            disabled={sending}
+            aria-busy={sending}
             style={{
               background: C.orange,
               color: "#FFFFFF",
@@ -266,9 +301,10 @@ export default function AdviserForm({ service }: { service: string }) {
               border: 0,
               cursor: "pointer",
               fontFamily: "inherit",
+              opacity: sending ? 0.7 : 1,
             }}
           >
-            Submit Enquiry
+            {sending ? "Verifying…" : "Submit Enquiry"}
           </button>
           <div style={{ fontSize: 12.5, color: C.mute }}>
             Or email us directly at <a href={`mailto:${EMAIL}`}>{EMAIL}</a>

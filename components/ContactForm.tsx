@@ -1,7 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import FieldError from "@/components/FieldError";
+import Turnstile, { type TurnstileHandle } from "@/components/Turnstile";
+import { CAPTCHA_FAILED, CAPTCHA_REQUIRED, verifyCaptcha } from "@/lib/captcha";
 import {
   emailAddress,
   enquiryMessage,
@@ -103,8 +105,9 @@ function FieldLabel({
 
 /**
  * "Get in touch" enquiry card. Fields are validated on blur and on submit —
- * the mailto is only opened once every value is valid, so malformed or empty
- * enquiries never reach the inbox.
+ * the mailto is only opened once every value is valid and the Turnstile
+ * security check has been confirmed server-side, so malformed, empty or
+ * automated enquiries never reach the inbox.
  */
 export default function ContactForm() {
   const [values, setValues] = useState<Record<Key, string>>({
@@ -120,6 +123,10 @@ export default function ContactForm() {
   const [touched, setTouched] = useState<Partial<Record<Key, boolean>>>({});
   const [blocked, setBlocked] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const [captcha, setCaptcha] = useState("");
+  const [captchaError, setCaptchaError] = useState<string>();
+  const [sending, setSending] = useState(false);
+  const turnstile = useRef<TurnstileHandle>(null);
 
   /** Update a value, re-checking it live once the field has been touched. */
   const change = (key: Key) => (value: string) => {
@@ -141,7 +148,14 @@ export default function ContactForm() {
   const describedBy = (key: Key) =>
     invalid(key) ? `${INPUT_ID[key]}-error` : undefined;
 
-  function handleSubmit(e: React.FormEvent) {
+  /** Track the widget's current token, clearing the error once it passes. */
+  const gotToken = useCallback((token: string) => {
+    setCaptcha(token);
+    if (token) setCaptchaError(undefined);
+  }, []);
+
+  async function handleSubmit(e: React.FormEvent) {
+    if (sending) return;
     e.preventDefault();
     const found = validateAll(RULES, values);
     setErrors(found);
@@ -159,6 +173,20 @@ export default function ContactForm() {
     }
 
     setBlocked(false);
+    if (!captcha) {
+      setCaptchaError(CAPTCHA_REQUIRED);
+      return;
+    }
+
+    setSending(true);
+    const verified = await verifyCaptcha(captcha);
+    turnstile.current?.reset();
+    setSending(false);
+    if (!verified) {
+      setCaptchaError(CAPTCHA_FAILED);
+      return;
+    }
+
     window.location.href =
       `mailto:${EMAIL}?subject=` +
       encodeURIComponent("Website enquiry") +
@@ -377,6 +405,11 @@ export default function ContactForm() {
             <FieldError id="cf-updates-error">{errors.updates}</FieldError>
           </fieldset>
 
+          <div>
+            <Turnstile ref={turnstile} onToken={gotToken} />
+            <FieldError id="cf-captcha-error">{captchaError}</FieldError>
+          </div>
+
           {blocked && Object.values(errors).some(Boolean) && (
             <p className="form-summary" role="alert">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -391,6 +424,8 @@ export default function ContactForm() {
           <button
             type="submit"
             className="btn-orange"
+            disabled={sending}
+            aria-busy={sending}
             style={{
               background: C.orange,
               color: "#FFFFFF",
@@ -403,9 +438,10 @@ export default function ContactForm() {
               border: 0,
               cursor: "pointer",
               fontFamily: "inherit",
+              opacity: sending ? 0.7 : 1,
             }}
           >
-            Submit Enquiry
+            {sending ? "Verifying…" : "Submit Enquiry"}
           </button>
           <div style={{ fontSize: 13, color: C.mute }}>
             Or email us directly at <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
