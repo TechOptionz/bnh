@@ -7,14 +7,18 @@ export const CAPTCHA_FAILED =
 
 /**
  * Asks /api/turnstile to confirm a Turnstile token with Cloudflare. Tokens
- * are single-use, so the widget must be reset after every call.
+ * are single-use, so the widget must be reset after every call. `action`
+ * must match the one the widget was rendered with.
  */
-export async function verifyCaptcha(token: string): Promise<boolean> {
+export async function verifyCaptcha(
+  token: string,
+  action: string,
+): Promise<boolean> {
   try {
     const res = await fetch("/api/turnstile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token }),
+      body: JSON.stringify({ token, action }),
     });
     const data = (await res.json()) as { success?: boolean };
     return res.ok && data.success === true;

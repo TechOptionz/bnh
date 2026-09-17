@@ -139,7 +139,7 @@ export default function CareerForm() {
     }
 
     setSending(true);
-    const verified = await verifyCaptcha(captcha);
+    const verified = await verifyCaptcha(captcha, "career");
     turnstile.current?.reset();
     setSending(false);
     if (!verified) {
@@ -275,7 +275,7 @@ export default function CareerForm() {
       </div>
 
       <div>
-        <Turnstile ref={turnstile} onToken={gotToken} />
+        <Turnstile ref={turnstile} action="career" onToken={gotToken} />
         <FieldError id="jf-captcha-error">{captchaError}</FieldError>
       </div>
 

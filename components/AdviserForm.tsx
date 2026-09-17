@@ -132,7 +132,7 @@ export default function AdviserForm({ service }: { service: string }) {
     }
 
     setSending(true);
-    const verified = await verifyCaptcha(captcha);
+    const verified = await verifyCaptcha(captcha, "adviser");
     turnstile.current?.reset();
     setSending(false);
     if (!verified) {
@@ -266,7 +266,7 @@ export default function AdviserForm({ service }: { service: string }) {
           </div>
 
           <div>
-            <Turnstile ref={turnstile} onToken={gotToken} />
+            <Turnstile ref={turnstile} action="adviser" onToken={gotToken} />
             <FieldError id="af-captcha-error">{captchaError}</FieldError>
           </div>
 

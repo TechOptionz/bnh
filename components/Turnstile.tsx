@@ -4,6 +4,7 @@ import { useEffect, useImperativeHandle, useRef, type Ref } from "react";
 
 type RenderOptions = {
   sitekey: string;
+  action?: string;
   callback: (token: string) => void;
   "expired-callback": () => void;
   "error-callback": () => void;
@@ -54,9 +55,12 @@ export type TurnstileHandle = { reset: () => void };
  * owning form always knows whether it currently holds a usable token.
  */
 export default function Turnstile({
+  action,
   onToken,
   ref,
 }: {
+  /** Bound into the token so the server can reject tokens from other forms. */
+  action: string;
   onToken: (token: string) => void;
   ref?: Ref<TurnstileHandle>;
 }) {
@@ -87,6 +91,7 @@ export default function Turnstile({
         if (cancelled || !container.current || !window.turnstile) return;
         widgetId.current = window.turnstile.render(container.current, {
           sitekey,
+          action,
           theme: "light",
           size: "flexible",
           callback: (token) => onTokenRef.current(token),
@@ -103,7 +108,7 @@ export default function Turnstile({
       }
       widgetId.current = null;
     };
-  }, []);
+  }, [action]);
 
   return <div ref={container} style={{ minHeight: 65 }} />;
 }

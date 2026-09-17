@@ -179,7 +179,7 @@ export default function ContactForm() {
     }
 
     setSending(true);
-    const verified = await verifyCaptcha(captcha);
+    const verified = await verifyCaptcha(captcha, "contact");
     turnstile.current?.reset();
     setSending(false);
     if (!verified) {
@@ -406,7 +406,7 @@ export default function ContactForm() {
           </fieldset>
 
           <div>
-            <Turnstile ref={turnstile} onToken={gotToken} />
+            <Turnstile ref={turnstile} action="contact" onToken={gotToken} />
             <FieldError id="cf-captcha-error">{captchaError}</FieldError>
           </div>
 
