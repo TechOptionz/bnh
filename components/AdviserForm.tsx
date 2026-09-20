@@ -3,7 +3,8 @@
 import { useCallback, useRef, useState } from "react";
 import FieldError from "@/components/FieldError";
 import Turnstile, { type TurnstileHandle } from "@/components/Turnstile";
-import { CAPTCHA_FAILED, CAPTCHA_REQUIRED, verifyCaptcha } from "@/lib/captcha";
+import { CAPTCHA_FAILED, CAPTCHA_REQUIRED } from "@/lib/captcha";
+import { submitLead } from "@/lib/leads";
 import {
   emailAddress,
   enquiryMessage,
@@ -67,8 +68,10 @@ function Label({
 }
 
 /** The white "Speak with an Adviser" enquiry card. Fields are validated on
- *  blur and on submit; the mailto only opens once everything is valid and
- *  the Turnstile security check has been confirmed server-side. */
+ *  blur and on submit; the enquiry is only filed (as a Lead in the Aleesa CRM,
+ *  via /api/leads) once everything is valid and the Turnstile security check
+ *  has been confirmed server-side. If the CRM can't be reached the form
+ *  composes an email instead. */
 export default function AdviserForm({ service }: { service: string }) {
   const [values, setValues] = useState<Record<Key, string>>({
     first: "",
@@ -84,6 +87,7 @@ export default function AdviserForm({ service }: { service: string }) {
   const [captcha, setCaptcha] = useState("");
   const [captchaError, setCaptchaError] = useState<string>();
   const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
   const turnstile = useRef<TurnstileHandle>(null);
 
   const change = (key: Key) => (value: string) => {
@@ -132,14 +136,28 @@ export default function AdviserForm({ service }: { service: string }) {
     }
 
     setSending(true);
-    const verified = await verifyCaptcha(captcha, "adviser");
+    const result = await submitLead({
+      form: "adviser",
+      token: captcha,
+      firstName: values.first,
+      lastName: values.last,
+      email: values.email,
+      phone: values.phone,
+      service,
+      message: values.message,
+    });
     turnstile.current?.reset();
     setSending(false);
-    if (!verified) {
+    if (result === "captcha") {
       setCaptchaError(CAPTCHA_FAILED);
       return;
     }
+    if (result === "sent") {
+      setSent(true);
+      return;
+    }
 
+    // The CRM couldn't take it — compose an email so the enquiry isn't lost.
     window.location.href =
       `mailto:${EMAIL}?subject=` +
       encodeURIComponent(`Enquiry — ${service}`) +
@@ -172,6 +190,25 @@ export default function AdviserForm({ service }: { service: string }) {
         JCA-BNH<span style={{ color: C.orange }}>.</span>
       </div>
 
+      {sent ? (
+        <p
+          role="status"
+          style={{
+            margin: 0,
+            padding: "16px 18px",
+            borderRadius: 10,
+            background: "#F4F7FA",
+            border: `1px solid ${C.borderInput}`,
+            color: C.navy,
+            fontSize: 15,
+            lineHeight: 1.65,
+          }}
+        >
+          <b>Thanks, {values.first.trim()} — your enquiry has been sent.</b>
+          <br />
+          One of our advisers will be in touch shortly.
+        </p>
+      ) : (
       <form ref={formRef} onSubmit={handleSubmit} noValidate>
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <div
@@ -304,13 +341,14 @@ export default function AdviserForm({ service }: { service: string }) {
               opacity: sending ? 0.7 : 1,
             }}
           >
-            {sending ? "Verifying…" : "Submit Enquiry"}
+            {sending ? "Sending…" : "Submit Enquiry"}
           </button>
           <div style={{ fontSize: 12.5, color: C.mute }}>
             Or email us directly at <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
           </div>
         </div>
       </form>
+      )}
     </div>
   );
 }

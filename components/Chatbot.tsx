@@ -51,6 +51,27 @@ const OFFICES_ANSWER =
   "• Maroochydore — 2/68 Kingsford Smith Parade QLD 4558 — 07 5473 5444\n\n" +
   "Open Monday–Friday, 8am–5pm.";
 
+const SESSION_KEY = "jcabnh_chat_session_id";
+let fallbackSessionId: string | undefined;
+
+/**
+ * Stable per-visitor id, so the Aleesa agent keeps context across turns and
+ * page loads and the inbox groups the conversation into one thread.
+ */
+function getSessionId(): string {
+  try {
+    let id = localStorage.getItem(SESSION_KEY);
+    if (!id) {
+      id = `chat_${crypto.randomUUID()}`;
+      localStorage.setItem(SESSION_KEY, id);
+    }
+    return id;
+  } catch {
+    // Storage blocked — fall back to a per-page session.
+    return (fallbackSessionId ??= `chat_${crypto.randomUUID()}`);
+  }
+}
+
 function serviceAnswer(slug: keyof typeof SERVICES): Msg {
   const s = SERVICES[slug];
   return {
@@ -121,10 +142,9 @@ export default function Chatbot() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: next.slice(-12).map(({ role, content }) => ({
-            role,
-            content,
-          })),
+          text: q,
+          sessionId: getSessionId(),
+          page: window.location.pathname,
         }),
       });
       if (!res.ok) throw new Error("unavailable");

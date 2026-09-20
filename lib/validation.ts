@@ -1,10 +1,10 @@
 /**
- * Shared client-side validation for the site's enquiry forms.
+ * Shared validation for the site's enquiry forms — run in the browser as the
+ * visitor types, and again by /api/leads before an enquiry is filed.
  *
  * Every rule returns `null` when the value is acceptable, or a plain-English
- * message to show under the field. The forms submit by composing a mailto,
- * so these checks are what stop an empty or malformed enquiry from ever
- * reaching the inbox.
+ * message to show under the field. These checks are what stop an empty or
+ * malformed enquiry from ever reaching the CRM or the inbox.
  */
 
 export type Rule = (value: string) => string | null;

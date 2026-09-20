@@ -3,7 +3,8 @@
 import { useCallback, useRef, useState } from "react";
 import FieldError from "@/components/FieldError";
 import Turnstile, { type TurnstileHandle } from "@/components/Turnstile";
-import { CAPTCHA_FAILED, CAPTCHA_REQUIRED, verifyCaptcha } from "@/lib/captcha";
+import { CAPTCHA_FAILED, CAPTCHA_REQUIRED } from "@/lib/captcha";
+import { submitLead } from "@/lib/leads";
 import {
   emailAddress,
   enquiryMessage,
@@ -105,9 +106,10 @@ function FieldLabel({
 
 /**
  * "Get in touch" enquiry card. Fields are validated on blur and on submit —
- * the mailto is only opened once every value is valid and the Turnstile
- * security check has been confirmed server-side, so malformed, empty or
- * automated enquiries never reach the inbox.
+ * the enquiry is only filed (as a Lead in the Aleesa CRM, via /api/leads)
+ * once every value is valid and the Turnstile security check has been
+ * confirmed server-side, so malformed, empty or automated enquiries never
+ * get through. If the CRM can't be reached the form composes an email instead.
  */
 export default function ContactForm() {
   const [values, setValues] = useState<Record<Key, string>>({
@@ -126,6 +128,7 @@ export default function ContactForm() {
   const [captcha, setCaptcha] = useState("");
   const [captchaError, setCaptchaError] = useState<string>();
   const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
   const turnstile = useRef<TurnstileHandle>(null);
 
   /** Update a value, re-checking it live once the field has been touched. */
@@ -179,14 +182,29 @@ export default function ContactForm() {
     }
 
     setSending(true);
-    const verified = await verifyCaptcha(captcha, "contact");
+    const result = await submitLead({
+      form: "contact",
+      token: captcha,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      phone: values.phone,
+      hear: values.hear,
+      updates: values.updates,
+      message: values.message,
+    });
     turnstile.current?.reset();
     setSending(false);
-    if (!verified) {
+    if (result === "captcha") {
       setCaptchaError(CAPTCHA_FAILED);
       return;
     }
+    if (result === "sent") {
+      setSent(true);
+      return;
+    }
 
+    // The CRM couldn't take it — compose an email so the enquiry isn't lost.
     window.location.href =
       `mailto:${EMAIL}?subject=` +
       encodeURIComponent("Website enquiry") +
@@ -236,6 +254,25 @@ export default function ContactForm() {
         information.
       </p>
 
+      {sent ? (
+        <p
+          role="status"
+          style={{
+            margin: 0,
+            padding: "16px 18px",
+            borderRadius: 10,
+            background: "#FFFFFF",
+            border: `1px solid ${C.borderInput}`,
+            color: C.navy,
+            fontSize: 16,
+            lineHeight: 1.65,
+          }}
+        >
+          <b>Thanks, {values.firstName.trim()} — your enquiry has been sent.</b>
+          <br />
+          One of our team will be in touch shortly.
+        </p>
+      ) : (
       <form ref={formRef} onSubmit={handleSubmit} noValidate>
         <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
           <div
@@ -441,13 +478,14 @@ export default function ContactForm() {
               opacity: sending ? 0.7 : 1,
             }}
           >
-            {sending ? "Verifying…" : "Submit Enquiry"}
+            {sending ? "Sending…" : "Submit Enquiry"}
           </button>
           <div style={{ fontSize: 13, color: C.mute }}>
             Or email us directly at <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
           </div>
         </div>
       </form>
+      )}
     </div>
   );
 }
