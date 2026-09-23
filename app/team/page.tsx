@@ -121,63 +121,121 @@ export default function TeamPage() {
         </div>
       </section>
 
-      {/* Experience matters — photo left, copy right */}
+      {/* Experience matters — text-only editorial split */}
       <section
         style={{
           background: "#FFFFFF",
           padding: "clamp(48px,8vw,70px) 5vw clamp(64px,10vw,110px)",
-          overflowX: "clip",
         }}
       >
-        <div
-          style={{
-            maxWidth: 1200,
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(min(320px,100%),1fr))",
-            gap: "56px 84px",
-            alignItems: "center",
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/team-photo.jpg"
-            alt="JCA-BNH team members working together"
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div
             style={{
-              width: "100%",
-              aspectRatio: "5 / 6",
-              objectFit: "cover",
-              borderRadius: 18,
-              display: "block",
+              borderTop: `1px solid ${C.border}`,
+              paddingTop: "clamp(40px,6vw,64px)",
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(min(320px,100%),1fr))",
+              gap: "40px 84px",
+              alignItems: "start",
             }}
-          />
-          <div>
-            <Eyebrow label="Our People" />
-            <h2
-              style={{
-                fontFamily: LEXEND,
-                fontWeight: 600,
-                color: C.navy,
-                fontSize: "clamp(30px,3.8vw,48px)",
-                lineHeight: 1.14,
-                letterSpacing: "-0.01em",
-                margin: "0 0 22px",
-              }}
-            >
-              When it comes to money matters, experience matters. Especially
-              when the decisions carry weight.
-            </h2>
-            <p style={{ lineHeight: 1.75, fontSize: 16.5, margin: "0 0 18px" }}>
-              We firmly believe that professional and personal success are
-              built through strong relationships, a strategic mindset and clear
-              leadership.
-            </p>
-            <p style={{ lineHeight: 1.75, fontSize: 16.5, margin: 0 }}>
-              Our experts know their business &mdash; and they make it their
-              mission to know yours. What sets our people apart isn&rsquo;t
-              simply expertise: it&rsquo;s judgement, built over decades across
-              taxation, audit, financial advice and industry.
-            </p>
+          >
+            <div>
+              <Eyebrow label="Our People" />
+              <h2
+                style={{
+                  fontFamily: LEXEND,
+                  fontWeight: 600,
+                  color: C.navy,
+                  fontSize: "clamp(30px,3.8vw,48px)",
+                  lineHeight: 1.14,
+                  letterSpacing: "-0.01em",
+                  margin: 0,
+                }}
+              >
+                When it comes to money matters, experience matters. Especially
+                when the decisions carry weight.
+              </h2>
+            </div>
+            <div style={{ paddingTop: "clamp(0px,3vw,44px)" }}>
+              <p style={{ lineHeight: 1.75, fontSize: 16.5, margin: "0 0 18px" }}>
+                We firmly believe that professional and personal success are
+                built through strong relationships, a strategic mindset and
+                clear leadership.
+              </p>
+              <p style={{ lineHeight: 1.75, fontSize: 16.5, margin: 0 }}>
+                Our experts know their business &mdash; and they make it their
+                mission to know yours. What sets our people apart isn&rsquo;t
+                simply expertise: it&rsquo;s judgement, built over decades
+                across taxation, audit, financial advice and industry.
+              </p>
+            </div>
+          </div>
+
+          {/* Three pillars, pulled from the copy above */}
+          <div
+            style={{
+              marginTop: "clamp(40px,6vw,64px)",
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(min(260px,100%),1fr))",
+              gap: 20,
+            }}
+          >
+            {[
+              {
+                n: "01",
+                title: "Strong relationships",
+                body: "You deal with the same senior people from the first conversation onward. No handoffs, no starting over.",
+              },
+              {
+                n: "02",
+                title: "A strategic mindset",
+                body: "Advice framed around where you want to be, not just this year’s compliance obligations.",
+              },
+              {
+                n: "03",
+                title: "Clear leadership",
+                body: "Judgement built over decades across taxation, audit, financial advice and industry.",
+              },
+            ].map((item) => (
+              <div
+                key={item.n}
+                style={{
+                  background: C.bgAlt,
+                  borderRadius: 18,
+                  padding: "28px 28px 30px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 12,
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: LEXEND,
+                    fontWeight: 600,
+                    fontSize: 13,
+                    letterSpacing: "0.08em",
+                    color: C.teal,
+                  }}
+                >
+                  {item.n}
+                </span>
+                <h3
+                  style={{
+                    fontFamily: LEXEND,
+                    fontWeight: 600,
+                    color: C.navy,
+                    fontSize: 20,
+                    lineHeight: 1.25,
+                    margin: 0,
+                  }}
+                >
+                  {item.title}
+                </h3>
+                <p style={{ lineHeight: 1.7, fontSize: 15.5, margin: 0 }}>
+                  {item.body}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
