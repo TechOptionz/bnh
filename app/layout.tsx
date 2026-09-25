@@ -1,6 +1,6 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
-import { Lexend, Public_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import BackToTop from "@/components/BackToTop";
 import Chatbot from "@/components/Chatbot";
 import SamePageScroll from "@/components/SamePageScroll";
@@ -9,16 +9,19 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { EMAIL, FACEBOOK_URL, LINKEDIN_URL, PHONE_BRISBANE } from "@/lib/site";
 import "./globals.css";
 
-const lexend = Lexend({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+/* Fonts are self-hosted (variable woff2, latin subset, from Google Fonts) so
+   the production build never has to reach fonts.googleapis.com — a fetch
+   failure there breaks the whole Vercel build. */
+const lexend = localFont({
+  src: "./fonts/Lexend-latin.woff2",
+  weight: "300 700",
   variable: "--font-lexend",
   display: "swap",
 });
 
-const publicSans = Public_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+const publicSans = localFont({
+  src: "./fonts/PublicSans-latin.woff2",
+  weight: "400 700",
   variable: "--font-public-sans",
   display: "swap",
 });
