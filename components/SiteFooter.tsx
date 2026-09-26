@@ -8,11 +8,9 @@ import {
   C,
   DISCLAIMER,
   EMAIL,
-  FSG_URL,
   HOURS,
   OFFICES,
   PHONE_BRISBANE,
-  TERMS_URL,
 } from "@/lib/site";
 
 type Key = "home" | "financial-advice" | "accounting" | "about" | "contact";
@@ -118,8 +116,6 @@ export default function SiteFooter({
     ...NAV.filter((l) => !omit.includes(l.key) && l.key !== "home"),
     { href: "/blog", label: "Blog" },
     { href: BACHROB_URL, label: "BachRob (sister firm)", external: true },
-    { href: FSG_URL, label: "Financial Services Guide", external: true },
-    { href: TERMS_URL, label: "Terms of Engagement", external: true },
   ];
 
   return (
