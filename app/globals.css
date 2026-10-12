@@ -9,7 +9,11 @@
   --cyan: #12b7d6;
   --teal: #0e93ac;
   --body: #46536e;
-  --mute: #8a97af;
+  --mute: #64728b; /* AA contrast on white and --bg-alt */
+  /* Orange CTA buttons: the brand orange (#f25c0a) only reaches 3.3:1 with
+     white text, so buttons use this deeper shade (4.8:1) and a darker hover. */
+  --orange-button: #c94800;
+  --orange-button-dark: #b03f00;
   --light-blue: #c9d4e8;
   --bg-alt: #f4f7fa;
   --border: #e6ebf2;
@@ -78,8 +82,11 @@ img {
 }
 
 /* Solid orange buttons. */
+.btn-orange {
+  background: var(--orange-button) !important;
+}
 .btn-orange:hover {
-  background: var(--orange-dark) !important;
+  background: var(--orange-button-dark) !important;
   color: #ffffff !important;
 }
 

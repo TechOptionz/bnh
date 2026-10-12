@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AdviserForm from "@/components/AdviserForm";
@@ -15,6 +16,7 @@ import {
   serviceImages,
   SERVICES,
 } from "@/lib/services";
+import { pageMetadata } from "@/lib/seo";
 import { BOOKING_URL, C, PHONE_BRISBANE } from "@/lib/site";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -30,7 +32,15 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const service = SERVICES[slug];
   if (!service) return { title: "Service not found" };
-  return { title: service.title, description: service.tagline };
+  const images = serviceImages(slug);
+  return pageMetadata({
+    title: service.title,
+    description: service.tagline,
+    path: `/services/${slug}`,
+    image: images
+      ? { url: images.hero, width: 1024, height: 1024, alt: images.alt }
+      : undefined,
+  });
 }
 
 /** Small square + label section marker from the reference design. */
@@ -148,12 +158,16 @@ export default async function ServicePage({ params }: Params) {
             {service.title}
           </h1>
           {images ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={images.hero}
               alt={images.alt}
+              width={1600}
+              height={700}
+              sizes="(max-width: 1280px) 92vw, 1280px"
+              loading="eager"
               style={{
                 width: "100%",
+                height: "auto",
                 aspectRatio: "16 / 7",
                 objectFit: "cover",
                 borderRadius: 10,
@@ -209,12 +223,15 @@ export default async function ServicePage({ params }: Params) {
           }}
         >
           {images ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={images.side}
               alt={images.alt}
+              width={800}
+              height={1000}
+              sizes="(max-width: 768px) 92vw, 600px"
               style={{
                 width: "100%",
+                height: "auto",
                 aspectRatio: "4 / 5",
                 objectFit: "cover",
                 borderRadius: 10,
@@ -345,12 +362,15 @@ export default async function ServicePage({ params }: Params) {
           </div>
           <div style={{ position: "relative", paddingBottom: 56 }}>
             {images ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={images.insight}
                 alt={images.alt}
+                width={800}
+                height={1000}
+                sizes="(max-width: 768px) 92vw, 600px"
                 style={{
                   width: "100%",
+                  height: "auto",
                   aspectRatio: "4 / 5",
                   objectFit: "cover",
                   borderRadius: 10,

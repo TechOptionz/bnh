@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import CtaBand from "@/components/CtaBand";
@@ -7,6 +8,7 @@ import KeyobPartnerCard from "@/components/partners/KeyobPartnerCard";
 import PageHero from "@/components/PageHero";
 import SiteFooter from "@/components/SiteFooter";
 import { ARTICLES, postBySlug } from "@/lib/blog";
+import { pageMetadata } from "@/lib/seo";
 import { C, DISCLAIMER, POSTS } from "@/lib/site";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -22,7 +24,14 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const post = postBySlug(slug);
   if (!post) return { title: "Article not found" };
-  return { title: post.title, description: post.excerpt };
+  return pageMetadata({
+    title: post.title,
+    description: post.excerpt,
+    path: `/blog/${slug}`,
+    type: "article",
+    publishedTime: post.iso,
+    image: post.img ? { url: post.img, alt: post.alt } : undefined,
+  });
 }
 
 function Meta({ post }: { post: NonNullable<ReturnType<typeof postBySlug>> }) {
@@ -98,12 +107,16 @@ export default async function BlogArticlePage({ params }: Params) {
           <div style={{ marginBottom: 44 }}>
             {post.img ? (
               <div style={{ borderRadius: 12, overflow: "hidden" }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={post.img}
                   alt={post.alt}
+                  width={1600}
+                  height={800}
+                  sizes="(max-width: 900px) 90vw, 860px"
+                  loading="eager"
                   style={{
                     width: "100%",
+                    height: "auto",
                     aspectRatio: "16/8",
                     objectFit: "cover",
                     display: "block",
@@ -202,12 +215,15 @@ export default async function BlogArticlePage({ params }: Params) {
               {i === 1 &&
                 (article.midImg ? (
                   <div style={{ margin: "36px 0 8px", borderRadius: 12, overflow: "hidden" }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
                       src={article.midImg}
                       alt={article.midAlt ?? ""}
+                      width={1600}
+                      height={700}
+                      sizes="(max-width: 900px) 90vw, 860px"
                       style={{
                         width: "100%",
+                        height: "auto",
                         aspectRatio: "16/7",
                         objectFit: "cover",
                         display: "block",
@@ -345,12 +361,15 @@ export default async function BlogArticlePage({ params }: Params) {
                 }}
               >
                 {p.img ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <Image
                     src={p.img}
                     alt={p.alt}
+                    width={1600}
+                    height={900}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
                     style={{
                       width: "100%",
+                      height: "auto",
                       aspectRatio: "16/9",
                       objectFit: "cover",
                       display: "block",

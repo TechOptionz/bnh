@@ -6,7 +6,16 @@ import Chatbot from "@/components/Chatbot";
 import SamePageScroll from "@/components/SamePageScroll";
 import ScrollReveal from "@/components/ScrollReveal";
 import ScrollToTop from "@/components/ScrollToTop";
-import { EMAIL, FACEBOOK_URL, LINKEDIN_URL, PHONE_BRISBANE } from "@/lib/site";
+import {
+  EMAIL,
+  FACEBOOK_URL,
+  LINKEDIN_URL,
+  OG_IMAGE,
+  PHONE_BRISBANE,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/site";
+import { HOME_DESCRIPTION, HOME_TITLE } from "@/lib/seo";
 import "./globals.css";
 
 /* Fonts are self-hosted (variable woff2, latin subset, from Google Fonts) so
@@ -27,12 +36,30 @@ const publicSans = localFont({
 });
 
 export const metadata: Metadata = {
+  /* Resolves the relative canonical / Open Graph URLs set on each page. */
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "JCA-BNH — Better at Money Matters",
-    template: "%s | JCA-BNH",
+    default: HOME_TITLE,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "JCA-BNH Accountants & Financial Advisers deliver tailored accounting, taxation, advisory and financial advice for businesses and individuals across Australia.",
+  description: HOME_DESCRIPTION,
+  applicationName: SITE_NAME,
+  openGraph: {
+    type: "website",
+    locale: "en_AU",
+    siteName: SITE_NAME,
+    url: "/",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: [OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: [OG_IMAGE.url],
+  },
+  robots: { index: true, follow: true },
 };
 
 /** Organisation structured data — `sameAs` points search engines at our
@@ -41,7 +68,7 @@ const ORG_JSONLD = {
   "@context": "https://schema.org",
   "@type": "AccountingService",
   name: "JCA-BNH Accountants & Financial Advisers",
-  url: "https://jca-bnh.com.au/",
+  url: `${SITE_URL}/`,
   email: EMAIL,
   telephone: PHONE_BRISBANE,
   slogan: "Better at Money Matters",

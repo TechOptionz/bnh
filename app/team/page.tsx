@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
 import KeyobPartnerStrip from "@/components/partners/KeyobPartnerStrip";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { pageMetadata } from "@/lib/seo";
 import { C } from "@/lib/site";
 import { TEAM } from "@/lib/team";
 
-export const metadata: Metadata = {
-  title: "Meet Our Team | JCA-BNH",
+export const metadata: Metadata = pageMetadata({
+  title: "Meet Our Team",
   description:
     "Meet the JCA-BNH team — CPAs, Chartered Accountants, a CFA charterholder and Big-4 alumni working hands-on with clients across four QLD offices.",
-};
+  path: "/team",
+});
 
 const LEXEND = "var(--font-lexend), Lexend, sans-serif";
 
@@ -72,12 +75,16 @@ export default function TeamPage() {
           >
             Hands-on. Always.
           </h1>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="/assets/hero-team-wide.jpg"
             alt="The JCA-BNH team"
+            width={1942}
+            height={809}
+            sizes="(max-width: 1200px) 90vw, 1200px"
+            loading="eager"
             style={{
               width: "100%",
+              height: "auto",
               aspectRatio: "16 / 7",
               objectFit: "cover",
               borderRadius: 18,
@@ -281,15 +288,12 @@ export default function TeamPage() {
                   background: C.border,
                 }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={m.photo}
                   alt={m.name}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 300px"
                   style={{
-                    position: "absolute",
-                    inset: 0,
-                    width: "100%",
-                    height: "100%",
                     objectFit: "cover",
                     objectPosition: "top",
                     display: "block",

@@ -3,13 +3,15 @@ import CareerForm from "@/components/CareerForm";
 import KeyobPartnerStrip from "@/components/partners/KeyobPartnerStrip";
 import PageHero from "@/components/PageHero";
 import SiteFooter from "@/components/SiteFooter";
+import { pageMetadata } from "@/lib/seo";
 import { C, PHONE_BRISBANE } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Career",
   description:
     "Looking for a career in accounting or financial planning? We've grown 300% in a year and we're always keen to hear from talented people.",
-};
+  path: "/careers",
+});
 
 const REASONS = [
   "A fast-growing firm — 300% growth and four QLD offices",

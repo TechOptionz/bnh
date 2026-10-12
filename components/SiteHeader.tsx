@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -8,6 +9,9 @@ import { ACC, FA, serviceGroups } from "@/lib/services";
 import { KEYOB_PARTNER } from "@/lib/partners";
 import KeyobLogo from "@/components/partners/KeyobLogo";
 import SocialLinks from "@/components/SocialLinks";
+
+/** Natural size of /public/assets/logo.png (FooterLogo shares the file). */
+const LOGO = { w: 2160, h: 777 };
 
 export type NavKey =
   | "financial-advice"
@@ -466,12 +470,15 @@ export default function SiteHeader({
             }
           }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="/assets/logo.png"
             alt="JCA-BNH — Better at Money Matters"
+            width={LOGO.w}
+            height={LOGO.h}
+            sizes="(max-width: 640px) 128px, 172px"
+            loading="eager"
             className="site-logo"
-            style={{ height: 62, display: "block" }}
+            style={{ height: 62, width: "auto", display: "block" }}
           />
         </Link>
         <nav

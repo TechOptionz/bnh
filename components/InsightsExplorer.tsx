@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useDeferredValue, useMemo, useState } from "react";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
 import { highlightParts, searchPosts, type SearchHit } from "@/lib/blogSearch";
@@ -100,12 +101,15 @@ function PostCard({ post, hit }: { post: Post; hit?: SearchHit }) {
     >
       <div style={{ borderRadius: 14, overflow: "hidden" }}>
         {post.img ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={post.img}
             alt={post.alt}
+            width={1200}
+            height={900}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
             style={{
               width: "100%",
+              height: "auto",
               aspectRatio: "4/3",
               objectFit: "cover",
               display: "block",

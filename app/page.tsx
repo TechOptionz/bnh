@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import HomeFooter from "@/components/HomeFooter";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
@@ -7,7 +9,17 @@ import KeyobPartnerStrip from "@/components/partners/KeyobPartnerStrip";
 import ServiceCards from "@/components/ServiceCards";
 import SiteHeader from "@/components/SiteHeader";
 import StatsStrip from "@/components/StatsStrip";
+import YouTubeFacade from "@/components/YouTubeFacade";
+import { HOME_DESCRIPTION, HOME_TITLE, pageMetadata } from "@/lib/seo";
 import { BACHROB_URL, BOOKING_URL, C, POSTS } from "@/lib/site";
+
+export const metadata: Metadata = pageMetadata({
+  title: HOME_TITLE,
+  description: HOME_DESCRIPTION,
+  path: "/",
+  /* The home page carries the full brand title, not the "%s | JCA-BNH" template. */
+  absoluteTitle: true,
+});
 
 const EYEBROW_CHIP: React.CSSProperties = {
   width: 12,
@@ -620,8 +632,8 @@ export default function HomePage() {
       </section>
 
       {/* Brand video — orange band, sits between How We Work and Partners.
-          The iframe is lazy so it never competes with the hero video for
-          bandwidth on first paint. */}
+          Rendered as a click-to-play poster so YouTube's player (and its
+          cookies) only load once a visitor presses play. */}
       <section
         aria-label="Who We Are: JCA-BNH Accountants &amp; Financial Advisers"
         style={{
@@ -640,20 +652,9 @@ export default function HomePage() {
             boxShadow: "0 26px 60px -30px rgba(10,18,36,0.55)",
           }}
         >
-          <iframe
-            src="https://www.youtube-nocookie.com/embed/AnLzNzHE7JY"
-            title="Who We Are: JCA-BNH Accountants &amp; Financial Advisers"
-            loading="lazy"
-            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              border: 0,
-              display: "block",
-            }}
+          <YouTubeFacade
+            id="AnLzNzHE7JY"
+            title="Who We Are: JCA-BNH Accountants & Financial Advisers"
           />
         </div>
       </section>
@@ -682,11 +683,13 @@ export default function HomePage() {
             {/* Four copies: the first half fills even ultrawide screens, the
                 second half is what slides in behind it, so the loop never gaps. */}
             {[...PARTNERS, ...PARTNERS, ...PARTNERS, ...PARTNERS].map((p, i) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 key={`${p.alt}-${i}`}
                 src={p.src}
                 alt={p.alt}
+                width={150}
+                height={150}
+                sizes="124px"
                 aria-hidden={i >= PARTNERS.length}
                 loading="eager"
               />
@@ -747,12 +750,15 @@ export default function HomePage() {
                 }}
               >
                 {p.img ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <Image
                     src={p.img}
                     alt={p.alt}
+                    width={1600}
+                    height={900}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
                     style={{
                       width: "100%",
+                      height: "auto",
                       aspectRatio: "16/9",
                       objectFit: "cover",
                       display: "block",
@@ -805,12 +811,20 @@ export default function HomePage() {
       <section
         style={{
           position: "relative",
-          backgroundImage: "url('/assets/hero-team-wide.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          overflow: "hidden",
+          background: C.navyDeep,
           padding: "clamp(140px,30vw,230px) 5vw 56px",
         }}
       >
+        {/* Background photo as an optimised <Image> (was a CSS background,
+            which can't be resized or served as AVIF/WebP). */}
+        <Image
+          src="/assets/hero-team-wide.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          style={{ objectFit: "cover", objectPosition: "center" }}
+        />
         <div
           style={{
             position: "absolute",

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import CtaBand from "@/components/CtaBand";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { pageMetadata } from "@/lib/seo";
 import { C } from "@/lib/site";
 import { TEAM, teamMember } from "@/lib/team";
 
@@ -22,10 +24,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const m = teamMember(slug);
   if (!m) return { title: "Team member not found" };
-  return {
-    title: `${m.name} | JCA-BNH`,
+  return pageMetadata({
+    title: m.name,
     description: m.bio,
-  };
+    path: `/team/${slug}`,
+    type: "profile",
+    image: { url: m.photo, width: 520, height: 650, alt: m.name },
+  });
 }
 
 const EYEBROW_CHIP: React.CSSProperties = {
@@ -221,13 +226,17 @@ export default async function TeamMemberPage({ params }: Params) {
             )}
           </div>
           {/* Portrait overlaps out of the blue band into the section below */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={m.photo}
             alt={m.name}
+            width={520}
+            height={650}
+            sizes="(max-width: 768px) 100vw, 440px"
+            loading="eager"
             className="member-portrait"
             style={{
               width: "100%",
+              height: "auto",
               maxWidth: 440,
               justifySelf: "end",
               aspectRatio: "4 / 5",

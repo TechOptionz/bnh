@@ -1,4 +1,8 @@
+import Image from "next/image";
 import { KEYOB_PARTNER } from "@/lib/partners";
+
+/** Natural size of /public/partners/keyob-logo.png. */
+const NATURAL = { w: 219, h: 44 };
 
 /**
  * KEYOB wordmark. The asset is navy for light surfaces; `light` knocks it
@@ -13,10 +17,11 @@ export default function KeyobLogo({
   light?: boolean;
 }) {
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <Image
       src={KEYOB_PARTNER.logo}
       alt="KEYOB"
+      width={Math.round((height * NATURAL.w) / NATURAL.h)}
+      height={height}
       style={{
         height,
         width: "auto",

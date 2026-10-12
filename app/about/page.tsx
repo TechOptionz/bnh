@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
 import KeyobPartnerStrip from "@/components/partners/KeyobPartnerStrip";
@@ -7,14 +8,16 @@ import SiteHeader from "@/components/SiteHeader";
 import SocialLinks from "@/components/SocialLinks";
 import StatsStrip from "@/components/StatsStrip";
 import ValuesCarousel from "@/components/ValuesCarousel";
+import { pageMetadata } from "@/lib/seo";
 import { C } from "@/lib/site";
 import { TEAM } from "@/lib/team";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About JCA-BNH",
   description:
     "A growing Queensland firm with global experience — CPAs, Chartered Accountants, a CFA charterholder and Big-4 alumni across four QLD offices.",
-};
+  path: "/about",
+});
 
 const STATS = [
   { n: "300%", l: "growth this year" },
@@ -131,12 +134,15 @@ function AccentImage({
   return (
     <div style={{ position: "relative" }}>
       {src ? (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img
+        <Image
           src={src}
           alt={alt}
+          width={1000}
+          height={1200}
+          sizes="(max-width: 768px) 90vw, 560px"
           style={{
             width: "100%",
+            height: "auto",
             aspectRatio: ratio,
             objectFit: "cover",
             borderRadius: 18,
@@ -205,12 +211,16 @@ export default function AboutPage() {
       {/* Full-width team photo below the navy band */}
       <section style={{ background: "#FFFFFF", padding: "clamp(52px,8vw,72px) 5vw 0" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="/assets/about-team-group.jpg"
             alt="The JCA-BNH team together"
+            width={1672}
+            height={941}
+            sizes="(max-width: 1200px) 90vw, 1200px"
+            loading="eager"
             style={{
               width: "100%",
+              height: "auto",
               aspectRatio: "16 / 9",
               objectFit: "cover",
               borderRadius: 18,
@@ -360,10 +370,11 @@ export default function AboutPage() {
                 achieve financial success with confidence.&rdquo;
               </p>
               <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src="/assets/team-nayyar.jpg"
                   alt="Nayyar Hayat"
+                  width={50}
+                  height={50}
                   style={{
                     width: 50,
                     height: 50,
@@ -434,15 +445,12 @@ export default function AboutPage() {
                   background: C.border,
                 }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={m.photo}
                   alt={m.name}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 300px"
                   style={{
-                    position: "absolute",
-                    inset: 0,
-                    width: "100%",
-                    height: "100%",
                     objectFit: "cover",
                     objectPosition: "top",
                     display: "block",

@@ -3,13 +3,15 @@ import InsightsExplorer from "@/components/InsightsExplorer";
 import KeyobPartnerStrip from "@/components/partners/KeyobPartnerStrip";
 import PageHero from "@/components/PageHero";
 import SiteFooter from "@/components/SiteFooter";
+import { pageMetadata } from "@/lib/seo";
 import { C } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Blogs & Articles",
   description:
     "Practical thinking on tax, super, property and financial planning from the JCA-BNH team.",
-};
+  path: "/blog",
+});
 
 export default function BlogPage() {
   return (

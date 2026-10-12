@@ -5,6 +5,7 @@ import OfficesMap from "@/components/OfficesMap";
 import PageHero from "@/components/PageHero";
 import SiteFooter from "@/components/SiteFooter";
 import SocialLinks from "@/components/SocialLinks";
+import { pageMetadata } from "@/lib/seo";
 import {
   BOOKING_URL,
   C,
@@ -14,11 +15,12 @@ import {
   PHONE_SUNSHINE,
 } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contact Us",
   description:
     "Ask a question, book a free consultation, or drop into one of our Queensland offices in Springwood, Noosaville or Maroochydore.",
-};
+  path: "/contact",
+});
 
 const LEXEND = "var(--font-lexend), Lexend, sans-serif";
 

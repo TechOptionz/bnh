@@ -3,13 +3,15 @@ import CtaBand from "@/components/CtaBand";
 import PageHero from "@/components/PageHero";
 import ServiceGroups, { type ServiceGroup } from "@/components/ServiceGroups";
 import SiteFooter from "@/components/SiteFooter";
+import { pageMetadata } from "@/lib/seo";
 import { BOOKING_URL, C } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Financial Planning & Advice",
   description:
     "Strategic financial advice and solutions — retirement planning, superannuation and SMSF, personal insurance, investments and estate planning.",
-};
+  path: "/financial-advice",
+});
 
 const GROUPS: ServiceGroup[] = [
   {

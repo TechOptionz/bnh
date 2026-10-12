@@ -1,10 +1,34 @@
 "use client";
 
+import { getImageProps } from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 const SRC = "/assets/logo.png";
 /** logo.png natural size — keeps the slice math and aspect ratio exact. */
-const RATIO = 7162 / 2575;
+const NATURAL = { w: 2160, h: 777 };
+const RATIO = NATURAL.w / NATURAL.h;
+
+/** The wordmark renders up to 1080 CSS px wide, so take the 1080w and
+ *  2048w candidates from the optimiser's srcset (AVIF/WebP, resized) and
+ *  offer them as a 1x / 2x `image-set()` for the sliced background. */
+const BG_IMAGE = (() => {
+  const { props } = getImageProps({
+    src: SRC,
+    alt: "",
+    width: NATURAL.w,
+    height: NATURAL.h,
+    sizes: "100vw",
+  });
+  const candidates = new Map(
+    (props.srcSet ?? "")
+      .split(", ")
+      .map((c) => c.split(" ") as [string, string])
+      .map(([url, w]) => [w, url]),
+  );
+  const x1 = candidates.get("1080w") ?? props.src;
+  const x2 = candidates.get("2048w") ?? props.src;
+  return `image-set(url("${x1}") 1x, url("${x2}") 2x)`;
+})();
 const SLICES = 8;
 const STAGGER_MS = 90;
 const DURATION_MS = 900;
@@ -84,7 +108,7 @@ export default function FooterLogo() {
             className={done ? "logo-slice" : undefined}
             style={{
               flex: 1,
-              backgroundImage: `url(${SRC})`,
+              backgroundImage: BG_IMAGE,
               backgroundRepeat: "no-repeat",
               backgroundSize: `${SLICES * 100}% 100%`,
               backgroundPosition: `${(i / (SLICES - 1)) * 100}% 0`,

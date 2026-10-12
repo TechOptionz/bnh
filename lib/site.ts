@@ -8,7 +8,9 @@ export const C = {
   cyan: "#12B7D6",
   teal: "#0E93AC",
   body: "#46536E",
-  mute: "#8A97AF",
+  /* Was #8A97AF (2.9:1 on white). Darkened to pass WCAG AA 4.5:1 for the
+     small uppercase labels, dates and captions that use it. */
+  mute: "#64728B",
   lightBlue: "#C9D4E8",
   footerText: "#9FAEC9",
   bgAlt: "#F4F7FA",
@@ -16,6 +18,18 @@ export const C = {
   borderInput: "#DCE4EE",
   footerRule: "#22335A",
 } as const;
+
+/** Canonical origin of the production site (no trailing slash). Used for
+ *  `metadataBase`, canonical URLs, Open Graph, robots and the sitemap. */
+export const SITE_URL = "https://www.jca-bnh.com.au";
+export const SITE_NAME = "JCA-BNH";
+/** Default social-share image (team photo, landscape) for pages without one. */
+export const OG_IMAGE = {
+  url: "/assets/about-team-group.jpg",
+  width: 1672,
+  height: 941,
+  alt: "The JCA-BNH team",
+};
 
 export const BOOKING_URL =
   "https://outlook.office365.com/owa/calendar/JCABNH@jcabrehmer.com.au/bookings/?skipRedirect=1";

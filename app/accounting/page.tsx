@@ -4,13 +4,15 @@ import KeyobPartnerStrip from "@/components/partners/KeyobPartnerStrip";
 import PageHero from "@/components/PageHero";
 import ServiceGroups, { type ServiceGroup } from "@/components/ServiceGroups";
 import SiteFooter from "@/components/SiteFooter";
+import { pageMetadata } from "@/lib/seo";
 import { BOOKING_URL, C } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Accounting, Taxation & Advisory Services",
   description:
     "Taxation strategy, bookkeeping and payroll, audit, SMSF, Virtual CFO and business advisory for clients Australia-wide.",
-};
+  path: "/accounting",
+});
 
 const GROUPS: ServiceGroup[] = [
   {
