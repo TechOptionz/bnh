@@ -14,6 +14,7 @@ import {
   validateAll,
   type Rule,
 } from "@/lib/validation";
+import PrivacyNote from "@/components/PrivacyNote";
 import { C, EMAIL } from "@/lib/site";
 
 const FIELD: React.CSSProperties = {
@@ -480,6 +481,7 @@ export default function ContactForm() {
           >
             {sending ? "Sending…" : "Submit Enquiry"}
           </button>
+          <PrivacyNote />
           <div style={{ fontSize: 13, color: C.mute }}>
             Or email us directly at <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
           </div>

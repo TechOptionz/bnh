@@ -313,7 +313,19 @@ export default function SiteFooter({
               color: C.body,
             }}
           >
-            <div>&copy; 2026 JCA-BNH. All rights reserved.</div>
+            <div>
+              &copy; 2026 JCA-BNH. All rights reserved.
+              <span aria-hidden="true" style={{ margin: "0 10px", color: C.mute }}>
+                ·
+              </span>
+              <Link
+                href="/privacy-policy"
+                className="hv-orange"
+                style={{ color: C.navy, fontWeight: 600 }}
+              >
+                Privacy Policy
+              </Link>
+            </div>
             <div
               style={{
                 fontSize: 11.5,
